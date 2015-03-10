@@ -8,9 +8,41 @@ This module provides Atom Translators for OCULAR messages
 
 import roslib
 roslib.load_manifest('ocular_interaction')
+from itertools import chain
+from dialog_manager_msgs.msg import (VarSlot, AtomMsg)
 
-from monarch_multimodal_fusion import translators
-from dialog_manager_msgs.msg import VarSlot
+
+def generate_default_slots(atom_type='_NO_VALUE_', atom_subtype='user'):
+    """
+    Generates the slots that are common to every Atom
+
+    :param str atom_type: Type of the atom
+    :param str atom_subtype: Subtype of te atom. Defaults to 'user'
+    :return: Yields the default VarSlots
+    :rtype: VarSlot
+    """
+    yield VarSlot(name="type", val=atom_type)
+    yield VarSlot(name="subtype", val=atom_subtype)
+    yield VarSlot(name="timestamp", val="_NO_VALUE_", type="number")
+    yield VarSlot(name="consumed", val="false", type="string")
+
+
+def to_atom_msg(msg, generator_func, atom_name, atom_subtype='user'):
+    """
+    Returns an AtomMsg from a msg instance and a generator function
+
+    :param msg: The message to translate
+    :param function generator_func: The function to translate the message
+    :param str atom_name: Name of the atom
+    :param str atom_subtype: (default: 'user') Name of the atom subtype
+    :return: The msg converted to an AtomMsg
+    :rtype: AtomMsg
+    """
+    if not msg:
+        return AtomMsg()
+    def_slots = generate_default_slots(atom_name, atom_subtype)
+    varslots = chain(def_slots, generator_func(msg))
+    return AtomMsg(varslots=list(varslots))
 
 
 def generate_event_handler_slots(event_msg):
@@ -22,6 +54,5 @@ def generate_event_handler_slots(event_msg):
 
 def event_handler_to_atom(event_handler_msg):
     """ Generates an OCULAR's event_handler atom """
-    return (translators.to_atom_msg(event_handler_msg,
-                                    generate_event_handler_slots,
-                                    'event_handler'))
+    return (to_atom_msg(event_handler_msg, generate_event_handler_slots,
+            'event_handler'))
