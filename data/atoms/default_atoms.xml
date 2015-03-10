@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!--
+
+     In this file are all PREDEFINED user slots that could be received by the dialog manager
+     from multimodal_fusion_dialog (translators and aggregators).Instead the globals slots are
+     unified by iwaki.
+
+     *Note 1: each atom is sended by: one translator (fusion), one aggregator (aggregator), or iwaki (if type globals)
+
+     *Note 2: on user atoms could appears more slot that these predefined slots. For example on
+     each semnatic grammars used by grammar-based recognizer usually are defined slots that they are
+     used on the dialog but are they are not commun for whatever dialog. in that sense,
+     this file is util for defined the possible type of atoms and the predefined slots sended
+     by multimodal fussion, but it is possible use on dialogs other slots received.
+
+     *Note 3: is a good practice use this file for everything dialogs, to improve the powerfull
+     of the dialog for everything possible dialogs.
+
+     *Note 4: the atoms are in order to the level of abstraction/complexity of the information supplied.
+-->
+
+
+<!-- Slots definde by the inputs modes on Multimodal Fusion Dialog -->
+<default_atoms>
+
+  <!-- Slot for Etts start/stop to synthesize voice/sounds -->
+  <atom>
+    <slot name="type" val="robot_speaking"/>
+    <slot name="subtype" val="user"/>
+    <slot name="is_speaking" value="_NO_VALUE_" type="string"/>
+  </atom>
+
+  <!--  Slots definded by ASR Loquendo with results OK-->
+  <atom>
+    <slot name="type" val="asr_loquendoOK"/>
+    <slot name="subtype" val="user"/>
+    <slot name="words" value="_NO_VALUE_" type="string"/>
+    <slot name="num_words" value="_NO_VALUE_" type="number"/>
+    <slot name="confidence" value="_NO_VALUE_" type="number"/>
+    <slot name="nameUserSpeaking" value="_NO_VALUE_" type="string"/>
+    <slot name="timestamp" value="_NO_VALUE_" type="number"/>
+    <slot name="consumed" value="_NO_VALUE_" type="string"/>
+  </atom>
+
+  <!--  Slots definded by ASR Loquendo with NO results -->
+  <atom>
+    <slot name="type" val="asr_loquendoFail"/>
+    <slot name="subtype" val="user"/>
+    <slot name="timestamp" value="_NO_VALUE_" type="number"/>
+    <slot name="consumed" value="_NO_VALUE_" type="string"/>
+  </atom>
+
+
+  <!--  Slots definded by Google ASR with results OK -->
+  <atom>
+    <slot name="type" val="asr_googleOK"/>
+    <slot name="subtype" val="user"/>
+    <slot name="content" value="_NO_VALUE_" type="string"/>
+    <slot name="g_confidence" value="_NO_VALUE_" type="number"/>
+    <slot name="timestamp" value="_NO_VALUE_" type="number"/>
+    <slot name="consumed" value="_NO_VALUE_" type="string"/>
+  </atom>
+
+  <!--  Slots definded by Google ASR with NO RESULTS  -->
+  <atom>
+    <slot name="type" val="asr_googleFail"/>
+    <slot name="subtype" val="user"/>
+    <slot name="timestamp" value="_NO_VALUE_" type="number"/>
+    <slot name="consumed" value="_NO_VALUE_" type="string"/>
+  </atom>
+
+  <!-- ############################################################## -->
+  <!-- #######HIGH LEVEL OF ABSTRACTON INPUT COMMUNICATIVE ACTS ##### -->
+  <!-- ############################################################## -->
+
+  <!-- One of the users leaves the scene -->
+  <atom>
+    <slot name="type" val="user_leaving"/>
+    <slot name="subtype" val="user"/>
+    <slot name="user_id" val="0" type="number" />
+    <slot name="timestamp" value="_NO_VALUE_" type="number"/>
+    <slot name="currentTime" value="_NO_VALUE_" type="number"/>
+    <slot name="consumed" val="false" type="string"/>
+  </atom>
+
+
+  <!-- Person Detected -->
+  <atom>
+    <!-- <slot name="type" val="user_come_in"/> -->
+    <slot name="type" val="person_detected"/>
+    <slot name="subtype" val="user"/>
+    <slot name="person_id" val="0" type="number" />
+    <slot name="timestamp" value="_NO_VALUE_" type="number"/>
+    <slot name="consumed" val="false" type="string"/>
+  </atom>
+
+
+  <!-- One user disengaged -->
+  <atom>
+    <slot name="type" val="user_disengaged"/>
+    <slot name="subtype" val="user"/>
+    <slot name="user_id" val="0" type="number" />
+    <slot name="timestamp" value="_NO_VALUE_" type="number"/>
+    <slot name="consumed" val="false" type="string"/>
+  </atom>
+
+
+  <!-- ############################################################## -->
+  <!-- ####### OCULAR ATOMS                                     ##### -->
+  <!-- ############################################################## -->
+
+  <!-- OCULAR Event Handler atom -->
+  <atom>
+    <slot name="type"       val="gesture_status"/>
+    <slot name="subtype"    val="user"/>
+    <slot name="hand"       val="_NO_VALUE_"   type="string"/>
+    <slot name="event"      val="_NO_VALUE_"   type="string"/>
+    <slot name="last_event" val="_NO_VALUE_"   type="string"/>
+    <slot name="timestamp"  value="_NO_VALUE_" type="number"/>
+    <slot name="consumed"   val="false"        type="string"/>
+  </atom>
+
+
+  <!-- ############################################################## -->
+  <!-- ####### GLOBALS                                          ##### -->
+  <!-- ############################################################## -->
+
+  <!-- Globals atom with Slots unified by Iwaki, and user atom inherit this slots-->
+  <atom>
+    <slot name="type" val="im"/>
+    <slot name="subtype" val="globals"/>
+    <slot name="time" val="_NO_VALUE_" type="number" var="_im_time"/>
+    <slot name="consumed" val="false" type="string"/>
+  </atom>
+
+  <atom>
+    <slot name="type" val="im"/>
+    <slot name="subtype" val="user"/>
+  </atom>
+
+</default_atoms>

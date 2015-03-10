@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- To the etts (voice, non verbal sounds, music...) -->
+<bml name="say_text">
+  <roboml:args>
+      <!-- If engine is non_verbal the values possibles are: "SINGING"|"CONFIRMATION"|"THINKING"|"WARNING"|"DIALOG"|"HELLO"|"ERROR"|"AMAZING"
+      If engine is music_score a partiture is valid, example:  BPM=85,A6,Ab2,C5,1/4-C3
+      Fo other engines, sentence could be any text -->
+      <arg name="sentence" value="_NO_VALUE_" type="string"/>
+      <!-- engine values =  "loquendo","google","microsfot","festival","non_verbal","music_score","console" -->
+      <arg name="engine"  value="loquendo" type="string"/>
+      <!-- emotion values = "happy","tranquility","sad","nervous" -->
+      <arg name="emotion" value="happy" type="string"/>
+      <!-- language values: any google format language, example: "es","en" -->
+      <arg name="language" value="es" type="string"/>
+      <!-- priority: QUEUE_SENTENCE | SHUTUP_IMMEDIATLY_AND_SAY_SENTENCE | SHUTUP_AND_SAY_SENTENCE | PAUSE | RESUME -->
+      <arg name="priority" value="QUEUE_SENTENCE" type="string"/>
+      <!-- volume (1-100), 0 is VOLUME_LAST_USED -->
+      <arg name="volume" value="0" type="number"/>
+  </roboml:args>
+</bml>
+
+<!-- To set a grammar on an ASR grammar-based recognizer -->
+<bml name="set_grammar">
+  <roboml:args>
+      <!-- Grammar to set on asr grammar based engine (without absolute path and without extension .gram) -->
+      <arg name="grammar" value="_NO_VALUE_" type="string"/>
+  </roboml:args>
+</bml>
+
+
+<!-- To add a new grammar on grammar-based recognizer (don't remove the currect grammars loaded on asr) -->
+<bml name="add_grammar">
+    <roboml:args>
+        <!-- Grammar to add on asr grammar based engine (without absolute path and without extension .gram) -->
+        <arg name="grammar" value="_NO_VALUE_" type="string"/>
+    </roboml:args>
+</bml>
+
+<!-- To perform a multimodal gesture (cummunicative expression) -->
+<bml name="execute_gesture">
+    <roboml:args>
+        <arg name="gesture" value="_NO_VALUE_" type="string"/> 
+        <!-- After the gesture argument, you can add any other arg
+             that will be added to the parmas field of the
+             GestureExpression.msg message 
+
+            For instance: 
+            <arg name="emotion" value="neutral" type="string"/>
+            <arg name="user_name" value="Pedro" type="string"/>
+            etc.
+         -->
+    </roboml:args>
+</bml>
+
+<bml name="abort_action">
+</bml>
+
+<!-- Action to send KVPA Messages. 
+     To use it, just put the fields you want in the recipe -->
+<bml name="kvpa">
+</bml>
+
+<!-- Action to send to the ROS Loggers -->
+<bml name="log">
+    <roboml:args>
+        <!-- name of the logger. One of the following:
+              'logdebug', 'loginfo', 'logwarn', 'logerr', 'logfatal'
+        -->
+        <arg name="logger" value="_NO_VALUE_" type="string"/>
+        <!-- Message to send to the logger-->
+        <arg name="message" value="_NO_VALUE_" type="string"/>
+    </roboml:args>
+</bml>
+
+
+<!-- Event Handler Action --> 
+<bml name="send_event">
+    <roboml:args>
+        <arg name="hand"        value="_NO_VALUE_" type="string"/>
+        <arg name="event"       value="_NO_VALUE_" type="string"/>
+        <arg name="last_event"  value="_NO_VALUE_" type="string"/>
+    </roboml:args>
+</bml>
