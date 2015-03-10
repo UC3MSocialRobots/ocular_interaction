@@ -1,0 +1,19 @@
+<package>
+  <description brief="ocular_interaction_rosbuild">
+
+     ocular_interaction_rosbuild
+
+  </description>
+  <author>Víctor González</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ocular_interaction_rosbuild</url>
+  <depend package="rospy"/>
+  <depend package="dialog_manager_msgs"/>
+  <depend package="interaction_common"/>
+  <depend package="ocular"/>
+  <depend package="monarch_multimodal_fusion"/>
+
+</package>
+
+
