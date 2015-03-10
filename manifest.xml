@@ -13,6 +13,7 @@
   <depend package="interaction_common"/>
   <depend package="ocular"/>
   <depend package="monarch_multimodal_fusion"/>
+  <depend package="rosunit"/>
 
 </package>
 

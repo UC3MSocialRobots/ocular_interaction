@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 """
-    :author: Victor Gonzalez-Pacheco (VGonPa) vgonzale@ing.uc3m.es
+:author: Victor Gonzalez-Pacheco (VGonPa) vgonzale@ing.uc3m.es
 
-    This module provides Atom Translators for OCULAR messages
+This module provides Atom Translators for OCULAR messages
 """
 
 import roslib
