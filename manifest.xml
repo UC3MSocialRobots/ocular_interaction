@@ -1,11 +1,16 @@
 <package>
   <description brief="ocular_interaction_rosbuild">
 
-     ocular_interaction_rosbuild
+     This package enables OCULAR with interaction capabilities.
+
+     - TODO: 
+        - launch ocular from this package
+        - Remap event topic to the interaction_manager
 
   </description>
   <author>Víctor González</author>
-  <license>BSD</license>
+  <license>LASRL-UC3M</license>
+  <version>0.1.0</version>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/ocular_interaction_rosbuild</url>
   <depend package="rospy"/>
