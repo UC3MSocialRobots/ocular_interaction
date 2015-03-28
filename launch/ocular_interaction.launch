@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<launch>
+  <!-- iwaki arguments -->
+  <arg name="loop_rate" default="0.1"/> <!-- seconds -->
+  <arg name="data_dir"  default="$(find ocular_interaction)/data"/>
+  <arg name="init_dir"  default="init_files"/>
+  <arg name="atoms_dir" default="atoms"/>
+  <arg name="atoms"     default="default_atoms.xml"/>
+  <arg name="init_file" default="ocular_interaction.xml"/>
+  <arg name="debug"     default="INFO"/>
+  <!-- debug levels:  ERROR, WARNING, INFO,
+                      DEBUG, DEBUG1, DEBUG2, DEBUG3, DEBUG4 -->
+    
+  <!-- Atom Translators -->
+  <node name="event_handler_atom_translator" 
+        pkg="ocular_interaction"
+        type="event_handler_atom_translator.py" 
+        respawn="false" 
+        output="screen"/>
+
+  <!-- Action Translators -->
+  <node name="event_handler_action_translator" 
+        pkg="ocular_interaction"
+        type="event_handler_action_translator.py" 
+        respawn="false" 
+        output="screen"/>
+
+  <node name="dialog_logger_node" 
+        pkg="ocular_interaction"
+        type="dialog_logger_node.py" 
+        respawn="false" 
+        output="screen"/>
+
+  <!-- Interaction Manager -->
+  <node name="interaction_manager"
+        pkg="dialog_manager"
+        type="interaction_manager_standalone.exe"
+        args="-t $(arg loop_rate)
+              -p $(arg data_dir)
+              -a $(arg atoms_dir)/$(arg atoms)
+              -i $(arg init_dir)/$(arg init_file)
+              -d $(arg debug)"
+        output="screen"/>
+
+</launch>
