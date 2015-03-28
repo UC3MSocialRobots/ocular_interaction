@@ -9,6 +9,7 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/ocular_interaction_rosbuild</url>
   <depend package="rospy"/>
+  <depend package="rospy_utils"/>
   <depend package="dialog_manager_msgs"/>
   <depend package="interaction_common"/>
   <depend package="ocular"/>
