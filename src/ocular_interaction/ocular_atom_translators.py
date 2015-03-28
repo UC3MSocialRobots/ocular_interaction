@@ -14,7 +14,7 @@ from dialog_manager_msgs.msg import (VarSlot, AtomMsg)
 
 def generate_default_slots(atom_type='_NO_VALUE_', atom_subtype='user'):
     """
-    Generates the slots that are common to every Atom
+    Generate the slots that are common to every Atom
 
     :param str atom_type: Type of the atom
     :param str atom_subtype: Subtype of te atom. Defaults to 'user'
@@ -46,13 +46,13 @@ def to_atom_msg(msg, generator_func, atom_name, atom_subtype='user'):
 
 
 def generate_event_handler_slots(event_msg):
-    """ Generates the slots for the OCULAR's event_handler_atom """
+    """ Generate the slots for the OCULAR's event_handler_atom """
     yield VarSlot(name="hand", val=event_msg.hand, type="string")
     yield VarSlot(name="event", val=event_msg.event, type="string")
     yield VarSlot(name="last_event", val=event_msg.last_event, type="string")
 
 
 def event_handler_to_atom(event_handler_msg):
-    """ Generates an OCULAR's event_handler atom """
+    """ Generate an OCULAR's event_handler atom """
     return (to_atom_msg(event_handler_msg, generate_event_handler_slots,
             'event_handler'))
