@@ -117,7 +117,7 @@
 
   <!-- OCULAR Event Handler atom -->
   <atom>
-    <slot name="type"       val="gesture_status"/>
+    <slot name="type"       val="event_handler"/>
     <slot name="subtype"    val="user"/>
     <slot name="hand"       val="_NO_VALUE_"   type="string"/>
     <slot name="event"      val="_NO_VALUE_"   type="string"/>
