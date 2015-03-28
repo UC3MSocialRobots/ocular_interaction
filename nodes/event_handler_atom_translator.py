@@ -24,13 +24,15 @@
 Node that translates EventHandler Messages to AtomMsgs
 """
 
+import roslib
+roslib.load_manifest('ocular_interaction')
 import rospy
 from rospy_utils import coroutines as co
 
 from ocular_interaction import ocular_atom_translators as tr
+
 from dialog_manager_msgs.msg import AtomMsg
 from ocular.msg import EventHandler
-
 
 if __name__ == '__main__':
     try:

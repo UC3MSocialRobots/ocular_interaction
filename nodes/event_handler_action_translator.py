@@ -23,7 +23,8 @@
 
 Node that translates ActionMsg messages to EventHandler Messages
 """
-
+import roslib
+roslib.load_manifest('ocular_interaction')
 import rospy
 from rospy_utils import coroutines as co
 
