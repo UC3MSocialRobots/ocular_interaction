@@ -11,7 +11,7 @@ roslib.load_manifest(PKG)
 
 import unittest
 from itertools import chain
-from ocular_interaction import ocular_atom_translators as otranslators
+from ocular_interaction import ocular_atom_translators as trans
 from dialog_manager_msgs.msg import AtomMsg, VarSlot
 from ocular.msg import EventHandler
 
@@ -44,16 +44,14 @@ class TestOCULAREventHandlerTranslator(unittest.TestCase):
         pass
 
     def test_generate_event_handler_slots(self):
-        slots = list(
-            otranslators.generate_event_handler_slots(self.event_msg))
+        slots = list(trans.generate_event_handler_slots(self.event_msg))
         self.assertEqual(slots, list(self.event_slots))
 
     def test_event_handler_to_atom_empty_msg(self):
-        self.assertEqual(AtomMsg(),
-                         otranslators.event_handler_to_atom(None))
+        self.assertEqual(AtomMsg(), trans.event_handler_to_atom(None))
 
     def test_event_handler_to_atom(self):
-        atom = otranslators.event_handler_to_atom(self.event_msg)
+        atom = trans.event_handler_to_atom(self.event_msg)
         self.assertEqual(self.event_handler_atom, atom)
 
 if __name__ == '__main__':
