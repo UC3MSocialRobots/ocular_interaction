@@ -13,7 +13,7 @@ from ocular.msg import EventHandler
 
 
 def action_to_event_handler(action):
-    """ Converts a dialog_manager_msgs/ActionMsg to ocular/EventHandler.msg."""
+    """ Convert a dialog_manager_msgs/ActionMsg to ocular/EventHandler.msg."""
     d = {arg.name: arg.value for arg in action.args}
     return EventHandler(hand=d['hand'], event=d['event'],
                         last_event=d['last_event'])

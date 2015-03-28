@@ -104,6 +104,12 @@
     <slot name="consumed" val="false" type="string"/>
   </atom>
 
+  <!-- An Atom to block a recipe. Use it carefully -->
+  <atom>
+    <slot name="type" val="idle"/>
+    <slot name="subtype" val="user"/>
+    <slot name="do_nothing" val="_"/>
+  </atom>
 
   <!-- ############################################################## -->
   <!-- ####### OCULAR ATOMS                                     ##### -->
