@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<launch>
+  <!-- iwaki arguments -->
+  <arg name="loop_rate" default="0.1"/> <!-- seconds -->
+  <arg name="data_dir"  default="$(find ocular_interaction)/data"/>
+  <arg name="init_dir"  default="init_files"/>
+  <arg name="atoms_dir" default="atoms"/>
+  <arg name="atoms"     default="default_atoms.xml"/>
+  <arg name="init_file" default="ocular_interaction.xml"/>
+  <arg name="loglevel"     default="INFO"/>
+  <!-- debug levels:  ERROR, WARNING, INFO,
+                      DEBUG, DEBUG1, DEBUG2, DEBUG3, DEBUG4 -->
+
+  <include file="$(find ocular)/launch/ocular.launch" >
+    <!-- TODO: REMAP NODES -->
+  </include>
+
+  <include file="$(find ocular_interaction)/launch/ocular_interaction.launch">
+    <arg name="loop_rate" value="$(arg loop_rate)"/> <!-- seconds -->
+    <arg name="data_dir"  value="$(arg data_dir)"/>
+    <arg name="init_dir"  value="$(arg init_dir)"/>
+    <arg name="atoms_dir" value="$(arg atoms_dir)"/>
+    <arg name="atoms"     value="$(arg atoms)"/>
+    <arg name="init_file" value="$(arg init_file)"/>
+    <arg name="debug"     value="$(arg loglevel)"/>
+  </include>
+
+  <!-- TODO: Add TTS and ASR Launchers -->
+
+</launch>
