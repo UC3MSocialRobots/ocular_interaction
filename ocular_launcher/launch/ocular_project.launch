@@ -11,8 +11,9 @@
   <!-- debug levels:  ERROR, WARNING, INFO,
                       DEBUG, DEBUG1, DEBUG2, DEBUG3, DEBUG4 -->
 
-  <include file="$(find ocular)/launch/ocular.launch" >
-    <!-- TODO: REMAP NODES -->
+  <include file="$(find ocular)/launch/ocular.launch">
+    <arg name="event_topic" default="event"/>
+    <arg name="interactive_event_topic" default="interactive_event"/>
   </include>
 
   <include file="$(find ocular_interaction)/launch/ocular_interaction.launch">
