@@ -10,7 +10,7 @@
   <arg name="debug"     default="INFO"/>
   <!-- debug levels:  ERROR, WARNING, INFO,
                       DEBUG, DEBUG1, DEBUG2, DEBUG3, DEBUG4 -->
-    
+
   <!-- Atom Translators -->
   <node name="event_handler_atom_translator" 
         pkg="ocular_interaction"

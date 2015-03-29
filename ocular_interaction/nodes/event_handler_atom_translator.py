@@ -40,7 +40,7 @@ if __name__ == '__main__':
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
         pipe = co.pipe([co.transformer(tr.event_handler_to_atom),
                         co.publisher('im_atom', AtomMsg)])
-        co.PipedSubscriber('event_remapped', EventHandler, pipe)
+        co.PipedSubscriber('event', EventHandler, pipe)
         rospy.spin()
     except rospy.ROSInterruptException:
         pass

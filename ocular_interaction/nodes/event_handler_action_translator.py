@@ -38,7 +38,7 @@ if __name__ == '__main__':
         rospy.init_node('ocular_event_handler_translator')
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
         pipe = co.pipe([co.transformer(tr.action_to_event_handler),
-                        co.publisher('event', EventHandler)])
+                        co.publisher('interactive_event', EventHandler)])
         co.PipedSubscriber('im_action', ActionMsg, pipe)
         rospy.spin()
     except rospy.ROSInterruptException:
