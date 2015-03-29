@@ -61,7 +61,7 @@ def callback(action_msg):
     if not __check_action_msg(action_msg):
         return
     msg = tr.action_args_to_dict(action_msg)
-    logger = msg['logger']
+    logger = _LOGGERS[msg['logger']]
     logger(msg['message'])
 
 
