@@ -1,0 +1,16 @@
+<package>
+  <description brief="ocular_launcher">
+
+     ocular_launcher
+
+  </description>
+  <author>Víctor González</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ocular_launcher</url>
+  <depend package="ocular"/>
+  <depend package="ocular_interaction"/>
+
+</package>
+
+
