@@ -1,11 +1,12 @@
 <package>
-  <description brief="ocular_launcher">
+  <description brief="Launcher package to launch all ocular packages">
 
-     ocular_launcher
+     Launcher package to launch all ocular packages
 
   </description>
   <author>Víctor González</author>
-  <license>BSD</license>
+  <version>0.1.0</version>
+  <license>LASRL-UC3M</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/ocular_launcher</url>
   <depend package="ocular"/>
