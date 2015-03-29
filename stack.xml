@@ -1,0 +1,17 @@
+<stack>
+  <description brief="Stack that contains all the OCULAR packages">
+    The OCULAR packages are:
+        - ocular (maintained in an external repo)
+        - ocular_interaction
+        - ocular_launcher
+
+  </description>
+  <author>Victor Gonzalez-Pacheco</author>
+  <license>LASR-UC3M</license>  
+  <review status="Unreviewed"/>
+  <url>http://ros.org/wiki/driver_common</url>
+  <depend stack="ocular" />
+  <depend stack="ocular_interaction" />
+  <depend stack="ocular_launcher" />
+
+</stack>
