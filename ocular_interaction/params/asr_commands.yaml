@@ -1,0 +1,6 @@
+asr_commands: {adivina: recognize,
+               reconoce: recognize,
+               probar: recognize,
+               prueba: recognize,
+               aprende: learn,
+               enseñar: learn}

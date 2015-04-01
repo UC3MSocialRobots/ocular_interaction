@@ -28,4 +28,26 @@
 
   <!-- TODO: Add TTS and ASR Launchers -->
 
+  <include file="$(find etts)/launch/etts.launch"/>    
+  
+  <rosparam command="load"
+            file="$(find ocular_interaction)/params/asr_commands.yaml"/>
+
+  <!-- Google ASR (no grammar based) -->
+  <node name="asr_open_grammar"
+        pkg="asr"
+        type="launcher_open_grammar_asr_skill.exe"
+        args=" --activate --volume_threshold 1200"
+        respawn="false"
+        output="screen">
+      <param name="language" type="string" value="spanish" />
+  </node>
+
+  <!-- Google ASR (no grammar based) -->
+  <node name="asr_command_parser"
+        pkg="ocular_interaction"
+        type="asr_command_parser.py"
+        args=" --activate --volume_threshold 1200"
+        respawn="false"
+        output="screen"/>
 </launch>
