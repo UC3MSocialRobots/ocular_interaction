@@ -25,6 +25,9 @@ Node that translates ActionMsg messages to EventHandler Messages
 """
 import roslib
 roslib.load_manifest('ocular_interaction')
+
+from functools import partial
+
 import rospy
 from rospy_utils import coroutines as co
 
@@ -33,11 +36,16 @@ from dialog_manager_msgs.msg import ActionMsg
 from ocular.msg import EventHandler
 
 
+is_action_valid = partial(tr.should_process_action,
+                          actor_name="event_handler",
+                          action_name="send_event")
+
 if __name__ == '__main__':
     try:
         rospy.init_node('ocular_event_handler_translator')
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
-        pipe = co.pipe([co.transformer(tr.action_to_event_handler),
+        pipe = co.pipe([co.filterer(is_action_valid),
+                        co.transformer(tr.action_to_event_handler),
                         co.publisher('interactive_event', EventHandler)])
         co.PipedSubscriber('im_action', ActionMsg, pipe)
         rospy.spin()
