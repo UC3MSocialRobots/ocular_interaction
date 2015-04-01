@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 # :version:      0.0.0
 # :copyright:    Copyright (C) 2014 Universidad Carlos III de Madrid.
 #                Todos los derechos reservados.
@@ -17,9 +18,8 @@
 # Robotics Lab - UC3M en el fichero LICENCIA.txt, que tambien se encuentra
 # disponible en <URL a la LASR_UC3Mv1.0>.
 
-"""
-Node that translates log messages from Interaction Manager to ROS Log messages.
-"""
+""" Translates log messages from Interaction Manager to ROS Log messages. """
+
 import roslib
 roslib.load_manifest('ocular_interaction')
 import rospy
@@ -40,25 +40,25 @@ _LOGGERS = {'logdebug': logdebug,
             'logfatal': logfatal}
 
 
-def __check_action_msg(action_msg):
-    """ Validate an action_msg. """
-    if action_msg.name != _ACTION_NAME:
-        logdebug("DM Logger Node: Action name is {}. I Only process action: {}"
-                 .format(action_msg.name, _ACTION_NAME))
-        return False
-    if action_msg.actor != _ACTOR_NAME:
-        logdebug("DM Logger Node: action {} is for actor {}. Discarding"
-                 .format(action_msg.name, action_msg.actor))
-        return False
-    if not action_msg.args:
-        logdebug("DM Logger Node: Action Message has empty args.")
-        return False
-    return True
+# def __check_action_msg(action_msg):
+#     """ Validate an action_msg. """
+#     if action_msg.name != _ACTION_NAME:
+#         logdebug("DM Logger Node: Action name is {}. I Only process action: {}"
+#                  .format(action_msg.name, _ACTION_NAME))
+#         return False
+#     if action_msg.actor != _ACTOR_NAME:
+#         logdebug("DM Logger Node: action {} is for actor {}. Discarding"
+#                  .format(action_msg.name, action_msg.actor))
+#         return False
+#     if not action_msg.args:
+#         logdebug("DM Logger Node: Action Message has empty args.")
+#         return False
+#     return True
 
 
 def callback(action_msg):
     """ Check if action_msg is valid and send it to the loggers. """
-    if not __check_action_msg(action_msg):
+    if not tr.should_process_action(action_msg, _ACTOR_NAME, _ACTION_NAME):
         return
     msg = tr.action_args_to_dict(action_msg)
     logger = _LOGGERS[msg['logger']]
