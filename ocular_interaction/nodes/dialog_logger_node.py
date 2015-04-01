@@ -40,22 +40,6 @@ _LOGGERS = {'logdebug': logdebug,
             'logfatal': logfatal}
 
 
-# def __check_action_msg(action_msg):
-#     """ Validate an action_msg. """
-#     if action_msg.name != _ACTION_NAME:
-#         logdebug("DM Logger Node: Action name is {}. I Only process action: {}"
-#                  .format(action_msg.name, _ACTION_NAME))
-#         return False
-#     if action_msg.actor != _ACTOR_NAME:
-#         logdebug("DM Logger Node: action {} is for actor {}. Discarding"
-#                  .format(action_msg.name, action_msg.actor))
-#         return False
-#     if not action_msg.args:
-#         logdebug("DM Logger Node: Action Message has empty args.")
-#         return False
-#     return True
-
-
 def callback(action_msg):
     """ Check if action_msg is valid and send it to the loggers. """
     if not tr.should_process_action(action_msg, _ACTOR_NAME, _ACTION_NAME):
