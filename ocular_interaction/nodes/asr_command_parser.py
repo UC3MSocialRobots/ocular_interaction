@@ -27,7 +27,7 @@ Node that parses the asr output and converts it to certain commands.
 import roslib
 roslib.load_manifest('ocular_interaction')
 from functools import partial
-from itertools import (ifilter, imap)
+from itertools import ifilter
 from nltk.stem import SnowballStemmer as Stemmer
 import rospy
 from rospy_utils import coroutines as co
