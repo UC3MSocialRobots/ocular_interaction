@@ -46,23 +46,23 @@ def to_atom_msg(msg, generator_func, atom_name, atom_subtype='user'):
 
 
 def generate_event_handler_slots(event_msg):
-    """ Generate the slots for the OCULAR's event_handler_atom. """
+    """Generate the slots for the OCULAR's event_handler_atom."""
     yield VarSlot(name="hand", val=event_msg.hand, type="string")
     yield VarSlot(name="event", val=event_msg.event, type="string")
     yield VarSlot(name="last_event", val=event_msg.last_event, type="string")
 
 
 def generate_user_command_slots(user_command):
-    """ Generate the slots for the OCULAR's user_command atom. """
+    """Generate the slots for the OCULAR's user_command atom."""
     yield VarSlot(name="command", val=user_command, type="string")
 
 
 def event_handler_to_atom(event_handler_msg):
-    """ Generate an OCULAR's event_handler atom. """
+    """Generate an OCULAR's event_handler atom."""
     return (to_atom_msg(event_handler_msg, generate_event_handler_slots,
             'event_handler'))
 
 
 def user_command_to_atom(command):
-    """ Generate an OCULAR's user_command atom. """
+    """Generate an OCULAR's user_command atom."""
     return (to_atom_msg(command, generate_user_command_slots, 'user_command'))

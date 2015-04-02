@@ -37,7 +37,7 @@ def should_process_action(action_msg, actor_name, action_name):
 
 
 def action_args_to_dict(action):
-    """ Return action.args in form of a dictionary. """
+    """Return action.args in form of a dictionary."""
     if not action.args:
         return None
     d = {arg.name: arg.value for arg in action.args}
@@ -45,7 +45,7 @@ def action_args_to_dict(action):
 
 
 def action_to_event_handler(action):
-    """ Convert a dialog_manager_msgs/ActionMsg to ocular/EventHandler.msg."""
+    """Convert a dialog_manager_msgs/ActionMsg to ocular/EventHandlermsg."""
     d = action_args_to_dict(action)
     logwarn("Received event from iwaki: %s", d)
     return EventHandler(hand=d.get('hand', None),
