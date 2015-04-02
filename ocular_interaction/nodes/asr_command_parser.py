@@ -69,10 +69,10 @@ if __name__ == '__main__':
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
         commands = next(pu.load_params('asr_commands'))
         commands_stemmed = {stemmer.stem(k): v for k, v in commands.items()}
-        parse_msg = partial(parse_asr_msg,
-                            commands=commands_stemmed,
-                            stemmer=stemmer)
+        parse_msg = \
+            partial(parse_asr_msg, commands=commands_stemmed, stemmer=stemmer)
         pipe = co.pipe([co.transformer(parse_msg),
+                        co.filterer(bool),
                         splitter])
         co.PipedSubscriber('open_grammar_results', ASRmsg, pipe)
         rospy.spin()
