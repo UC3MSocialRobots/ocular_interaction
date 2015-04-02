@@ -36,31 +36,41 @@ from asr_msgs.msg import open_grammar_recog_results as ASRmsg
 from std_msgs.msg import String
 from dialog_manager_msgs.msg import AtomMsg
 from ocular_interaction import ocular_atom_translators as tr
+from ocular_interaction import utils
+
+atom_logger = partial(utils.log_atom, logger=rospy.logdebug)
+
+translator_pipe = co.pipe([co.transformer(tr.user_command_to_atom),
+                           co.do(atom_logger),
+                           co.publisher('im_atom', AtomMsg)])
+
+splitter = co.splitter(co.publisher('asr_command', String),
+                       translator_pipe)
 
 
 def get_command(word, commands, stemmer):
-    """ Check wether word is a command from the commands dictionary. """
+    """Check wether word is a command from the commands dictionary."""
     return commands.get(stemmer.stem(word), None)
 
 
 def parse_sentence(sentence, commands, stemmer):
-    """ Parse a sentence and return the first command it founds in it. """
+    """Parse a sentence and return the first command it founds in it."""
     cmds = (get_command(word, commands, stemmer) for word in sentence.split())
     return ifilter(bool, cmds)
 
 
 def parse_asr_msg(msg, commands, stemmer):
-    """ Parse an ASR msg to found a command in it. """
+    """Parse an ASR msg to found a command in it."""
     try:
         return next(parse_sentence(msg.content, commands, stemmer))
     except StopIteration:
         pass
 
-translator_pipe = co.pipe([co.transformer(tr.user_command_to_atom),
-                           co.publisher('im_atom', AtomMsg)])
 
-splitter = co.splitter(co.publisher('asr_command', String),
-                       translator_pipe)
+def log_msg(msg):
+    """Log a msg to a rospy logger."""
+    rospy.logdebug("ASR message parsed to a command as: {}".format(msg))
+
 
 if __name__ == '__main__':
     stemmer = Stemmer('spanish')
@@ -72,6 +82,7 @@ if __name__ == '__main__':
         parse_msg = \
             partial(parse_asr_msg, commands=commands_stemmed, stemmer=stemmer)
         pipe = co.pipe([co.transformer(parse_msg),
+                        co.do(log_msg),
                         co.filterer(bool),
                         splitter])
         co.PipedSubscriber('open_grammar_results', ASRmsg, pipe)
