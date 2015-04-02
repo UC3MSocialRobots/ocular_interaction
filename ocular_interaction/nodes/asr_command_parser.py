@@ -37,7 +37,6 @@ from std_msgs.msg import String
 from dialog_manager_msgs.msg import AtomMsg
 from ocular_interaction import ocular_atom_translators as tr
 from ocular_interaction import utils
-
 atom_logger = partial(utils.log_atom, logger=rospy.logdebug)
 
 translator_pipe = co.pipe([co.transformer(tr.user_command_to_atom),
@@ -50,7 +49,10 @@ splitter = co.splitter(co.publisher('asr_command', String),
 
 def get_command(word, commands, stemmer):
     """Check wether word is a command from the commands dictionary."""
-    return commands.get(stemmer.stem(word), None)
+    try:
+        return commands.get(stemmer.stem(word), None)
+    except UnicodeDecodeError:
+        rospy.logwarn("UnicodeDecodeError while stemming word: {}".format(word))
 
 
 def parse_sentence(sentence, commands, stemmer):
@@ -79,6 +81,7 @@ if __name__ == '__main__':
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
         commands = next(pu.load_params('asr_commands'))
         commands_stemmed = {stemmer.stem(k): v for k, v in commands.items()}
+        rospy.logdebug("Available commands are: {}".format(commands))
         parse_msg = \
             partial(parse_asr_msg, commands=commands_stemmed, stemmer=stemmer)
         pipe = co.pipe([co.transformer(parse_msg),
