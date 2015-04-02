@@ -1,0 +1,9 @@
+nltk
+rospkg
+coverage
+flake8
+coveralls
+mock
+nose
+nose-cov
+nose-cover3
