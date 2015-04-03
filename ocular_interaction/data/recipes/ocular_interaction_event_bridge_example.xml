@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+
+<!-- ####################################################################### 
+OCULAR INTERACTION Event bridge example.
+
+This recipe is an example of the OCULAR Interaction using the Iwaki dialog Manager
+It simply bypasses the event_handler topic through iwaki.
+
+<!-- ####################################################################### -->
+<recipe name="ocular_interaction_event_example">
+  <precondition>
+    <atom>
+      <slot name="type"        val="event_handler"/>
+      <slot name="subtype"     val="user"/>
+      <slot name="event"       rel="equal" val="learn"/>
+      <slot name="last_event"  rel="equal" val="recognize"/>
+      <slot name="consumed"    rel="equal" val="false"/>
+      <slot name="hand"        rel= "bind" var="hand_var"/>
+      <slot name="event"       rel= "bind" var="event_var"/>
+      <slot name="last_event"  rel= "bind" var="last_event_var"/>
+      <slot name="this" rel="bind" var="event_handler_atom"/>
+    </atom> 
+  </precondition>
+
+  <body  order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" 
+             value="Recipe Triggered: ocular_interaction_event_example" 
+             type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Send event to OCULAR -->
+    <action name="send_event" actor="event_handler">
+      <roboml:args>
+        <arg name="hand"        value="$hand_var"       type="string"/>
+        <arg name="event"       value="$event_var"      type="string"/>
+        <arg name="last_event"  value="$last_event_var"  type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" 
+             value="Waiting for learning ends..." 
+             type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Go to specific recipes --> 
+    <goal recipe_name="wait_until_learning_ends" 
+          initiator="any"/>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" 
+             value="Finishing recipe: ocular_interaction_event_example" 
+             type="string"/>
+      </roboml:args>
+    </action>
+
+    <assignment>
+    </assignment>
+  </body>
+
+  <assignpost>
+    <atom>
+        <slot name="this" var="event_handler_atom"/>
+        <slot name="consumed" val="true"/>
+    </atom> 
+  </assignpost>
+
+</recipe>
+
+
+
+<!-- ####################################################################### -->
+<!-- Wait for End of learning                                                -->
+<!-- ####################################################################### -->
+<recipe name="wait_until_learning_ends">
+  <precondition>
+    <atom>
+      <slot name="type"        val="event_handler"/>
+      <slot name="subtype"     val="user"/>
+      <slot name="event"       rel="equal" val="recognize"/>
+      <slot name="last_event"  rel="equal" val="learn"/>
+      <slot name="consumed"    rel="equal" val="false"/>
+      <slot name="hand"        rel= "bind" var="hand_var"/>
+      <slot name="event"       rel= "bind" var="event_var"/>
+      <slot name="last_event"  rel= "bind" var="last_event_var"/>
+      <slot name="this" rel="bind" var="event_handler_atom"/>
+    </atom> 
+  </precondition>
+
+  <body  order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" 
+             value="Recipe Triggered: wait_until_learning_ends" 
+             type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" 
+             value="Learning ended." 
+             type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" 
+             value="Finishing recipe: wait_until_learning_ends" 
+             type="string"/>
+      </roboml:args>
+    </action>
+
+    <assignment>
+    </assignment>
+  </body>
+
+  <assignpost>
+    <atom>
+        <slot name="this" var="event_handler_atom"/>
+        <slot name="consumed" val="true"/>
+    </atom> 
+  </assignpost>
+</recipe>
