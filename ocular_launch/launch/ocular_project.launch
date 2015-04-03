@@ -43,7 +43,7 @@
       <param name="language" type="string" value="spanish" />
   </node>
 
-  <!-- Google ASR (no grammar based) -->
+  <!-- ASR Command parser -->
   <node name="asr_command_parser"
         pkg="ocular_interaction"
         type="asr_command_parser.py"
