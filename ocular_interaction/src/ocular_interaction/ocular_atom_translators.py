@@ -12,6 +12,10 @@ from itertools import chain
 from dialog_manager_msgs.msg import (VarSlot, AtomMsg)
 
 
+###############################################################################
+# Slot translators
+###############################################################################
+
 def generate_default_slots(atom_type='_NO_VALUE_', atom_subtype='user'):
     """
     Generate the slots that are common to every Atom.
@@ -26,6 +30,29 @@ def generate_default_slots(atom_type='_NO_VALUE_', atom_subtype='user'):
     yield VarSlot(name="timestamp", val="_NO_VALUE_", type="number")
     yield VarSlot(name="consumed", val="false", type="string")
 
+
+def generate_event_handler_slots(event_msg):
+    """Generate the slots for the OCULAR's event_handler_atom."""
+    yield VarSlot(name="hand", val=event_msg.hand, type="string")
+    yield VarSlot(name="event", val=event_msg.event, type="string")
+    yield VarSlot(name="last_event", val=event_msg.last_event, type="string")
+
+
+def generate_user_command_slots(user_command):
+    """Generate the slots for the OCULAR's user_command atom."""
+    yield VarSlot(name="command", val=user_command, type="string")
+
+
+def generate_google_asr_slots(asr_msg):
+    """Generate the slots for the Atoms corresponding Goolge ASR messages."""
+    yield VarSlot(name="content", val=asr_msg.content, type="string")
+    yield VarSlot(name="confidence", val=asr_msg.confidence, type="number")
+    yield VarSlot(name="languageID", val=asr_msg.languageID, type="number")
+
+
+###############################################################################
+# Atom translators
+###############################################################################
 
 def to_atom_msg(msg, generator_func, atom_name, atom_subtype='user'):
     """
@@ -45,24 +72,18 @@ def to_atom_msg(msg, generator_func, atom_name, atom_subtype='user'):
     return AtomMsg(varslots=list(varslots))
 
 
-def generate_event_handler_slots(event_msg):
-    """Generate the slots for the OCULAR's event_handler_atom."""
-    yield VarSlot(name="hand", val=event_msg.hand, type="string")
-    yield VarSlot(name="event", val=event_msg.event, type="string")
-    yield VarSlot(name="last_event", val=event_msg.last_event, type="string")
-
-
-def generate_user_command_slots(user_command):
-    """Generate the slots for the OCULAR's user_command atom."""
-    yield VarSlot(name="command", val=user_command, type="string")
-
-
 def event_handler_to_atom(event_handler_msg):
     """Generate an OCULAR's event_handler atom."""
-    return (to_atom_msg(event_handler_msg, generate_event_handler_slots,
-            'event_handler'))
+    return to_atom_msg(event_handler_msg,
+                       generate_event_handler_slots,
+                       'event_handler')
 
 
 def user_command_to_atom(command):
     """Generate an OCULAR's user_command atom."""
-    return (to_atom_msg(command, generate_user_command_slots, 'user_command'))
+    return to_atom_msg(command, generate_user_command_slots, 'user_command')
+
+
+def asr_msg_to_atom(asr_msg):
+    """Generate an OCULAR's asr atom. """
+    return to_atom_msg(asr_msg, generate_google_asr_slots, 'asr_googleOK')
