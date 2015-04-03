@@ -37,6 +37,9 @@ from std_msgs.msg import String
 from dialog_manager_msgs.msg import AtomMsg
 from ocular_interaction import ocular_atom_translators as tr
 from ocular_interaction import utils
+
+import colorama
+
 atom_logger = partial(utils.log_atom, logger=rospy.logdebug)
 
 translator_pipe = co.pipe([co.transformer(tr.user_command_to_atom),
@@ -69,9 +72,14 @@ def parse_asr_msg(msg, commands, stemmer):
         pass
 
 
+def colorize(logmsg, color=colorama.Fore.MAGENTA):
+    """Colorize a message with green colors."""
+    return ''.join([color, logmsg, colorama.Fore.RESET])
+
+
 def log_msg(msg):
     """Log a msg to a rospy logger."""
-    rospy.logdebug("ASR message parsed to a command as: {}".format(msg))
+    rospy.loginfo(colorize("ASR message parsed to a command: {}".format(msg)))
 
 
 if __name__ == '__main__':
