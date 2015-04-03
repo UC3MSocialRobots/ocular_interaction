@@ -1,4 +1,5 @@
 nltk
+enum34
 rospkg
 coverage
 flake8
