@@ -4,4 +4,10 @@ asr_commands: {adivina: recognize,
                probar: recognize,
                prueba: recognize,
                aprende: learn,
-               enseñar: learn}
+               enseñar: learn,
+               para: finish,
+               stop: finish,
+               acabar: finish,
+               dejalo: finish,
+               déjalo: finish,
+               fin: finish}
