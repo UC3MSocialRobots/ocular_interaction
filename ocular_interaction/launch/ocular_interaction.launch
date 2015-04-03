@@ -25,6 +25,12 @@
         respawn="false" 
         output="screen"/>
 
+  <node name="etts_action_translator" 
+        pkg="ocular_interaction"
+        type="etts_action_translator.py" 
+        respawn="false" 
+        output="screen"/>
+
   <node name="dialog_logger_node" 
         pkg="ocular_interaction"
         type="dialog_logger_node.py" 

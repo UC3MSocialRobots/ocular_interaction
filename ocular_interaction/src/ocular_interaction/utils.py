@@ -26,7 +26,7 @@ import roslib
 roslib.load_manifest('monarch_multimodal_fusion')
 # import rospy
 from rospy import loginfo
-
+from enum import Enum
 
 # LOGGING UTILS ###############################################################
 def_slots = {'timestamp', 'consumed', 'subtype', 'type'}
@@ -59,3 +59,8 @@ def log_varslot(varslot, logger=loginfo):
     """
     logger("Name: {} -- Val: {} -- Type: {}"
            .format(varslot.name, varslot.val, varslot.type))
+
+# TTS UTILS ###################################################################
+TTS_ENGINES = ('novoice', 'festival', 'google', 'loquendo', 'microsoft',
+               'nonverbal', 'music_score', 'pico', 'espeak')
+TTSEngine = Enum('TTSEngine', ' '.join(TTS_ENGINES))

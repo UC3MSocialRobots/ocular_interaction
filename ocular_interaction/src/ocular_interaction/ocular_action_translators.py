@@ -9,8 +9,9 @@ This module provides Action Translators for OCULAR messages
 import roslib
 roslib.load_manifest('ocular_interaction')
 from rospy import logdebug, logwarn
+from ocular_interaction.utils import TTSEngine
 from ocular.msg import EventHandler
-
+from etts_msgs.msg import Utterance
 
 def should_process_action(action_msg, actor_name, action_name):
     """
@@ -51,3 +52,17 @@ def action_to_event_handler(action):
     return EventHandler(hand=d.get('hand', None),
                         event=d.get('event', None),
                         last_event=d.get('last_event', None))
+
+
+def action_to_etts(action):
+    """Convert a dialog_manager_msgs/ActionMsg to etts_msgs/Uterance."""
+    d = action_args_to_dict(action)
+    logwarn("Received event from iwaki: %s", d)
+    tts_engine = getattr(TTSEngine, d.get('engine', 'google')).value
+    return Utterance(text=d.get('sentence'),
+                     language=d.get('language', 'es'),  # Spanish by default.
+                     primitive=tts_engine,              # Google by default.
+                     volume=d.get('volume'),
+                     emotion=d.get('emotion'),
+                     volume=d.get('volume'),
+                     priority=d.get('priority'))
