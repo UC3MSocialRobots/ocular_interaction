@@ -58,11 +58,10 @@ def action_to_etts(action):
     """Convert a dialog_manager_msgs/ActionMsg to etts_msgs/Uterance."""
     d = action_args_to_dict(action)
     logwarn("Received event from iwaki: %s", d)
-    tts_engine = getattr(TTSEngine, d.get('engine', 'google')).value
+    tts_engine = getattr(TTSEngine, d.get('engine', 'google'), TTSEngine.google)
     return Utterance(text=d.get('sentence'),
-                     language=d.get('language', 'es'),  # Spanish by default.
-                     primitive=tts_engine,              # Google by default.
-                     volume=d.get('volume'),
-                     emotion=d.get('emotion'),
-                     volume=d.get('volume'),
-                     priority=d.get('priority'))
+                     primitive=tts_engine.value,
+                     language='es',               # Force Spanish
+                     volume=0,                    # Use last set volume
+                     emotion=1,                   # Force happy emotion
+                     priority=2)                  # Queue messages
