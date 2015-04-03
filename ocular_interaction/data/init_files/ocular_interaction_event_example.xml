@@ -2,11 +2,11 @@
 
 <iminit>
   <triggerables>
-    <recipe name="start_learning" max_instances="1"/>
+    <recipe name="ocular_interaction_event_example" max_instances="1"/>
 </triggerables>
 
   <recipefiles>
-    <file>ocular_interaction.xml</file>
+    <file>ocular_interaction_event_bridge_example.xml</file>
 </recipefiles>
 
   <actionfiles>
