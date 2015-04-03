@@ -9,12 +9,12 @@
           BPM=85,A6,Ab2,C5,1/4-C3
         Fo other engines, sentence could be any text
     
-      :engine:   "loquendo","google","microsfot","festival","non_verbal","music_score","console
+      :engine:  'last_used', 'novoice', 'festival', 'google', 'loquendo', 'microsoft', 'nonverbal', 'music_score', 'pico', 'espeak'
 
       :emotion:
         "happy","tranquility","sad","nervous" 
 
-      language: values: any google format language, example: "es","en"
+      language: values: any google format language, example: "es","en", "pt"
       :priority: 
           QUEUE_SENTENCE | SHUTUP_IMMEDIATLY_AND_SAY_SENTENCE | SHUTUP_AND_SAY_SENTENCE | PAUSE | RESUME
       :volume: (1-100), 0 is VOLUME_LAST_USED
@@ -22,11 +22,11 @@
 <bml name="say_text">
   <roboml:args>
       <arg name="sentence" value="_NO_VALUE_" type="string"/>
-      <arg name="engine"  value="loquendo" type="string"/>      
-      <arg name="emotion" value="happy" type="string"/>
+      <arg name="engine"   value="google" type="string"/>      
+      <arg name="emotion"  value="happy" type="string"/>
       <arg name="language" value="es" type="string"/>
       <arg name="priority" value="QUEUE_SENTENCE" type="string"/>
-      <arg name="volume" value="0" type="number"/>
+      <arg name="volume"   value="0" type="number"/>
   </roboml:args>
 </bml>
 
@@ -91,7 +91,7 @@
 -->
 <bml name="log">
     <roboml:args>
-        <arg name="logger" value="_NO_VALUE_" type="string"/>
+        <arg name="logger"  value="_NO_VALUE_" type="string"/>
         <arg name="message" value="_NO_VALUE_" type="string"/>
     </roboml:args>
 </bml>
