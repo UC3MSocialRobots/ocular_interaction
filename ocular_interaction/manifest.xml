@@ -16,6 +16,8 @@
   <depend package="rospy"/>
   <depend package="rospy_utils"/>
   <depend package="dialog_manager_msgs"/>
+  <depend package="etts_msgs"/>
+  <depend package="asr_msgs"/>
   <depend package="interaction_common"/>
   <depend package="ocular"/>
   <depend package="rosunit"/>
