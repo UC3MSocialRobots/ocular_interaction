@@ -40,7 +40,7 @@ if __name__ == '__main__':
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
         pipe = co.pipe([co.transformer(tr.asr_msg_to_atom),
                         co.publisher('im_atom', AtomMsg)])
-        co.PipedSubscriber('event', ASRMsg, pipe)
+        co.PipedSubscriber('open_grammar_results', ASRMsg, pipe)
         rospy.spin()
     except rospy.ROSInterruptException:
         pass
