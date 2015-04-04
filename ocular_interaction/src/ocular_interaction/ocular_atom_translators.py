@@ -46,8 +46,8 @@ def generate_user_command_slots(user_command):
 def generate_google_asr_slots(asr_msg):
     """Generate the slots for the Atoms corresponding Goolge ASR messages."""
     yield VarSlot(name="content", val=asr_msg.content, type="string")
-    yield VarSlot(name="confidence", val=asr_msg.confidence, type="number")
-    yield VarSlot(name="languageID", val=asr_msg.languageID, type="number")
+    yield VarSlot(name="confidence", val=str(asr_msg.confidence), type="number")
+    yield VarSlot(name="languageID", val=str(asr_msg.languageID), type="number")
 
 
 ###############################################################################
