@@ -1,4 +1,5 @@
 nltk
+pattern
 enum34
 rospkg
 coverage
