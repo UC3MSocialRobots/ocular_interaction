@@ -25,8 +25,10 @@ Several utilities for the OCULAR Interaction packages.
 import roslib
 roslib.load_manifest('monarch_multimodal_fusion')
 # import rospy
-from rospy import loginfo
+from pattern.es import parse
 from enum import Enum
+from rospy import loginfo
+from functools import partial
 
 # LOGGING UTILS ###############################################################
 def_slots = {'timestamp', 'consumed', 'subtype', 'type'}
@@ -64,3 +66,56 @@ def log_varslot(varslot, logger=loginfo):
 TTS_ENGINES = ('novoice', 'festival', 'google', 'loquendo', 'microsoft',
                'nonverbal', 'music_score', 'pico', 'espeak')
 TTSEngine = Enum('TTSEngine', ' '.join(TTS_ENGINES))
+
+
+# TEXT PARSING UTILS ##########################################################
+def tokenize(pos_sentence):
+    """
+    Tokenize a POS sentence.
+
+    Note: POS is Part-of-Speech Tagging.
+
+    :return: list of [word, *tags]
+    :rtype: list of lists
+
+    Example:
+
+        >>>s = parse("esto es una botella.")
+        >>> s
+        u'esto/DT/O/O es/VB/B-VP/O una/DT/B-NP/O botella/NN/I-NP/O ././O/O'
+        >>> list(tokenize(s.split(' ')))
+        [[u'esto', u'DT', u'O', u'O'],
+         [u'es', u'VB', u'B-VP', u'O'],
+         [u'una', u'DT', u'B-NP', u'O'],
+         [u'botella', u'NN', u'I-NP', u'O'],
+         [u'.', u'.', u'O', u'O']]
+    """
+    return (word.split('/') for word in pos_sentence)
+
+
+def get_tagged(tokens, tag):
+    """
+    Return tokens that have been tagged with tag.
+
+    Example:
+
+        >>>s = parse("esto es una botella.")
+        >>> s
+        u'esto/DT/O/O es/VB/B-VP/O una/DT/B-NP/O botella/NN/I-NP/O ././O/O'
+        >>> list(get_tags(tokenize(s.split(' ')), 'NN'))
+        [[u'botella', u'NN', u'I-NP', u'O']]
+    """
+    return (t for t in tokens if t[1] == tag)
+
+get_nouns = partial(get_tagged, tag='NN')
+get_verbs = partial(get_tagged, tag='VB')
+
+
+# ASR PARSING UTILS ###########################################################
+
+
+def get_nouns_from_asr(asr_msg):
+    """Get all nouns from an ASR message."""
+    sentence = parse(asr_msg.content)
+    nouns = zip(*get_nouns(tokenize(sentence.split(' '))))[0]
+    return nouns
