@@ -18,11 +18,29 @@
         respawn="false" 
         output="screen"/>
 
-    <node name="asr_atom_translator" 
-        pkg="ocular_interaction"
-        type="asr_atom_translator.py" 
-        respawn="false" 
-        output="screen"/>
+  
+  <node name="event_handler_translator_rate_limiter"
+        type="throttle"
+        pkg="topic_tools"
+        args="messages event 1 /event_low_rate"/>
+
+  <node name="asr_atom_translator" 
+      pkg="ocular_interaction"
+      type="asr_atom_translator.py" 
+      respawn="false" 
+      output="screen"/>
+
+  <node name="object_name_atom_translator"
+      pkg="ocular_interaction"
+      type="object_name_atom_translator.py"
+      respawn="false"
+      output="screen"/>
+
+  <node name="object_learned_atom_translator"
+      pkg="ocular_interaction"
+      type="object_learned_atom_translator.py"
+      respawn="false"
+      output="screen"/>
 
   <!-- Action Translators -->
   <node name="event_handler_action_translator" 
@@ -42,6 +60,13 @@
         type="dialog_logger_node.py" 
         respawn="false" 
         output="screen"/>
+
+  <node name="object_name_action_translator" 
+        pkg="ocular_interaction"
+        type="object_name_action_translator.py" 
+        respawn="false" 
+        output="screen"/>
+
 
   <!-- Other Nodes -->
   <node name="object_id_notifier" 
