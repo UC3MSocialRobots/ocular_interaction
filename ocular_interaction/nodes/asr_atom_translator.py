@@ -18,10 +18,10 @@
 # disponible en <URL a la LASR_UC3Mv1.0>.
 
 """
+Node that translates ASR Messages to AtomMsgs
+
 :author: Victor Gonzalez Pacheco
 :maintainer: Victor Gonzalez Pacheco
-
-Node that translates ASR Messages to AtomMsgs
 """
 
 import roslib
@@ -36,7 +36,7 @@ from asr_msgs.msg import open_grammar_recog_results as ASRMsg
 
 if __name__ == '__main__':
     try:
-        rospy.init_node('ocular_event_handler_translator')
+        rospy.init_node('ocular_asr_translator')
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
         pipe = co.pipe([co.transformer(tr.asr_msg_to_atom),
                         co.publisher('im_atom', AtomMsg)])
