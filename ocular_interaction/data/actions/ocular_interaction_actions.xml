@@ -105,3 +105,11 @@
         <arg name="last_event"  value="_NO_VALUE_" type="string"/>
     </roboml:args>
 </bml>
+
+
+<!-- Object Name: Action to tell the name of an object -->
+<bml name="object_name">
+    <roboml:args>
+        <arg name="object_name" value="_NO_VALUE_" type="string"/> 
+    </roboml:args>
+</bml>
