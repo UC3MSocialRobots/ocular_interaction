@@ -30,9 +30,9 @@ roslib.load_manifest('ocular_interaction')
 import rospy
 from ocular_interaction import utils
 
+from std_msgs.msg import String
 from ocular.msg import LearningFinished as LFMsg
 from ocular_interaction.msg import ObjectDescriptor
-from asr_msgs.msg import open_grammar_recog_results as ASRMsg
 
 _DEFAULT_NAME = 'object_id_notifier'
 
@@ -52,9 +52,9 @@ class ObjectIDAccumulator(object):
         self.learners = ('2D', '3D')
         self.ids = dict.fromkeys(self.learners)
         self.object_name = None
-        self.pub = rospy.Publisher('named_object', ObjectDescriptor)
+        self.pub = rospy.Publisher('learned_object', ObjectDescriptor)
         rospy.Subscriber('learning_finished', LFMsg, self.callback)
-        rospy.Subscriber('open_grammar_results', ASRMsg, self.asr_callback)
+        rospy.Subscriber('object_name', String, self.object_name_cb)
 
     def callback(self, msg):
         """Check if action_msg is valid and send it to the loggers."""
@@ -64,7 +64,7 @@ class ObjectIDAccumulator(object):
             rospy.logwarn("Discarding unknown learner %s.", msg.learner)
             return
 
-        for _, obj_id in self.ids.iteritems():
+        for obj_id in self.ids.values():
             if obj_id is None:
                 return
 
@@ -73,9 +73,9 @@ class ObjectIDAccumulator(object):
                                           id3D=self.ids['3D']))
         self.ids = dict.fromkeys(self.learners)  # Clear dict values.
 
-    def asr_callback(self, asrmsg):
-        """Store object name from an asr sentence."""
-        self.object_name = utils.get_nouns_from_asr(asrmsg)[0]
+    def object_name_cb(self, name):
+        """Store object name."""
+        self.object_name = name.data
 
     def run(self):
         """Run the node."""
