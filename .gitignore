@@ -9,6 +9,8 @@ syntax: glob
 .tox
 nosetests.xml
 build
+msg_gen
+*/src/*/msg/*
 src/rospkg.egg-info
 syntax: regexp
 (target|build|dist)/.*
