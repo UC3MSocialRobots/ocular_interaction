@@ -7,7 +7,7 @@
   <arg name="atoms_dir" default="atoms"/>
   <arg name="atoms"     default="default_atoms.xml"/>
   <arg name="init_file" default="ocular_interaction.xml"/>
-  <arg name="loglevel"     default="INFO"/>
+  <arg name="loglevel"  default="INFO"/>
   <!-- debug levels:  ERROR, WARNING, INFO,
                       DEBUG, DEBUG1, DEBUG2, DEBUG3, DEBUG4 -->
 
