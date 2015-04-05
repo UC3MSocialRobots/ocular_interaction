@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ####################################################################### 
+      Wait for user start
+<!-- ####################################################################### -->
+<recipe name="get_object_name">
+  <precondition>
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body  order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Recipe Triggered: get_object_name" type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Send event to OCULAR -->
+    <action name="send_event" actor="event_handler">
+      <roboml:args>
+        <arg name="hand"        value="$hand_var"  type="string"/>
+        <arg name="event"       value="learn"      type="string"/>
+        <arg name="last_event"  value="recognize"  type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="say_text" actor="etts">
+      <roboml:args>
+        <arg name="sentence" value="¿Cómo se llama el objeto que me vas a ensenyar?" type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="Waiting for user to give the object name" type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Go to specific recipes ············································ -->
+    <goal recipe_name="get_object_name_from_asr" initiator="any"/>
+    <!-- ··································································  -->
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="Got object name from ASR. Now I will tell it to the user to confirm its name." type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Go to specific recipes ············································ -->
+    <goal recipe_name="tell_object_name" initiator="any"/>
+    <!-- ··································································  -->
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="Finishing recipe: get_object_name" type="string"/>
+      </roboml:args>
+    </action>
+
+    <assignment>
+    </assignment>
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+
+  <assignpost>
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->
+
+
+<!-- ####################################################################### -->
+<!-- Get Object Name from ASR                                                -->
+<!-- ####################################################################### -->
+<recipe name="get_object_name_from_asr">
+  <precondition>
+    <atom>
+      <slot name="type"     val="asr_googleOK"/>
+      <slot name="subtype"  val="user"/>
+      <slot name="consumed" rel="equal" val="false"/>
+      <slot name="content"  rel= "bind" var="content_var"/>
+      <slot name="this" rel="bind" var="asr_google_OK_atom"/>
+    </atom> 
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Recipe Triggered: get_object_name_from_asr" type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="object_name" actor="object_name_translator">
+      <roboml:args>
+          <arg name="object_name" value="$content_var" type="string"/> 
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Finishing recipe: get_object_name_from_asr" type="string"/>
+      </roboml:args>
+    </action>
+
+    <assignment>
+    </assignment>
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+
+  <assignpost>
+    <atom>
+        <slot name="this" var="asr_google_OK_atom"/>
+        <slot name="consumed" val="true"/>
+    </atom> 
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->
+
+<!-- ####################################################################### -->
+<!-- Tell Object Name to user                                                -->
+<!-- ####################################################################### -->
+<recipe name="tell_object_name">
+  <precondition>
+    <atom>
+      <slot name="type"         val="object_name"/>
+      <slot name="subtype"      val="user"/>
+      <slot name="consumed"     rel="equal" val="false"/>
+      <slot name="object_name"  rel="bind" var="object_name_var"/>
+      <slot name="this" rel="bind" var="object_name_atom"/>
+    </atom> 
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Recipe Triggered: tell_object_name" type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="say_text" actor="etts">
+      <roboml:args>
+        <arg name="sentence" value="Vale, $object_name_var. ¡Espero poder acordarme!, jejej" type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Finishing recipe: tell_object_name" type="string"/>
+      </roboml:args>
+    </action>
+
+    <assignment>
+    </assignment>
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+
+  <assignpost>
+    <atom>
+        <slot name="this" var="object_name_atom"/>
+        <slot name="consumed" val="true"/>
+    </atom> 
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->
