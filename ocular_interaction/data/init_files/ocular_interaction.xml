@@ -7,6 +7,7 @@
 
   <recipefiles>
     <file>ocular_interaction.xml</file>
+    <file>get_object_name.xml</file>
 </recipefiles>
 
   <actionfiles>
