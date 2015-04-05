@@ -43,6 +43,14 @@
         respawn="false" 
         output="screen"/>
 
+  <!-- Other Nodes -->
+  <node name="object_id_notifier" 
+        pkg="ocular_interaction"
+        type="object_id_notifier.py" 
+        respawn="false" 
+        output="screen"/>
+
+
   <!-- Interaction Manager -->
   <node name="interaction_manager"
         pkg="dialog_manager"
