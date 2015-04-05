@@ -50,6 +50,18 @@ def generate_google_asr_slots(asr_msg):
     yield VarSlot(name="languageID", val=str(asr_msg.languageID), type="number")
 
 
+def generate_object_name_slots(string_msg):
+    """Generate the slots for the object_name Atom."""
+    yield VarSlot(name="object_name", val=string_msg.data, type="string")
+
+
+def generate_learned_object_slots(learned_msg):
+    """Generate the slots for the ObjectDescriptor Messages."""
+    yield VarSlot(name="object", val=learned_msg.name, type="string")
+    yield VarSlot(name="id2D", val=str(learned_msg.id2D), type="number")
+    yield VarSlot(name="id3D", val=str(learned_msg.id3D), type="number")
+
+
 ###############################################################################
 # Atom translators
 ###############################################################################
@@ -85,5 +97,15 @@ def user_command_to_atom(command):
 
 
 def asr_msg_to_atom(asr_msg):
-    """Generate an OCULAR's asr atom. """
+    """Generate an OCULAR's asr atom."""
     return to_atom_msg(asr_msg, generate_google_asr_slots, 'asr_googleOK')
+
+
+def object_name_to_atom(object_name):
+    """Generate an OCULAR's object_name Atom."""
+    return to_atom_msg(object_name, generate_object_name_slots, 'object_name')
+
+
+def learned_object_to_atom(obj_msg):
+    """Generate an OCULAR's learned_object atom."""
+    return to_atom_msg(obj_msg, generate_learned_object_slots, 'object_learned')
