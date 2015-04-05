@@ -19,7 +19,7 @@
 This node fuses the 2D and 3D object id with an object name.
 
 It gets the object's id for its 2D and 3D templates
-and matches them with an object name given by the user. 
+and matches them with an object name given by the user.
 
 :author: Victor Gonzalez Pacheco
 :maintainer: Victor Gonzalez Pacheco
@@ -28,7 +28,6 @@ and matches them with an object name given by the user.
 import roslib
 roslib.load_manifest('ocular_interaction')
 import rospy
-# from rospy_utils import coroutines as co
 from ocular_interaction import utils
 
 from ocular.msg import LearningFinished as LFMsg
@@ -53,7 +52,7 @@ class ObjectIDAccumulator(object):
         self.learners = ('2D', '3D')
         self.ids = dict.fromkeys(self.learners)
         self.object_name = None
-        self.pub = rospy.publisher('named_object', ObjectDescriptor)
+        self.pub = rospy.Publisher('named_object', ObjectDescriptor)
         rospy.Subscriber('learning_finished', LFMsg, self.callback)
         rospy.Subscriber('open_grammar_results', ASRMsg, self.asr_callback)
 
