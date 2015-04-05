@@ -16,16 +16,19 @@
 # disponible en <URL a la LASR_UC3Mv1.0>.
 
 """
+This node fuses the 2D and 3D object id with an object name.
+
+It gets the object's id for its 2D and 3D templates
+and matches them with an object name given by the user. 
+
 :author: Victor Gonzalez Pacheco
 :maintainer: Victor Gonzalez Pacheco
-
-Node that detects when a user
 """
 
 import roslib
 roslib.load_manifest('ocular_interaction')
 import rospy
-from rospy_utils import coroutines as co
+# from rospy_utils import coroutines as co
 from ocular_interaction import utils
 
 from ocular.msg import LearningFinished as LFMsg
@@ -37,9 +40,14 @@ _DEFAULT_NAME = 'object_id_notifier'
 
 class ObjectIDAccumulator(object):
 
-    """docstring for ObjectIDAccumulator."""
+    """
+    This node fuses the 2D and 3D object id with an object name.
 
-    def __init__(self, arg):
+    It gets the object's id for its 2D and 3D templates
+    and matches them with an object name given by the user.
+    """
+
+    def __init__(self):
         """Init."""
         super(ObjectIDAccumulator, self).__init__()
         self.learners = ('2D', '3D')
@@ -57,7 +65,7 @@ class ObjectIDAccumulator(object):
             rospy.logwarn("Discarding unknown learner %s.", msg.learner)
             return
 
-        for learner, obj_id in self.ids.iteritems():
+        for _, obj_id in self.ids.iteritems():
             if obj_id is None:
                 return
 
