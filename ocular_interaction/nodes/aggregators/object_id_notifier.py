@@ -37,7 +37,7 @@ from ocular_interaction.msg import ObjectDescriptor
 _DEFAULT_NAME = 'object_id_notifier'
 
 
-class ObjectIDAccumulator(object):
+class ObjectNameIDAggregator(object):
 
     """
     This node fuses the 2D and 3D object id with an object name.
@@ -48,7 +48,7 @@ class ObjectIDAccumulator(object):
 
     def __init__(self):
         """Init."""
-        super(ObjectIDAccumulator, self).__init__()
+        super(ObjectNameIDAggregator, self).__init__()
         self.learners = ('2D', '3D')
         self.ids = dict.fromkeys(self.learners)
         self.object_name = None
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     try:
         rospy.init_node(_DEFAULT_NAME)
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
-        accum = ObjectIDAccumulator()
+        accum = ObjectNameIDAggregator()
         accum.run()
     except rospy.ROSInterruptException:
         pass
