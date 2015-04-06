@@ -40,8 +40,8 @@ def colorize(logmsg, color=colorama.Fore.MAGENTA):
     """Colorize a message with green colors."""
     return ''.join([color, logmsg, colorama.Fore.RESET])
 
+green = partial(colorize, color=colorama.Fore.GREEN)
 blue = partial(colorize, color=colorama.Fore.BLUE)
-gree = partial(colorize, color=colorama.Fore.GREEN)
 
 
 def log_atom(msg, logger=loginfo, color=blue):
@@ -131,8 +131,10 @@ def get_first_noun(sentence):
     """Return the first noun that is found in a sentence."""
     s = parse(sentence)
     tokens = tokenize(s.split(' '))
-    nouns = zip(*get_nouns(tokens))[0]
-    return nouns[0]
+    nouns = zip(*get_nouns(tokens))
+    if nouns:
+        return nouns[0][0]      # Return first noun that has been found
+    return None                 # Else return None
 
 
 # ASR PARSING UTILS ###########################################################
