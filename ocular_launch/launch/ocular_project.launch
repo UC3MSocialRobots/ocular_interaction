@@ -10,6 +10,8 @@
   <arg name="loglevel"  default="INFO"/>
   <!-- debug levels:  ERROR, WARNING, INFO,
                       DEBUG, DEBUG1, DEBUG2, DEBUG3, DEBUG4 -->
+  <arg name="db_dir" default="$(env PWD)"/>
+  <arg name="object_db"/>   <!-- Filename of the object database -->
 
   <include file="$(find ocular)/launch/ocular.launch">
     <arg name="event_topic" default="event"/>
@@ -24,10 +26,10 @@
     <arg name="atoms"     value="$(arg atoms)"/>
     <arg name="init_file" value="$(arg init_file)"/>
     <arg name="debug"     value="$(arg loglevel)"/>
+    <arg name="object_db" value="$(arg db_dir)/$(arg object_db)"/>
   </include>
 
-
-  <include file="$(find etts)/launch/etts.launch"/>    
+  <include file="$(find etts)/launch/etts.launch"/>
   
   <rosparam command="load"
             file="$(find ocular_interaction)/params/asr_commands.yaml"/>

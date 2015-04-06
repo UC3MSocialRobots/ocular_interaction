@@ -10,6 +10,7 @@
   <arg name="debug"     default="INFO"/>
   <!-- debug levels:  ERROR, WARNING, INFO,
                       DEBUG, DEBUG1, DEBUG2, DEBUG3, DEBUG4 -->
+  <arg name="object_db"/>   <!-- Filename of the object database -->
 
   <!-- Atom Translators -->
   <node name="event_handler_atom_translator" 
@@ -67,7 +68,7 @@
         output="screen"/>
 
   <!-- Aggregators -->
-  <node name="object_name_aggregator.py" 
+  <node name="object_name_aggregator" 
         pkg="ocular_interaction"
         type="object_name_aggregator.py" 
         respawn="false" 
@@ -79,6 +80,13 @@
         args=" --activate --volume_threshold 1200"
         respawn="false"
         output="screen"/>
+
+  <node name="object_database_builder"
+        pkg="ocular_interaction"
+        type="object_database_builder.py"
+        args="$(arg object_db)"
+        respawn="false"
+        output="screen"/>        
 
   <!-- Interaction Manager -->
   <node name="interaction_manager"
