@@ -69,9 +69,9 @@
 
 
   <!-- Other Nodes -->
-  <node name="object_id_notifier" 
+  <node name="object_name_aggregator.py" 
         pkg="ocular_interaction"
-        type="object_id_notifier.py" 
+        type="object_name_aggregator.py" 
         respawn="false" 
         output="screen"/>
 
