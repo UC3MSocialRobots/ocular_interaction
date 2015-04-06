@@ -31,15 +31,21 @@ import rospy
 from rospy_utils import coroutines as co
 
 from ocular_interaction import ocular_atom_translators as tr
+from ocular_interaction import utils
 
 from std_msgs.msg import String
 from dialog_manager_msgs.msg import AtomMsg
+
+
+def _log_atom(atom_msg):
+    utils.log_atom(atom_msg, logger=rospy.logdebug)
 
 if __name__ == '__main__':
     try:
         rospy.init_node('ocular_event_handler_translator')
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
         pipe = co.pipe([co.transformer(tr.object_name_to_atom),
+                        co.do(_log_atom),
                         co.publisher('im_atom', AtomMsg)])
         co.PipedSubscriber('object_name', String, pipe)
         rospy.spin()
