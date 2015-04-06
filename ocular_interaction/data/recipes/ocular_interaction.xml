@@ -133,6 +133,15 @@
       </roboml:args>
     </action>
 
+    <!-- Send event to OCULAR -->
+    <action name="send_event" actor="event_handler">
+      <roboml:args>
+        <arg name="hand"        value="$hand_var"  type="string"/>
+        <arg name="event"       value="recognize"  type="string"/>
+        <arg name="last_event"  value="recognize"  type="string"/>
+      </roboml:args>
+    </action>
+
     <assignment>
     </assignment>
   </body>
