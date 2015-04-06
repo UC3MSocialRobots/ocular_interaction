@@ -18,7 +18,6 @@
         respawn="false" 
         output="screen"/>
 
-  
   <node name="event_handler_translator_rate_limiter"
         type="throttle"
         pkg="topic_tools"
@@ -43,6 +42,12 @@
       output="screen"/>
 
   <!-- Action Translators -->
+  <node name="dialog_logger_node" 
+        pkg="ocular_interaction"
+        type="dialog_logger_node.py" 
+        respawn="false" 
+        output="screen"/>
+
   <node name="event_handler_action_translator" 
         pkg="ocular_interaction"
         type="event_handler_action_translator.py" 
@@ -55,26 +60,25 @@
         respawn="false" 
         output="screen"/>
 
-  <node name="dialog_logger_node" 
-        pkg="ocular_interaction"
-        type="dialog_logger_node.py" 
-        respawn="false" 
-        output="screen"/>
-
   <node name="object_name_action_translator" 
         pkg="ocular_interaction"
         type="object_name_action_translator.py" 
         respawn="false" 
         output="screen"/>
 
-
-  <!-- Other Nodes -->
+  <!-- Aggregators -->
   <node name="object_name_aggregator.py" 
         pkg="ocular_interaction"
         type="object_name_aggregator.py" 
         respawn="false" 
         output="screen"/>
 
+  <node name="asr_command_parser"
+        pkg="ocular_interaction"
+        type="asr_command_parser.py"
+        args=" --activate --volume_threshold 1200"
+        respawn="false"
+        output="screen"/>
 
   <!-- Interaction Manager -->
   <node name="interaction_manager"

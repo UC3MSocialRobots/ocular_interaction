@@ -26,7 +26,6 @@
     <arg name="debug"     value="$(arg loglevel)"/>
   </include>
 
-  <!-- TODO: Add TTS and ASR Launchers -->
 
   <include file="$(find etts)/launch/etts.launch"/>    
   
@@ -42,12 +41,4 @@
         output="screen">
       <param name="language" type="string" value="spanish" />
   </node>
-
-  <!-- ASR Command parser -->
-  <node name="asr_command_parser"
-        pkg="ocular_interaction"
-        type="asr_command_parser.py"
-        args=" --activate --volume_threshold 1200"
-        respawn="false"
-        output="screen"/>
 </launch>
