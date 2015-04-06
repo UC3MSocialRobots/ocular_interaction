@@ -49,7 +49,7 @@
     </action>
 
     <!-- Go to specific recipes ············································ -->
-    <goal recipe_name="tell_object_name" initiator="any"/>
+    <!-- <goal recipe_name="tell_object_name" initiator="any"/> -->
     <!-- ··································································  -->
 
     <action name="log" actor="ros_logger">
@@ -145,7 +145,7 @@
 
     <action name="say_text" actor="etts">
       <roboml:args>
-        <arg name="sentence" value="Vale, $object_name_var. ¡Espero poder acordarme!, jejej" type="string"/>
+        <arg name="sentence" value="Vale, $object_name_var. ¡Espero poder acordarme! GeGe" type="string"/>
       </roboml:args>
     </action>
 

@@ -3,6 +3,7 @@
 <iminit>
   <triggerables>
     <recipe name="start_learning" max_instances="1"/>
+    <recipe name="tell_object_name" max_instances="1"/>
 </triggerables>
 
   <recipefiles>
