@@ -58,6 +58,8 @@ def get_command(word, commands, stemmer):
 
 def parse_sentence(sentence, commands, stemmer):
     """Parse a sentence and return the first command it founds in it."""
+    rospy.logwarn("Going to parse sentence: {}".format(utils.blue(sentence)))
+    rospy.logwarn("With type: {}".format(utils.blue(str(type(sentence)))))
     cmds = (get_command(word, commands, stemmer) for word in sentence.split())
     return ifilter(bool, cmds)
 
@@ -70,12 +72,7 @@ def parse_asr_msg(msg, commands, stemmer):
         pass
 
 
-# def colorize(logmsg, color=colorama.Fore.MAGENTA):
-#     """Colorize a message with green colors."""
-#     return ''.join([color, logmsg, colorama.Fore.RESET])
-
-
-def log_msg(msg):
+def _log_msg(msg):
     """Log a msg to a rospy logger."""
     rospy.loginfo(utils.colorize("ASR msg parsed to command: {}".format(msg)))
 
@@ -91,7 +88,7 @@ if __name__ == '__main__':
         parse_msg = \
             partial(parse_asr_msg, commands=commands_stemmed, stemmer=stemmer)
         pipe = co.pipe([co.transformer(parse_msg),
-                        co.do(log_msg),
+                        co.do(_log_msg),
                         co.filterer(bool),
                         splitter])
         co.PipedSubscriber('open_grammar_results', ASRmsg, pipe)
