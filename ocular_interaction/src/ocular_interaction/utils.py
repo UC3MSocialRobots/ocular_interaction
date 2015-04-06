@@ -40,8 +40,11 @@ def colorize(logmsg, color=colorama.Fore.MAGENTA):
     """Colorize a message with green colors."""
     return ''.join([color, logmsg, colorama.Fore.RESET])
 
+red = partial(colorize, color=colorama.Fore.RED)
 green = partial(colorize, color=colorama.Fore.GREEN)
 blue = partial(colorize, color=colorama.Fore.BLUE)
+magenta = partial(colorize, color=colorama.Fore.MAGENTA)
+yellow = partial(colorize, color=colorama.Fore.YELLOW)
 
 
 def log_atom(msg, logger=loginfo, color=blue):
