@@ -65,6 +65,51 @@ class ObjectDBHelper(object):
         self.db['3D'][name].append(id3D)
         return self
 
+    def get(self, key, *args, **kwargs):
+        """
+        Return an entry from the DB with similar syntax to 'dict.get'.
+
+        :param key: the key of the values to retrieve.
+        :type key: str
+        :return: tuple: (key, value2D, value3D)
+
+        Example:
+
+            >>> db = ObjectDBHelper('/tmp/example_db')
+            >>> db.add('A', 1, 1)
+            >>> db.add('B', 2, 2)
+            >>> db.get('A')
+            ('A', [1], [1])
+            >>> db.get('B')
+            ('B', [2], [2])
+            >>> db.get('C', 'ITEM NOT FOUND')
+            ('C', 'ITEM NOT FOUND', 'ITEM NOT FOUND')
+        """
+        return (key,
+                self.db['2D'].get(key, *args, **kwargs),
+                self.db['3D'].get(key, *args, **kwargs))
+
+    def __getitem__(self, key):
+        """
+        Retrieve an item in a dict-like syntax.
+
+        :param key: the key of the values to retrieve.
+        :type key: str
+        :return: tuple: (key, value2D, value3D)
+
+        Example:
+            >>> db = ObjectDBHelper('/tmp/example_db')
+            >>> db.add('A', 1, 1)
+            >>> db.add('B', 2, 2)
+            >>> db['A']
+            ('A', [1], [1])
+            >>> db['B']
+            ('B', [2], [2])
+            >>> db['C']
+            ('C', [], [])
+        """
+        return (key, self.db['2D'][key], self.db['3D'][key])
+
     def load(self, filename):
         """
         Load the object database from a filename.
