@@ -51,7 +51,8 @@ splitter = co.splitter(co.publisher('asr_command', String),
 def get_command(word, commands, stemmer):
     """Check wether word is a command from the commands dictionary."""
     try:
-        return commands.get(stemmer.stem(word), None)
+        normalized_word = utils.normalize_word(word)
+        return commands.get(stemmer.stem(normalized_word), None)
     except UnicodeDecodeError:
         rospy.logwarn("UnicodeDecodeError while stemming word: {}".format(word))
 
@@ -83,7 +84,8 @@ if __name__ == '__main__':
         rospy.init_node('ocular_event_handler_translator')
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
         commands = next(pu.load_params('asr_commands'))
-        commands_stemmed = {stemmer.stem(k): v for k, v in commands.items()}
+        commands_stemmed = {stemmer.stem(utils.normalize_word(k)): v
+                            for k, v in commands.items()}
         rospy.logdebug("Available commands are: {}".format(commands))
         parse_msg = \
             partial(parse_asr_msg, commands=commands_stemmed, stemmer=stemmer)
