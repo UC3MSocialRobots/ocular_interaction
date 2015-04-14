@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 # :license       LASR_UC3M v1.0, ver LICENCIA.txt
 
@@ -25,6 +26,7 @@ Several utilities for the OCULAR Interaction packages.
 import roslib
 roslib.load_manifest('monarch_multimodal_fusion')
 # import rospy
+import unicodedata
 from pattern.es import parse
 from enum import Enum
 from rospy import loginfo
@@ -88,6 +90,28 @@ TTSEngine = Enum('TTSEngine', ' '.join(TTS_ENGINES))
 
 
 # TEXT PARSING UTILS ##########################################################
+def normalize_word(word):
+    u"""
+    Normalize a word that might have some unicode characters.
+
+    Example:
+
+        >>> map(normalize_word,
+                'piraña balón camión púrpura amígdala Panamá esté'.split(' '))
+        ['pirana', 'balon', 'camion', 'purpura', 'amigdala', 'Panama', 'este']
+        >>> map(normalize_word,
+                'la bella piraña se encontraba en un estanque.'.split(' '))
+        ['la', 'bella', 'pirana', 'se', 'encontraba', 'en', 'un', 'estanque.']
+
+    """
+    unicode_w = u''
+    if type(word) == str:
+        unicode_w = word.decode('utf-8', 'replace')
+    else:
+        unicode_w = word
+    return unicodedata.normalize('NFD', unicode_w).encode('ascii', 'ignore')
+
+
 def tokenize(pos_sentence):
     """
     Tokenize a POS sentence.
@@ -137,7 +161,7 @@ def get_first_noun(sentence):
     nouns = zip(*get_nouns(tokens))
     if nouns:
         return nouns[0][0]      # Return first noun that has been found
-    return None                 # Else return None
+    return '_UNKNOWN_'          # Else return '_UNKNOWN_'
 
 
 # ASR PARSING UTILS ###########################################################
