@@ -38,7 +38,7 @@
     </action>
 
     <!-- Go to specific recipes ············································ -->
-    <goal recipe_name="get_object_name_from_asr" initiator="any"/>
+    <goal recipe_name="get_object_name_from_asr, get_object_name_from_asr_got_unknown_object" initiator="any"/>
     <!-- ··································································  -->
 
     <action name="log" actor="ros_logger">
@@ -76,9 +76,10 @@
 <recipe name="get_object_name_from_asr">
   <precondition>
     <atom>
-      <slot name="type"     val="asr_googleOK"/>
+      <slot name="type"     val="asr_googleOK"/> <!-- Here I should use a name finder aggregator instead of raw ASR-->
       <slot name="subtype"  val="user"/>
       <slot name="consumed" rel="equal" val="false"/>
+      <slot name="content"  rel="!=" val="_UNKNOWN_"/>
       <slot name="content"  rel= "bind" var="content_var"/>
       <slot name="this" rel="bind" var="asr_google_OK_atom"/>
     </atom> 
@@ -103,6 +104,62 @@
       <roboml:args>
         <arg name="logger" value="loginfo" type="string"/>
         <arg name="message" value="Finishing recipe: get_object_name_from_asr" type="string"/>
+      </roboml:args>
+    </action>
+
+    <assignment>
+    </assignment>
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+
+  <assignpost>
+    <atom>
+        <slot name="this" var="asr_google_OK_atom"/>
+        <slot name="consumed" val="true"/>
+    </atom> 
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->
+
+
+<!-- ####################################################################### -->
+<!-- Get Object Name from ASR --- Empty object                               -->
+<!-- ####################################################################### -->
+<recipe name="get_object_name_from_asr_got_unknown_object">
+  <precondition>
+    <atom>
+      <slot name="type"     val="asr_googleOK"/>
+      <slot name="subtype"  val="user"/>
+      <slot name="consumed" rel="equal" val="false"/>
+      <slot name="content"  rel="equal" val="_UNKNOWN_"/>
+      <slot name="content"  rel= "bind" var="content_var"/>
+      <slot name="this" rel="bind" var="asr_google_OK_atom"/>
+    </atom> 
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Recipe Triggered: get_object_name_from_asr_got_unknown_object" type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="say_text" actor="etts">
+      <roboml:args>
+        <arg name="sentence" value="Lo siento, no he entendido lo que has dicho. Lo puedes repetir?" type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Go to specific recipes ············································ -->
+    <goal recipe_name="get_object_name_from_asr, get_object_name_from_asr_got_unknown_object" initiator="any"/>
+    <!-- ··································································  -->
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Finishing recipe: get_object_name_from_asr_got_unknown_object" type="string"/>
       </roboml:args>
     </action>
 
