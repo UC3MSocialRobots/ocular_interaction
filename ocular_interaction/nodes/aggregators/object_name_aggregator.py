@@ -57,7 +57,7 @@ class ObjectNameIDAggregator(object):
         rospy.Subscriber('object_name', String, self.object_name_cb)
 
     def callback(self, msg):
-        """Check if action_msg is valid and send it to the loggers."""
+        """Aggregate the object name to the received ids."""
         try:
             self.ids[msg.learner] = msg.object_id
         except KeyError:
