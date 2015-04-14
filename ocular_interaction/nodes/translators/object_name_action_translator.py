@@ -50,7 +50,9 @@ def __get_object_name(string_msg):
 
 
 def __log_object_name(string_msg):
-    rospy.logwarn("Object Name is: {}".format(string_msg.data))
+    """Log to screen the object name."""
+    object_name = utils.normalize_word(string_msg.data)
+    rospy.logwarn("Object Name is: {}".format(object_name))
 
 if __name__ == '__main__':
     try:
