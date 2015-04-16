@@ -77,7 +77,6 @@ if __name__ == '__main__':
                         co.transformer(utils.get_first_noun),
                         co.transformer(utils.normalize_word),
                         co.do(_log_msg),
-                        # co.filterer(lambda s: s != '_UNKNOWN_'),
                         co.splitter(co.publisher('nouns_from_asr', String),
                                     translator_pipe)])
         co.PipedSubscriber('open_grammar_results', ASRmsg, pipe)
