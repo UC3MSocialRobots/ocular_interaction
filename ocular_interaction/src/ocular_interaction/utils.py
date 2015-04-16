@@ -113,6 +113,20 @@ def normalize_word(word):
     return unicodedata.normalize('NFD', unicode_w).encode('ascii', 'ignore')
 
 
+def get_pos_tags(string):
+    """
+    Parse a string and returns its POS (Part Of Speech) tags.
+
+    :see: http://www.clips.ua.ac.be/pages/mbsp-tags for further tag information.
+
+    Example
+    >>> get_pos_tags('hola esto es una frase')  # doctest: +ELLIPSIS
+    [[u'hola', u'UH'], [u'esto', u'DT'], [u'es', u'VB'], ..., [u'frase', u'NN']]
+    """
+    return map(lambda tokens: tokens[:2], map(lambda s: s.split('/'),
+                                              parse(string).split(' ')))
+
+
 def tokenize(pos_sentence):
     """
     Tokenize a POS sentence.
@@ -139,20 +153,30 @@ def get_tagged(tokens, tag):
 
     Example:
 
-        >>> s = parse("esto es una botella")
-        >>> list(get_tags(tokenize(s.split(' ')), 'NN'))
-        [[u'botella', u'NN', u'I-NP', u'O']]
+        >>> s = get_pos_tags("esto es una botella")
+        >>> list(get_tagged(s, 'NN'))
+        [(u'botella', u'NN')]
     """
-    return (t for t in tokens if t[1] == tag)
+    return ((word, wtag) for word, wtag in tokens if wtag == tag)
 
 get_nouns = partial(get_tagged, tag='NN')
 get_verbs = partial(get_tagged, tag='VB')
 
 
 def get_first_noun(sentence):
-    """Return the first noun that is found in a sentence."""
-    s = parse(sentence)
-    tokens = tokenize(s.split(' '))
+    """
+    Return the first noun that is found in a sentence.
+
+    Example
+
+        >>> get_first_noun('Esto es una pelota de cuero y tela')
+        u'pelota'
+        >>> get_first_noun('Esto es ')
+        '_UNKNOWN_'
+    """
+    # s = parse(sentence)
+    # tokens = tokenize(s.split(' '))
+    tokens = get_pos_tags(sentence)
     nouns = zip(*get_nouns(tokens))
     if nouns:
         return nouns[0][0]      # Return first noun that has been found
