@@ -63,7 +63,8 @@ def get_asr_content(asr_msg):
 
 def _log_msg(msg):
     """Log a msg to a rospy logger."""
-    rospy.loginfo(utils.colorize("First noun of ASR msg: {}".format(msg)))
+    log_msg = "First noun of ASR msg: {}".format(msg)
+    rospy.loginfo(utils.colorize(log_msg))
 
 
 if __name__ == '__main__':
@@ -74,6 +75,7 @@ if __name__ == '__main__':
 
         pipe = co.pipe([co.transformer(get_asr_content),
                         co.transformer(utils.get_first_noun),
+                        co.transformer(utils.normalize_word),
                         co.do(_log_msg),
                         co.filterer(lambda s: s != '_UNKNOWN_'),
                         co.splitter(co.publisher('nouns_from_asr', String),
