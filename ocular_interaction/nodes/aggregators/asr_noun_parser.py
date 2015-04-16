@@ -47,7 +47,18 @@ translator_pipe = co.pipe([co.transformer(tr.asr_first_noun_to_atom),
 splitter = co.splitter(co.publisher('nouns_from_asr', String),
                        translator_pipe)
 
-get_asr_content = partial(getattr, name='content')
+
+def get_asr_content(asr_msg):
+    """
+    Return the content of an ASR Msg.
+
+    Example:
+
+    >>> asrmsg = ASRmsg(content='Hello World', confidence=100.0, languageID=0)
+    >>> get_asr_content(asrmsg)
+    'Hello World'
+    """
+    return asr_msg.content
 
 
 def _log_msg(msg):
