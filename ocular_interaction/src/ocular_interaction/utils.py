@@ -96,11 +96,12 @@ def normalize_word(word):
 
     Example:
 
-        >>> map(normalize_word,
-                'piraña balón camión púrpura amígdala Panamá esté'.split(' '))
+        >>> words = 'piraña balón camión púrpura amígdala Panamá esté'
+        >>> map(normalize_word, words.split(' '))
         ['pirana', 'balon', 'camion', 'purpura', 'amigdala', 'Panama', 'este']
-        >>> map(normalize_word,
-                'la bella piraña se encontraba en un estanque.'.split(' '))
+
+        >>> sentence = 'la bella piraña se encontraba en un estanque.'
+        >>> map(normalize_word, sentence.split(' '))
         ['la', 'bella', 'pirana', 'se', 'encontraba', 'en', 'un', 'estanque.']
 
     """
@@ -123,15 +124,11 @@ def tokenize(pos_sentence):
 
     Example:
 
-        >>>s = parse("esto es una botella.")
+        >>> s = parse("esto es una botella")
         >>> s
-        u'esto/DT/O/O es/VB/B-VP/O una/DT/B-NP/O botella/NN/I-NP/O ././O/O'
-        >>> list(tokenize(s.split(' ')))
-        [[u'esto', u'DT', u'O', u'O'],
-         [u'es', u'VB', u'B-VP', u'O'],
-         [u'una', u'DT', u'B-NP', u'O'],
-         [u'botella', u'NN', u'I-NP', u'O'],
-         [u'.', u'.', u'O', u'O']]
+        u'esto/DT/O/O es/VB/B-VP/O una/DT/B-NP/O botella/NN/I-NP/O'
+        >>> list(tokenize(s.split(' ')))  # doctest: +ELLIPSIS
+        [[u'esto', u'DT', u'O', u'O'], ..., [u'botella', u'NN', u'I-NP', u'O']]
     """
     return (word.split('/') for word in pos_sentence)
 
@@ -142,9 +139,7 @@ def get_tagged(tokens, tag):
 
     Example:
 
-        >>>s = parse("esto es una botella.")
-        >>> s
-        u'esto/DT/O/O es/VB/B-VP/O una/DT/B-NP/O botella/NN/I-NP/O ././O/O'
+        >>> s = parse("esto es una botella")
         >>> list(get_tags(tokenize(s.split(' ')), 'NN'))
         [[u'botella', u'NN', u'I-NP', u'O']]
     """
