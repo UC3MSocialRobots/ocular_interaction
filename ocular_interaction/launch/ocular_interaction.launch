@@ -24,11 +24,11 @@
         pkg="topic_tools"
         args="messages event 1 /event_low_rate"/>
 
-  <node name="asr_atom_translator" 
+  <!-- <node name="asr_atom_translator" 
       pkg="ocular_interaction"
       type="asr_atom_translator.py" 
       respawn="false" 
-      output="screen"/>
+      output="screen"/> -->
 
   <node name="object_name_atom_translator"
       pkg="ocular_interaction"
@@ -71,6 +71,12 @@
   <node name="object_name_aggregator" 
         pkg="ocular_interaction"
         type="object_name_aggregator.py" 
+        respawn="false" 
+        output="screen"/>
+
+  <node name="asr_noun_parser" 
+        pkg="ocular_interaction"
+        type="asr_noun_parser.py" 
         respawn="false" 
         output="screen"/>
 
