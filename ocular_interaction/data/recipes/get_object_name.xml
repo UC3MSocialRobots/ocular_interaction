@@ -4,6 +4,12 @@
 <!-- ####################################################################### -->
 <recipe name="get_object_name">
   <precondition>
+    <atom>  <!-- Need this atom to perform a dirty trick (see assignment below) -->
+        <slot name="type"                   val="first_noun"/>
+        <slot name="subtype"                val="user"/>
+        <slot name="consumed"   rel="equal" val="false"/>
+        <slot name="this" rel="bind" var="first_noun_atom"/>
+      </atom>
   </precondition>
 
   <!-- --------------------------------------------------------------------- -->
@@ -16,13 +22,13 @@
     </action>
 
     <!-- Send event to OCULAR -->
-    <action name="send_event" actor="event_handler">
+<!--     <action name="send_event" actor="event_handler">
       <roboml:args>
         <arg name="hand"        value="$hand_var"  type="string"/>
         <arg name="event"       value="learn"      type="string"/>
         <arg name="last_event"  value="recognize"  type="string"/>
       </roboml:args>
-    </action>
+    </action> -->
 
     <action name="say_text" actor="etts">
       <roboml:args>
@@ -36,6 +42,13 @@
         <arg name="message" value="Waiting for user to give the object name" type="string"/>
       </roboml:args>
     </action>
+
+    <assignment>   <!-- Here it comes the dirty trick. Put this atom to consumed to force receiving another one -->
+      <atom>
+         <slot name="this" var="first_noun_atom"/>
+         <slot name="consumed" val="true"/>
+      </atom>
+    </assignment>
 
     <!-- Go to specific recipes ············································ -->
     <goal recipe_name="get_object_name_from_asr, get_object_name_from_asr_got_unknown_object" initiator="any"/>
