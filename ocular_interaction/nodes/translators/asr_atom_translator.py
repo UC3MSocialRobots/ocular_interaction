@@ -36,10 +36,6 @@ from dialog_manager_msgs.msg import AtomMsg
 from asr_msgs.msg import open_grammar_recog_results as ASRMsg
 
 
-def _log_msg(msg):
-    """Log a msg to a rospy logger."""
-    rospy.loginfo(utils.colorize("ASR recognized: {}".format(msg)))
-
 if __name__ == '__main__':
     try:
         rospy.init_node('ocular_asr_translator')
