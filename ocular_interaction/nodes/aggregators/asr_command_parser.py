@@ -19,10 +19,10 @@
 # disponible en <URL a la LASR_UC3Mv1.0>.
 
 """
+Node that parses the asr output and converts it to certain commands.
+
 :author: Victor Gonzalez Pacheco
 :maintainer: Victor Gonzalez Pacheco
-
-Node that parses the asr output and converts it to certain commands.
 """
 import roslib
 roslib.load_manifest('ocular_interaction')
