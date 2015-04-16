@@ -81,7 +81,7 @@ def _log_msg(msg):
 if __name__ == '__main__':
     stemmer = Stemmer('spanish')
     try:
-        rospy.init_node('ocular_event_handler_translator')
+        rospy.init_node('asr_command_parser')
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
         commands = next(pu.load_params('asr_commands'))
         commands_stemmed = {stemmer.stem(utils.normalize_word(k)): v
