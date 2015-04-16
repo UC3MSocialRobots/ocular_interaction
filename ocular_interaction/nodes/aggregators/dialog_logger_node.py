@@ -18,7 +18,7 @@
 # Robotics Lab - UC3M en el fichero LICENCIA.txt, que tambien se encuentra
 # disponible en <URL a la LASR_UC3Mv1.0>.
 
-""" Translates log messages from Interaction Manager to ROS Log messages. """
+"""Translates log messages from Interaction Manager to ROS Log messages."""
 
 import roslib
 roslib.load_manifest('ocular_interaction')
@@ -41,7 +41,7 @@ _LOGGERS = {'logdebug': logdebug,
 
 
 def callback(action_msg):
-    """ Check if action_msg is valid and send it to the loggers. """
+    """Check if action_msg is valid and send it to the loggers."""
     if not tr.should_process_action(action_msg, _ACTOR_NAME, _ACTION_NAME):
         return
     msg = tr.action_args_to_dict(action_msg)
