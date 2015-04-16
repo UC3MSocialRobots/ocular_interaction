@@ -161,7 +161,7 @@ def asr_msg_to_atom(asr_msg):
 
 def asr_first_noun_to_atom(string):
     """Generate an OCULAR's first_noun Atom."""
-    return to_atom_msg(string, slot_from_string, 'frist_noun',
+    return to_atom_msg(string, slot_from_string, 'first_noun',
                        slotname='first_noun')
 
 
