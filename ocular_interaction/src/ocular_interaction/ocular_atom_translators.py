@@ -9,6 +9,7 @@ This module provides Atom Translators for OCULAR messages
 import roslib
 roslib.load_manifest('ocular_interaction')
 from itertools import chain
+from functools import partial
 from dialog_manager_msgs.msg import (VarSlot, AtomMsg)
 
 
@@ -29,6 +30,62 @@ def generate_default_slots(atom_type='_NO_VALUE_', atom_subtype='user'):
     yield VarSlot(name="subtype", val=atom_subtype)
     yield VarSlot(name="timestamp", val="_NO_VALUE_", type="number")
     yield VarSlot(name="consumed", val="false", type="string")
+
+
+def slot_from_string(string, slotname, slottype='string'):
+    """
+    Produce a VarSlot from a string.
+
+    Example:
+
+        >>> next(slot_from_string('the_slot_value', 'the_slot_name'))
+        name: the_slot_name
+        relation: ''
+        val: the_slot_value
+        type: string
+        unique_mask: False
+    """
+    yield VarSlot(name=slotname, val=string, type=slottype)
+
+
+def slot_from_num(num, slotname, slottype='number'):
+    """
+    Produce a VarSlot from an num.
+
+    It accepts int and float.
+
+    Example:
+
+        >>> next(slot_from_num(123, 'an_int_slot'))
+        name: an_int_slot
+        relation: ''
+        val: 123
+        type: number
+        unique_mask: False
+
+        >>> next(slot_from_num(0.12345, 'a_float_slot'))
+        name: a_float_slot
+        relation: ''
+        val: 0.12345
+        type: number
+        unique_mask: False
+    """
+    yield VarSlot(name=slotname, val=str(num), type=slottype)
+
+
+def slot_from_bool(b, slotname, slottype='string'):
+    """
+    Produce a VarSlot from a boolean.
+
+    Example:
+        >>> next(slot_from_bool(False, 'a_boolean_slot'))
+        name: a_boolean_slot
+        relation: ''
+        val: false
+        type: string
+        unique_mask: False
+    """
+    yield VarSlot(name=slotname, val=str(b).lower(), type=slottype)
 
 
 def generate_event_handler_slots(event_msg):
@@ -66,7 +123,8 @@ def generate_learned_object_slots(learned_msg):
 # Atom translators
 ###############################################################################
 
-def to_atom_msg(msg, generator_func, atom_name, atom_subtype='user'):
+def to_atom_msg(msg, generator_func, atom_name,
+                atom_subtype='user', *args, **kwargs):
     """
     Return an AtomMsg from a msg instance and a generator function.
 
@@ -80,7 +138,7 @@ def to_atom_msg(msg, generator_func, atom_name, atom_subtype='user'):
     if not msg:
         return AtomMsg()
     def_slots = generate_default_slots(atom_name, atom_subtype)
-    varslots = chain(def_slots, generator_func(msg))
+    varslots = chain(def_slots, generator_func(msg, *args, **kwargs))
     return AtomMsg(varslots=list(varslots))
 
 
@@ -99,6 +157,12 @@ def user_command_to_atom(command):
 def asr_msg_to_atom(asr_msg):
     """Generate an OCULAR's asr atom."""
     return to_atom_msg(asr_msg, generate_google_asr_slots, 'asr_googleOK')
+
+
+def asr_first_noun_to_atom(string):
+    """Generate an OCULAR's first_noun Atom."""
+    return to_atom_msg(string, slot_from_string, 'frist_noun',
+                       slotname='first_noun')
 
 
 def object_name_to_atom(object_name):
