@@ -80,7 +80,7 @@
       <slot name="subtype"                val="user"/>
       <slot name="consumed"   rel="equal" val="false"/>
       <slot name="first_noun" rel="!="    val="_UNKNOWN_"/>
-      <slot name="content"    rel= "bind" var="content_var"/>
+      <slot name="first_noun" rel= "bind" var="first_noun_var"/>
       <slot name="this" rel="bind" var="first_noun_atom"/>
     </atom> 
   </precondition>
@@ -96,7 +96,7 @@
 
     <action name="object_name" actor="object_name_translator">
       <roboml:args>
-          <arg name="object_name" value="$content_var" type="string"/> 
+          <arg name="object_name" value="$first_noun_var" type="string"/> 
       </roboml:args>
     </action>
 
@@ -132,7 +132,6 @@
       <slot name="subtype"                val="user"/>
       <slot name="consumed"   rel="equal" val="false"/>
       <slot name="first_noun" rel="equal" val="_UNKNOWN_"/>
-      <slot name="content"    rel="bind"  var="content_var"/>
       <slot name="this" rel="bind" var="first_noun_atom"/>
     </atom> 
   </precondition>
