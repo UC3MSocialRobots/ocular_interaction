@@ -147,7 +147,7 @@
 
     <action name="say_text" actor="etts">
       <roboml:args>
-        <arg name="sentence" value="Lo siento, no he entendido lo que has dicho. Lo puedes repetir?" type="string"/>
+        <arg name="sentence" value="Lo siento, no he entendido lo que has dicho. ¿Lo puedes repetir?" type="string"/>
       </roboml:args>
     </action>
 
