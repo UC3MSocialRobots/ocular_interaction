@@ -34,7 +34,7 @@ from ocular_interaction import ocular_atom_translators as tr
 from dialog_manager_msgs.msg import AtomMsg
 from ocular_interaction.msg import ObjectDescriptor
 
-from ocular_interaction import utils
+# from ocular_interaction import utils
 
 if __name__ == '__main__':
     try:
