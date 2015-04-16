@@ -151,6 +151,13 @@
       </roboml:args>
     </action>
 
+    <assignment>
+      <atom>
+          <slot name="this" var="first_noun_atom"/>
+          <slot name="consumed" val="true"/>
+      </atom> 
+    </assignment>
+
     <!-- Go to specific recipes ············································ -->
     <goal recipe_name="get_object_name_from_asr, get_object_name_from_asr_got_unknown_object" initiator="any"/>
     <!-- ··································································  -->
