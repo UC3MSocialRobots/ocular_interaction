@@ -18,7 +18,7 @@
 # disponible en <URL a la LASR_UC3Mv1.0>.
 
 """
-Node that translates ASR Messages to AtomMsgs
+Node that translates ASR Messages to AtomMsgs.
 
 :author: Victor Gonzalez Pacheco
 :maintainer: Victor Gonzalez Pacheco
