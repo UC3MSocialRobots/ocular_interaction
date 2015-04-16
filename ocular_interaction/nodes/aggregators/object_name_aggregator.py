@@ -28,7 +28,6 @@ and matches them with an object name given by the user.
 import roslib
 roslib.load_manifest('ocular_interaction')
 import rospy
-from ocular_interaction import utils
 
 from std_msgs.msg import String
 from ocular.msg import LearningFinished as LFMsg
