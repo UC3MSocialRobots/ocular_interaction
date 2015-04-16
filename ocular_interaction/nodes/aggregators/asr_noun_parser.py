@@ -28,10 +28,10 @@ import roslib
 roslib.load_manifest('ocular_interaction')
 from functools import partial
 from nltk.stem import SnowballStemmer as Stemmer
-from pattern.es import parse
+
 import rospy
 from rospy_utils import coroutines as co
-from rospy_utils import param_utils as pu
+
 from asr_msgs.msg import open_grammar_recog_results as ASRmsg
 from std_msgs.msg import String
 from dialog_manager_msgs.msg import AtomMsg
