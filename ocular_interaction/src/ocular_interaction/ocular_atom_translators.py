@@ -9,7 +9,7 @@ This module provides Atom Translators for OCULAR messages
 import roslib
 roslib.load_manifest('ocular_interaction')
 from itertools import chain
-from functools import partial
+
 from dialog_manager_msgs.msg import (VarSlot, AtomMsg)
 
 
