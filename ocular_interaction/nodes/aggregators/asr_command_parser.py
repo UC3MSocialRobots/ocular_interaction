@@ -24,11 +24,9 @@ Node that parses the asr output and converts it to certain commands.
 :author: Victor Gonzalez Pacheco
 :maintainer: Victor Gonzalez Pacheco
 """
-import roslib
-roslib.load_manifest('ocular_interaction')
+import roslib; roslib.load_manifest('ocular_interaction')
 from functools import partial
 from itertools import ifilter
-from nltk.stem import SnowballStemmer as Stemmer
 import rospy
 from rospy_utils import coroutines as co
 from rospy_utils import param_utils as pu
@@ -38,7 +36,7 @@ from dialog_manager_msgs.msg import AtomMsg
 from ocular_interaction import ocular_atom_translators as tr
 from ocular_interaction import utils
 
-atom_logger = partial(utils.log_atom, logger=rospy.logdebug)
+atom_logger = partial(utils.log_atom, logger=rospy.loginfo)
 
 translator_pipe = co.pipe([co.transformer(tr.user_command_to_atom),
                            co.do(atom_logger),
@@ -48,27 +46,26 @@ splitter = co.splitter(co.publisher('asr_command', String),
                        translator_pipe)
 
 
-def get_command(word, commands, stemmer):
+def get_command(word, commands):
     """Check wether word is a command from the commands dictionary."""
     try:
-        normalized_word = utils.normalize_word(word)
-        return commands.get(stemmer.stem(normalized_word), None)
+        return commands.get(utils.to_infinitive(word), None)
     except UnicodeDecodeError:
         rospy.logwarn("UnicodeDecodeError while stemming word: {}".format(word))
 
 
-def parse_sentence(sentence, commands, stemmer):
+def parse_sentence(sentence, commands):
     """Parse a sentence and return the first command it founds in it."""
-    rospy.logwarn("Going to parse sentence: {}".format(utils.blue(sentence)))
-    rospy.logwarn("With type: {}".format(utils.blue(str(type(sentence)))))
-    cmds = (get_command(word, commands, stemmer) for word in sentence.split())
+    rospy.loginfo("Going to parse sentence: {}".format(utils.blue(sentence)))
+    rospy.logdebug("With type: {}".format(utils.blue(str(type(sentence)))))
+    cmds = (get_command(word, commands) for word in sentence.split())
     return ifilter(bool, cmds)
 
 
-def parse_asr_msg(msg, commands, stemmer):
+def parse_asr_msg(msg, commands):
     """Parse an ASR msg to found a command in it."""
     try:
-        return next(parse_sentence(msg.content, commands, stemmer))
+        return next(parse_sentence(msg.content, commands))
     except StopIteration:
         pass
 
@@ -79,16 +76,13 @@ def _log_msg(msg):
 
 
 if __name__ == '__main__':
-    stemmer = Stemmer('spanish')
     try:
         rospy.init_node('asr_command_parser')
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
         commands = next(pu.load_params('asr_commands'))
-        commands_stemmed = {stemmer.stem(utils.normalize_word(k)): v
-                            for k, v in commands.items()}
         rospy.logdebug("Available commands are: {}".format(commands))
-        parse_msg = \
-            partial(parse_asr_msg, commands=commands_stemmed, stemmer=stemmer)
+        parsed_cmds = {utils.to_infinitive(k): v for k, v in commands.items()}
+        parse_msg = partial(parse_asr_msg, commands=parsed_cmds)
         pipe = co.pipe([co.transformer(parse_msg),
                         co.do(_log_msg),
                         co.filterer(bool),
