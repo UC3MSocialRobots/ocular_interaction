@@ -23,11 +23,12 @@ Several utilities for the OCULAR Interaction packages.
 :maintainer: Victor Gonzalez Pacheco
 """
 
-import roslib
-roslib.load_manifest('monarch_multimodal_fusion')
+import roslib; roslib.load_manifest('monarch_multimodal_fusion')
 # import rospy
 import unicodedata
 from pattern.es import parse
+from pattern.es import conjugate
+from pattern.es import INFINITIVE, PRESENT, PAST, SG, SUBJUNCTIVE, PERFECTIVE
 from enum import Enum
 from rospy import loginfo
 from functools import partial
@@ -174,13 +175,29 @@ def get_first_noun(sentence):
         >>> get_first_noun('Esto es ')
         '_UNKNOWN_'
     """
-    # s = parse(sentence)
-    # tokens = tokenize(s.split(' '))
     tokens = get_pos_tags(sentence)
     nouns = zip(*get_nouns(tokens))
     if nouns:
         return nouns[0][0]      # Return first noun that has been found
     return '_UNKNOWN_'          # Else return '_UNKNOWN_'
+
+
+def to_infinitive(word):
+    u"""
+    Conjugate a verb to its infinitive form.
+
+    >>> to_infinitive(u'aprendas')
+    u'aprender'
+    >>> to_infinitive(u'enseñar')
+    'ensenar'
+    >>> to_infinitive('empieza')
+    u'empezar'
+    >>> to_infinitive(u'acabó')
+    u'acabar'
+    >>> to_infinitive('fuiste')
+    u'ser'
+    """
+    return conjugate(normalize_word(word))
 
 
 # ASR PARSING UTILS ###########################################################
