@@ -22,7 +22,7 @@
   <node name="event_handler_translator_rate_limiter"
         type="throttle"
         pkg="topic_tools"
-        args="messages event 1 /event_low_rate"/>
+        args="messages event 0.5 /event_low_rate"/>
 
   <!-- <node name="asr_atom_translator" 
       pkg="ocular_interaction"
