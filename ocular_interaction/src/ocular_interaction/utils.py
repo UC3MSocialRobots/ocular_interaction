@@ -28,7 +28,7 @@ import roslib; roslib.load_manifest('monarch_multimodal_fusion')
 import unicodedata
 from pattern.es import parse
 from pattern.es import conjugate
-from pattern.es import INFINITIVE, PRESENT, PAST, SG, SUBJUNCTIVE, PERFECTIVE
+# from pattern.es import INFINITIVE, PRESENT, PAST, SG, SUBJUNCTIVE, PERFECTIVE
 from enum import Enum
 from rospy import loginfo
 from functools import partial
