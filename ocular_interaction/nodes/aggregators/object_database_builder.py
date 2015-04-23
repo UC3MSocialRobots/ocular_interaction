@@ -25,111 +25,111 @@ The database automatically saved to `db_filename` when
 the node is shutdown via rospy.shutdown.
 """
 
-import roslib
-roslib.load_manifest('ocular_interaction')
+import roslib; roslib.load_manifest('ocular_interaction')
 
 import sys
-import yaml
+# import yaml
 import rospy
-from collections import defaultdict
+# from collections import defaultdict
 from ocular_interaction import utils
+from ocular_interaction import object_database_manager as odbm
 
 from ocular_interaction.msg import ObjectDescriptor
 
 
-def _db_to_defaultdict(db):
-    """Transform the type of the dabase subdicts to defaultdict."""
-    return {'2D': defaultdict(list, db['2D']),
-            '3D': defaultdict(list, db['3D'])}
+# def _db_to_defaultdict(db):
+#     """Transform the type of the dabase subdicts to defaultdict."""
+#     return {'2D': defaultdict(list, db['2D']),
+#             '3D': defaultdict(list, db['3D'])}
 
 
-def _db_to_dict(db):
-    """Convert the database to dict."""
-    return {'2D': dict(db['2D']),
-            '3D': dict(db['3D'])}
+# def _db_to_dict(db):
+#     """Convert the database to dict."""
+#     return {'2D': dict(db['2D']),
+#             '3D': dict(db['3D'])}
 
 
-class ObjectDBHelper(object):
+# class ObjectDBHelper(object):
 
-    """Loads and stores the ObjectDatabase to YAML file."""
+#     """Loads and stores the ObjectDatabase to YAML file."""
 
-    def __init__(self, db_filename):
-        """Init."""
-        super(ObjectDBHelper, self).__init__()
-        self.db_filename = db_filename
-        self.load(self.db_filename)
+#     def __init__(self, db_filename):
+#         """Init."""
+#         super(ObjectDBHelper, self).__init__()
+#         self.db_filename = db_filename
+#         self.load(self.db_filename)
 
-    def add(self, name, id2D, id3D):
-        """Add an entry to the database."""
-        self.db['2D'][name].append(id2D)
-        self.db['3D'][name].append(id3D)
-        return self
+#     def add(self, name, id2D, id3D):
+#         """Add an entry to the database."""
+#         self.db['2D'][name].append(id2D)
+#         self.db['3D'][name].append(id3D)
+#         return self
 
-    def get(self, key, *args, **kwargs):
-        """
-        Return an entry from the DB with similar syntax to 'dict.get'.
+#     def get(self, key, *args, **kwargs):
+#         """
+#         Return an entry from the DB with similar syntax to 'dict.get'.
 
-        :param key: the key of the values to retrieve.
-        :type key: str
-        :return: tuple: (key, value2D, value3D)
+#         :param key: the key of the values to retrieve.
+#         :type key: str
+#         :return: tuple: (key, value2D, value3D)
 
-        Example:
+#         Example:
 
-            >>> db = ObjectDBHelper('/tmp/example_db')
-            >>> db.add('A', 1, 1)
-            >>> db.add('B', 2, 2)
-            >>> db.get('A')
-            ('A', [1], [1])
-            >>> db.get('B')
-            ('B', [2], [2])
-            >>> db.get('C', 'ITEM NOT FOUND')
-            ('C', 'ITEM NOT FOUND', 'ITEM NOT FOUND')
-        """
-        return (key,
-                self.db['2D'].get(key, *args, **kwargs),
-                self.db['3D'].get(key, *args, **kwargs))
+#             >>> db = ObjectDBHelper('/tmp/example_db')
+#             >>> db.add('A', 1, 1)
+#             >>> db.add('B', 2, 2)
+#             >>> db.get('A')
+#             ('A', [1], [1])
+#             >>> db.get('B')
+#             ('B', [2], [2])
+#             >>> db.get('C', 'ITEM NOT FOUND')
+#             ('C', 'ITEM NOT FOUND', 'ITEM NOT FOUND')
+#         """
+#         return (key,
+#                 self.db['2D'].get(key, *args, **kwargs),
+#                 self.db['3D'].get(key, *args, **kwargs))
 
-    def __getitem__(self, key):
-        """
-        Retrieve an item in a dict-like syntax.
+#     def __getitem__(self, key):
+#         """
+#         Retrieve an item in a dict-like syntax.
 
-        :param key: the key of the values to retrieve.
-        :type key: str
-        :return: tuple: (key, value2D, value3D)
+#         :param key: the key of the values to retrieve.
+#         :type key: str
+#         :return: tuple: (key, value2D, value3D)
 
-        Example:
-            >>> db = ObjectDBHelper('/tmp/example_db')
-            >>> db.add('A', 1, 1)
-            >>> db.add('B', 2, 2)
-            >>> db['A']
-            ('A', [1], [1])
-            >>> db['B']
-            ('B', [2], [2])
-            >>> db['C']
-            ('C', [], [])
-        """
-        return (key, self.db['2D'][key], self.db['3D'][key])
+#         Example:
+#             >>> db = ObjectDBHelper('/tmp/example_db')
+#             >>> db.add('A', 1, 1)
+#             >>> db.add('B', 2, 2)
+#             >>> db['A']
+#             ('A', [1], [1])
+#             >>> db['B']
+#             ('B', [2], [2])
+#             >>> db['C']
+#             ('C', [], [])
+#         """
+#         return (key, self.db['2D'][key], self.db['3D'][key])
 
-    def load(self, filename):
-        """
-        Load the object database from a filename.
+#     def load(self, filename):
+#         """
+#         Load the object database from a filename.
 
-        If filename doesn't exist, it creates an empty database.
-        """
-        try:
-            with open(filename, 'r') as f:
-                db = yaml.load(f)
-                self.db = _db_to_defaultdict(db)
-        except IOError:
-            rospy.logwarn("ObjectDB %s not found. Creating empty DB", filename)
-            self.db = _db_to_defaultdict({'2D': {}, '3D': {}})
-        return self
+#         If filename doesn't exist, it creates an empty database.
+#         """
+#         try:
+#             with open(filename, 'r') as f:
+#                 db = yaml.load(f)
+#                 self.db = _db_to_defaultdict(db)
+#         except IOError:
+#             rospy.logwarn("ObjectDB %s not found. Creating empty DB", filename)
+#             self.db = _db_to_defaultdict({'2D': {}, '3D': {}})
+#         return self
 
-    def save(self, filename):
-        """Save the object database to the given filename."""
-        with open(filename, 'w') as f:
-            yaml.dump(_db_to_dict(self.db), f)
-        return self
+#     def save(self, filename):
+#         """Save the object database to the given filename."""
+#         with open(filename, 'w') as f:
+#             yaml.dump(_db_to_dict(self.db), f)
+#         return self
 
 
 class ObjectDBNode(object):
@@ -145,7 +145,7 @@ class ObjectDBNode(object):
         """Init."""
         super(ObjectDBNode, self).__init__()
         self.db_filename = db_filename
-        self.db = ObjectDBHelper(self.db_filename)
+        self.db = odbm.ObjectDBHelper(self.db_filename)
         rospy.on_shutdown(self.shutdown)
         rospy.Subscriber('learned_object', ObjectDescriptor, self.callback)
 
