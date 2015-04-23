@@ -1,0 +1,96 @@
+<!-- ####################################################################### 
+      Wait for the user to show the object
+<!-- ####################################################################### -->
+<recipe name="start_recognizing">
+  <precondition>
+    <atom>
+      <slot name="type"        val="event_handler"/>
+      <slot name="subtype"     val="user"/>
+      <!-- <slot name="event"       rel="equal" val="learn"/> -->
+      <!-- <slot name="last_event"  rel="equal" val="recognize"/> -->
+      <slot name="consumed"    rel="equal" val="false"/>
+      <slot name="hand"        rel= "bind" var="hand_var"/>
+      <slot name="event"       rel= "bind" var="event_var"/>
+      <slot name="last_event"  rel= "bind" var="last_event_var"/>
+      <slot name="this" rel="bind" var="event_handler_atom"/>
+    </atom> 
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body  order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Recipe Triggered: start_recognizing" type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Send event to OCULAR -->
+    <action name="send_event" actor="event_handler">
+      <roboml:args>
+        <arg name="hand"        value="$hand_var"  type="string"/>
+        <arg name="event"       value="recognize"  type="string"/>
+        <arg name="last_event"  value="recognize"  type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Block waiting this recipe ········································· --> 
+    <goal recipe_name="will_never_be_triggered" initiator="any"/>
+    <!-- ··································································  -->
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="Finishing recipe: start_recognizing" type="string"/>
+      </roboml:args>
+    </action>
+
+    <assignment>
+    </assignment>
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+
+  <assignpost>
+    <atom>
+        <slot name="this" var="event_handler_atom"/>
+        <slot name="consumed" val="true"/>
+    </atom> 
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->
+
+
+<!-- ####################################################################### 
+      This recipe should be Impossible to be triggered
+<!-- ####################################################################### -->
+<recipe name="will_never_be_triggered">
+  <precondition>
+    <atom>
+      <slot name="type"        val="event_handler"/>
+      <slot name="subtype"     val="user"/>
+      <slot name="event"       rel="equal" val="this_atom_should_never_be_triggered_since_this_slot_should_never_exist"/>
+      <!-- <slot name="last_event"  rel="equal" val="recognize"/> -->
+      <slot name="consumed"    rel="equal" val="false"/>
+      <slot name="this" rel="bind" var="event_handler_atom"/>
+    </atom> 
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body  order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="logerr" type="string"/>
+        <arg name="message" value="ERROR YOU SHOULD NEVER ARRIVE HERE" type="string"/>
+      </roboml:args>
+    </action>
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+
+  <assignpost>
+    <atom>
+        <slot name="this" var="event_handler_atom"/>
+        <slot name="consumed" val="true"/>
+    </atom> 
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->

@@ -4,11 +4,13 @@
   <triggerables>
     <recipe name="start_learning" max_instances="1"/>
     <recipe name="tell_object_name" max_instances="1"/>
+    <recipe name="start_recognizing" max_instances="1"/>
 </triggerables>
 
   <recipefiles>
     <file>ocular_interaction.xml</file>
     <file>get_object_name.xml</file>
+    <file>start_recognizing.xml</file>
 </recipefiles>
 
   <actionfiles>
