@@ -25,8 +25,7 @@ Node that translates Messages with the object_name to AtomMsgs
 
 """
 
-import roslib
-roslib.load_manifest('ocular_interaction')
+import roslib; roslib.load_manifest('ocular_interaction')
 import rospy
 from rospy_utils import coroutines as co
 
@@ -38,6 +37,7 @@ from dialog_manager_msgs.msg import AtomMsg
 
 
 def _log_atom(atom_msg):
+    """Log an atom message."""
     utils.log_atom(atom_msg, logger=rospy.logdebug)
 
 if __name__ == '__main__':
