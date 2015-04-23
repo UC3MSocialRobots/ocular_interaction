@@ -94,6 +94,13 @@
         respawn="false"
         output="screen"/>        
 
+  <node name="object_name_matcher"
+        pkg="ocular_interaction"
+        type="object_name_matcher.py"
+        args="$(arg object_db)"
+        respawn="false"
+        output="screen"/>
+
   <!-- Interaction Manager -->
   <node name="interaction_manager"
         pkg="dialog_manager"
