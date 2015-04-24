@@ -22,8 +22,8 @@ This module provides the utilities to load an save an object DB.
 :maintainer: Victor Gonzalez Pacheco
 """
 
-import roslib; roslib.load_manifest('ocular_interaction')
-
+import roslib
+roslib.load_manifest('ocular_interaction')
 # import sys
 import yaml
 import rospy

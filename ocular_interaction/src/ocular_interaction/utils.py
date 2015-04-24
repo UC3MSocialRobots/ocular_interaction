@@ -23,7 +23,8 @@ Several utilities for the OCULAR Interaction packages.
 :maintainer: Victor Gonzalez Pacheco
 """
 
-import roslib; roslib.load_manifest('monarch_multimodal_fusion')
+import roslib
+roslib.load_manifest('monarch_multimodal_fusion')
 # import rospy
 import unicodedata
 from pattern.es import parse

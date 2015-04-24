@@ -16,13 +16,14 @@
 # disponible en <URL a la LASR_UC3Mv1.0>.
 
 """
-Matches the predicted object ids to its corresponding names
+Matches the predicted object ids to its corresponding names.
 
 :author: Victor Gonzalez Pacheco
 :maintainer: Victor Gonzalez Pacheco
 """
 
-import roslib; roslib.load_manifest('ocular_interaction')
+import roslib
+roslib.load_manifest('ocular_interaction')
 
 import sys
 import rospy
@@ -68,7 +69,7 @@ class ObjectNameMatcher(object):
         """Seek object_id in object DB and returns its name."""
         for name, ids_rgb, ids_pcloud in self.db.items():
             if any([object_id in ids_rgb, object_id in ids_pcloud]):
-                    return name
+                return name
         return 'NOT_FOUND'
 
     def shutdown(self):
@@ -83,12 +84,12 @@ class ObjectNameMatcher(object):
 _DEFAULT_NAME = 'object_database_builder'
 
 if __name__ == '__main__':
+    db_filename = rospy.myargv(argv=sys.argv)[1]
+    rospy.loginfo("Loaded Object Database file from: {}"
+                  .format(utils.blue(db_filename)))
     try:
         rospy.init_node(_DEFAULT_NAME)
         rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
-        db_filename = rospy.myargv(argv=sys.argv)[1]
-        rospy.loginfo("Loaded Object Database file from: {}"
-                      .format(utils.blue(db_filename)))
         matcher = ObjectNameMatcher(db_filename)
         matcher.run()
     except rospy.ROSInterruptException:
