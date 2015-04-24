@@ -49,7 +49,12 @@ class ObjectDBHelper(object):
     """Loads and stores the ObjectDatabase to YAML file."""
 
     def __init__(self, db_filename):
-        """Init."""
+        """
+        Constructor.
+
+        Args:
+            db_filename (str): Filename (and path) to the DB YAML file.
+        """
         super(ObjectDBHelper, self).__init__()
         self.db_filename = db_filename
         self.load(self.db_filename)
@@ -64,9 +69,11 @@ class ObjectDBHelper(object):
         """
         Return an entry from the DB with similar syntax to 'dict.get'.
 
-        :param key: the key of the values to retrieve.
-        :type key: str
-        :return: tuple: (key, value2D, value3D)
+        Args
+            key (str): the key of the values to retrieve.
+
+        Returns:
+            tuple of (key, value2D, value3D)
 
         Example:
 
