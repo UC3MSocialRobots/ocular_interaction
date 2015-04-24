@@ -1,12 +1,12 @@
 2D:
-  ? ''
-  : [6, 7]
-  botella: [4, 7, 8]
-  mariposa: [5]
-  pelota: [9]
+  conejo: [4, 9]
+  leon: [1, 6]
+  oso: [2, 7]
+  perro: [0, 5]
+  rana: [3, 8]
 3D:
-  ? ''
-  : [6, 8]
-  botella: [4, 7, 9]
-  mariposa: [5]
-  pelota: [10]
+  conejo: [4, 9]
+  leon: [1, 6]
+  oso: [2, 7]
+  perro: [0, 5]
+  rana: [3, 8]
