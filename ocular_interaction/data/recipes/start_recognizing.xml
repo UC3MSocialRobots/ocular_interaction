@@ -1,4 +1,92 @@
 <!-- ####################################################################### 
+      Wait for first input from user.
+      If first input is recognize starts recognizing and blocks.
+      Otherwise blocks directly and yields to other recipes.
+<!-- ####################################################################### -->
+<recipe name="wait_for_user_first_input">
+  <precondition>
+    <!-- no preconditions -->
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body  order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Recipe Triggered: wait_for_user_first_input" type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Block waiting this recipe ········································· --> 
+    <goal recipe_name="yield_to_learning_triggerables, start_recognizing" initiator="any"/>
+    <!-- ··································································  -->
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="Finishing recipe: wait_for_user_first_input" type="string"/>
+      </roboml:args>
+    </action>
+
+    <assignment>
+    </assignment>
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+  <assignpost>
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->
+
+
+<!-- ####################################################################### 
+      User decides to start recognizing.
+      Does nothing (just blocks) since other triggerables are alredy in charge.
+<!-- ####################################################################### -->
+<recipe name="yield_to_learning_triggerables">
+  <precondition>
+    <atom>
+      <slot name="type"     val="user_command"/>
+      <slot name="subtype"  val="user"/>
+      <slot name="command"  rel="equal" val="learn"/>
+      <slot name="consumed" rel="equal" val="false"/>
+      <slot name="this"     rel="bind" var="user_command_atom"/>
+    </atom> 
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body  order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Recipe Triggered: yield_to_learning_triggerables" type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Block waiting this recipe ········································· --> 
+    <goal recipe_name="will_never_be_triggered" initiator="any"/>
+    <!-- ··································································  -->
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="Finishing recipe: yield_to_learning_triggerables" type="string"/>
+      </roboml:args>
+    </action>
+
+    <assignment>
+    </assignment>
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+  <assignpost>
+      <atom>
+        <slot name="this" var="user_command_atom"/>
+        <slot name="consumed" val="true"/>
+      </atom> 
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->
+
+<!-- ####################################################################### 
       Wait for the user to show the object
 <!-- ####################################################################### -->
 <recipe name="start_recognizing">

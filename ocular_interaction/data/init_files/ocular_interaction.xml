@@ -4,7 +4,7 @@
   <triggerables>
     <recipe name="start_learning" max_instances="1"/>
     <recipe name="tell_object_name" max_instances="1"/>
-    <recipe name="start_recognizing" max_instances="1"/>
+    <recipe name="wait_for_user_first_input" max_instances="1"/>
 </triggerables>
 
   <recipefiles>
