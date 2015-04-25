@@ -3,10 +3,6 @@
 
      This package enables OCULAR with interaction capabilities.
 
-     - TODO: 
-        - launch ocular from this package
-        - Remap event topic to the interaction_manager
-
   </description>
   <author>Víctor González</author>
   <license>LASRL-UC3M</license>
