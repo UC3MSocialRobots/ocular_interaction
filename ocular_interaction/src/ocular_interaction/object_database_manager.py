@@ -24,12 +24,10 @@ This module provides the utilities to load an save an object DB.
 
 import roslib
 roslib.load_manifest('ocular_interaction')
-# import sys
 import yaml
 import rospy
 from collections import defaultdict
 from itertools import chain
-# from ocular_interaction import utils
 
 
 def _db_to_defaultdict(db):
