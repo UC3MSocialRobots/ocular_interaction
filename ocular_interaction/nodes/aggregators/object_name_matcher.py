@@ -58,24 +58,35 @@ class ObjectNameMatcher(object):
         rospy.Subscriber('ocular/final_object_id', SystemOutput, self.callback)
         self.pub = rospy.Publisher('recognized_object_name', String)
 
+    def __log_matched_names(self, name, rgb_name, pcloud_name, msg):
+        """Log names and ids of predictions."""
+        # rospy.loginfo("------------------------------------------")
+        rospy.loginfo("Predicted Object      (ID: {}, Name: {})"
+                      .format(utils.green(str(msg.id_2d_plus_3d)),
+                              utils.green(name)))
+        rospy.loginfo("RGB Prediction was    (ID: {}, Name: {})"
+                      .format(utils.green(str(msg.id_2d)),
+                              utils.green(rgb_name)))
+        rospy.loginfo("PCloud Prediction was (ID: {}, Name: {})"
+                      .format(utils.green(str(msg.id_3d)),
+                              utils.green(pcloud_name)))
+        rospy.loginfo("------------------------------------------")
+
     def callback(self, msg):
         """Publish the name of the received object_id."""
         matched_name = self.seek_object_name(msg.id_2d_plus_3d)
-        rospy.loginfo("Predicted Object (ID: {}, Name: {})"
-                      .format(utils.green(str(msg.id_2d_plus_3d)),
-                              utils.green(matched_name)))
+        rgb_name = self.seek_object_name(msg.id_2d)
+        pcloud_name = self.seek_object_name(msg.id_3d)
+        self.__log_matched_names(matched_name, rgb_name, pcloud_name, msg)
         self.pub.publish(matched_name)
 
     def seek_object_name(self, object_id):
         """Seek object_id in object DB and returns its name."""
-        for name, ids_rgb, ids_pcloud in self.db.items():
-            # rospy.logwarn("ObjectID: {}".format(object_id))
-            # rospy.logwarn("DB Entry:")
-            # rospy.logwarn("Name {} -- IDs RGB {} -- IDs Pcloud {}"
-            #               .format(name, ids_rgb, ids_rgb))
-            if any([object_id in ids_rgb, object_id in ids_pcloud]):
-                return name
-        return 'NOT_FOUND'
+        found_names = [name
+                       for name, ids_rgb, ids_pcloud in self.db.items()
+                       if any([object_id in ids_rgb,
+                               object_id in ids_pcloud])]
+        return found_names[0] if found_names else 'NOT_FOUND'
 
     def shutdown(self):
         """Hook to be executed when rospy.shutdown is called."""
