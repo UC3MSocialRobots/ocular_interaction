@@ -1,0 +1,9 @@
+<launch>
+    <node pkg="ocular_active_learning"
+          type="ocular_estimator.py"
+          name="ocular_estimator"
+          args="object_id:=/ocular/object_id
+                final_object_id:=/ocular/final_object_id">
+        <param name="rate" value="30"/>
+    </node>
+</launch>

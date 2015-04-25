@@ -18,6 +18,8 @@
     <arg name="interactive_event_topic" default="interactive_event"/>
   </include>
 
+  <include file="$(find ocular_active_learning)/launch/ocular_al.launch"/>
+
   <include file="$(find ocular_interaction)/launch/ocular_interaction.launch">
     <arg name="loop_rate" value="$(arg loop_rate)"/> <!-- seconds -->
     <arg name="data_dir"  value="$(arg data_dir)"/>
