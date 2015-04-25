@@ -1,0 +1,22 @@
+<package>
+  <description brief="ocular_active_learning">
+
+     Active Learning tools for OCULAR Project
+
+  </description>
+  <author>Víctor González</author>
+  <license>LASRL-UC3M</license>
+  <version>0.1.0</version>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ocular_active_learning</url>
+  <depend package="ocular"/>
+  <depend package="ocular_interaction"/>
+  <depend package="rospy_utils"/>
+  <depend package="rospy"/>
+  <depend package="dialog_manager_msgs"/>
+  <depend package="rosunit"/>
+  <depend package="rostest"/>
+
+</package>
+
+
