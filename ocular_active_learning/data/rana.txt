@@ -1,0 +1,105 @@
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (0, perro)
+------------------------------------------
+Predicted Object      (1, leon)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (3, rana)
+------------------------------------------
+Predicted Object      (1, leon)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (0, perro)
+------------------------------------------
+Predicted Object      (1, leon)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (3, rana)
+------------------------------------------
+Predicted Object      (1, leon)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (8, rana)
+------------------------------------------
+Predicted Object      (8, rana)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (8, rana)
+------------------------------------------
+Predicted Object      (1, leon)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (8, rana)
+------------------------------------------
+Predicted Object      (1, leon)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (8, rana)
+------------------------------------------
+Predicted Object      (1, leon)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (8, rana)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (8, rana)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (3, rana)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (3, rana)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (2, oso)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (3, rana)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (3, rana)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (0, perro)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (2, oso)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (2, oso)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (9, conejo)
+------------------------------------------
+Predicted Object      (1, leon)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (9, conejo)
+------------------------------------------
+Predicted Object      (1, leon)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (6, leon)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (8, rana)
+------------------------------------------
+Predicted Object      (1, leon)
+RGB Prediction was    (1, leon)
+PCloud Prediction was (8, rana)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (0, perro)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (9, conejo)
+------------------------------------------
+Predicted Object      (0, perro)
+RGB Prediction was    (0, perro)
+PCloud Prediction was (8, rana)
+------------------------------------------
