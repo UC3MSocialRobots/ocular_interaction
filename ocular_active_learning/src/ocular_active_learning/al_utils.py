@@ -110,7 +110,7 @@ class Accumulator(object):
 
     def haselems(self):
         """Return True if Accumulator has any elem. Otherwise return False."""
-        return not self.isempty(self)
+        return not self.isempty()
 
     def __call__(self, item=None):
         """
