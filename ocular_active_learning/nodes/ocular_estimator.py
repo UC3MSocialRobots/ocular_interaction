@@ -28,23 +28,21 @@ import roslib
 roslib.load_manifest('ocular_active_learning')
 import rospy
 from rospy import (Publisher, Subscriber)
-from rospy import loginfo, logfatal
+from rospy import loginfo
 
 from ocular_active_learning import al_utils as alu
 
-from ocular.msg import (RecognizedObject, SystemOutput)
-from rospy_utils.param_utils import load_params
-from rospy_utils.func_utils import error_handler as eh
-
-__RATE = 30
+from ocular.msg import SystemOutput
+from ocular_active_learning.msg import AccumulatedPredictions as Predictions
 
 
-class Estimator():
+class Estimator(object):
 
     """
-    Estimator Node: publishes final result once a second.
+    Estimator Node: publishes object_id estimations once a second.
 
-    Accumulate predictions and publishes a final result every second
+    It subscribes to the accumulated predictions topic and produces estimations
+    of the object_id each second from these accumulated predictions.
     """
 
     def __init__(self, **kwargs):
@@ -54,34 +52,18 @@ class Estimator():
         rospy.on_shutdown(self.shutdown)
         loginfo("Initializing " + self.node_name + " node...")
 
-        with eh(logger=logfatal, log_msg="Couldn't load parameters",
-                reraise=True):
-            self.hz = load_params(['rate']).next()
-
         # Publishers and Subscribers
+        Subscriber("predictions", Predictions, self.callback)
         self.pub = Publisher('final_object_id', SystemOutput)
-        Subscriber("object_id", RecognizedObject, self.callback)
 
-        # self.r = rospy.Rate(self.hz)
-        # Accumulates Hz items in per second. Ex: 30Hz -> ~30items/sec
-        self.accumulator = alu.Accumulator(self.hz)
-
-    def callback(self, data):
+    def callback(self, predictions):
         """Callback that publishes updated predictions when new msg is recv."""
-        self.accumulator.append(data.object_id)
-        if self.accumulator.isfull():
-            rospy.logdebug("Accumulator full. Printing all predictions")
-            rospy.logdebug("{}".format(self.accumulator))
-            predictions_rgb, predictions_pcloud = zip(*self.accumulator)
-            y, y_rgb, y_pcloud = alu.estimate(predictions_rgb,
-                                              predictions_pcloud)
-            output_msg = SystemOutput(id_2d_plus_3d=y,
-                                      id_2d=y_rgb,
-                                      id_3d=y_pcloud)
-            try:
-                self.pub.publish(output_msg)
-            except ValueError as ve:
-                rospy.logwarn(str(ve))
+        y, y_rgb, y_pcloud = alu.estimate(predictions.rgb, predictions.pcloud)
+        output_msg = SystemOutput(id_2d_plus_3d=y, id_2d=y_rgb, id_3d=y_pcloud)
+        try:
+            self.pub.publish(output_msg)
+        except ValueError as ve:
+            rospy.logwarn(str(ve))
 
     def run(self):
         """Run (wrapper of ``rospy.spin()``."""

@@ -2,8 +2,16 @@
     <node pkg="ocular_active_learning"
           type="ocular_estimator.py"
           name="ocular_estimator"
-          args="object_id:=/ocular/object_id
+          args="predictions:=/ocular/predictions/accumulated
                 final_object_id:=/ocular/final_object_id">
+    </node>
+
+    <node pkg="ocular_active_learning"
+          type="ocular_predictions_accumulator.py"
+          name="ocular_predictions_accumulator"
+          args="object_id:=/ocular/object_id
+                predictions:=/ocular/predictions/accumulated">
         <param name="rate" value="30"/>
     </node>
+
 </launch>
