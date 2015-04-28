@@ -23,12 +23,16 @@ Utilities for OCULAR's Active Learning Nodes.
 # from functools import partial
 from itertools import chain, islice
 # from toolz import (compose, frequencies, take)
-from toolz import frequencies
+# from toolz import (compose, frequencies)
+import toolz as tz
 import pandas as pd
 
 import roslib
 roslib.load_manifest('ocular_active_learning')
 # import rospy
+
+# Calc frequencies of a list and return them as series
+frequencies = tz.compose(pd.Series, tz.frequencies)
 
 
 class Accumulator(object):
@@ -194,8 +198,10 @@ def estimate(predictions_rgb, predictions_pcloud, weights=(0.6, 0.4)):
         (1, 1, 2)
     """
     w_rgb, w_pcloud = weights
-    freqs_rgb = pd.Series(frequencies(predictions_rgb))
-    freqs_pcloud = pd.Series(frequencies(predictions_pcloud))
+    # freqs_rgb = pd.Series(frequencies(predictions_rgb))
+    # freqs_pcloud = pd.Series(frequencies(predictions_pcloud))
+    freqs_rgb = frequencies(predictions_rgb)
+    freqs_pcloud = frequencies(predictions_pcloud)
     freqs = pd.Series.add(w_rgb * freqs_rgb,
                           w_pcloud * freqs_pcloud, fill_value=0)
     return (freqs.nlargest(1).index[0],
