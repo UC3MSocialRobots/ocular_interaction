@@ -136,18 +136,6 @@ checks:
         basic_pointless_statement: true
         basic_old_raise_syntax: true
         basic_missing_docstring: true
-        basic_invalid_name:
-            functions: '[a-z_][a-z0-9_]{2,30}$'
-            variables: '[a-z_][a-z0-9_]{2,30}$'
-            whitelisted_names: 'i,j,k,ex,Run,_'
-            constants: '(([A-Z_][A-Z0-9_]*)|(__.*__))$'
-            attributes: '[a-z_][a-z0-9_]{2,30}$'
-            arguments: '[a-z_][a-z0-9_]{2,30}$'
-            class_attributes: '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$'
-            inline_vars: '[A-Za-z_][A-Za-z0-9_]*$'
-            classes: '[A-Z_][a-zA-Z0-9]+$'
-            modules: '(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$'
-            methods: '[a-z_][a-z0-9_]{2,30}$'
         basic_function_redefined: true
         basic_expression_not_assigned: true
 
