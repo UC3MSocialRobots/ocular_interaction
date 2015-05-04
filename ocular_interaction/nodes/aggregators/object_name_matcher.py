@@ -35,6 +35,23 @@ from std_msgs.msg import String
 from ocular.msg import SystemOutput
 
 
+def __log_match(prefix, id_, name):
+        """Log a match ID-Name."""
+        logmsg = prefix + "(ID: {}, Name: {})".format(utils.green(str(id_)),
+                                                      utils.green(name))
+        rospy.loginfo(logmsg)
+
+
+def __log_matched_names(msg, *names):
+    """Log names and ids of predictions."""
+    name, rgb_name, pcloud_name = names
+    # rospy.loginfo("------------------------------------------")
+    __log_match("Predicted Object      ", msg.id_2d_plus_3d, name)
+    __log_match("RGB Prediction was    ", msg.id_2d, rgb_name)
+    __log_match("PCloud Prediction was ", msg.id_3d, pcloud_name)
+    rospy.loginfo("------------------------------------------")
+
+
 class ObjectNameMatcher(object):
 
     """
@@ -58,26 +75,12 @@ class ObjectNameMatcher(object):
         rospy.Subscriber('ocular/final_object_id', SystemOutput, self.callback)
         self.pub = rospy.Publisher('recognized_object_name', String)
 
-    def __log_matched_names(self, name, rgb_name, pcloud_name, msg):
-        """Log names and ids of predictions."""
-        # rospy.loginfo("------------------------------------------")
-        rospy.loginfo("Predicted Object      (ID: {}, Name: {})"
-                      .format(utils.green(str(msg.id_2d_plus_3d)),
-                              utils.green(name)))
-        rospy.loginfo("RGB Prediction was    (ID: {}, Name: {})"
-                      .format(utils.green(str(msg.id_2d)),
-                              utils.green(rgb_name)))
-        rospy.loginfo("PCloud Prediction was (ID: {}, Name: {})"
-                      .format(utils.green(str(msg.id_3d)),
-                              utils.green(pcloud_name)))
-        rospy.loginfo("------------------------------------------")
-
     def callback(self, msg):
         """Publish the name of the received object_id."""
         matched_name = self.seek_object_name(msg.id_2d_plus_3d)
         rgb_name = self.seek_object_name(msg.id_2d)
         pcloud_name = self.seek_object_name(msg.id_3d)
-        self.__log_matched_names(matched_name, rgb_name, pcloud_name, msg)
+        __log_matched_names(msg, matched_name, rgb_name, pcloud_name)
         self.pub.publish(matched_name)
 
     def seek_object_name(self, object_id):
