@@ -36,10 +36,10 @@ from ocular.msg import SystemOutput
 
 
 def _log_match(prefix, id_, name):
-        """Log a match ID-Name."""
-        logmsg = prefix + "(ID: {}, Name: {})".format(utils.green(str(id_)),
-                                                      utils.green(name))
-        rospy.loginfo(logmsg)
+    """Log a match ID-Name."""
+    logmsg = prefix + "(ID: {}, Name: {})".format(utils.green(str(id_)),
+                                                  utils.green(name))
+    rospy.loginfo(logmsg)
 
 
 def _log_matched_names(msg, *names):
@@ -54,12 +54,7 @@ def _log_matched_names(msg, *names):
 
 class ObjectNameMatcher(object):
 
-    """
-    Node that bulds an Object Database from ObjectDescriptor Messages.
-
-    The database can be stored to a given filename or it is automatically
-    saved to `db_filename` when the node is shutdown (via rospy.shutdown).
-    """
+    """Node that matches the predicted object ids to its corresponding names."""
 
     def __init__(self, db_filename):
         """
