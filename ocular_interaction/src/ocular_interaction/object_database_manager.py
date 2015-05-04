@@ -29,7 +29,6 @@ import rospy
 from collections import defaultdict
 from itertools import chain
 from toolz import memoize
-from rospy_utils import as_iter
 
 
 def _db_to_defaultdict(db):
@@ -72,11 +71,6 @@ def _get_object_name_from_id(object_id, db):
 
 #   [1] http://toolz.readthedocs.org/en/latest/api.html#toolz.functoolz.memoize
 get_object_name_from_id = memoize(_get_object_name_from_id)
-
-
-def __swap_dict(d):
-    """Swap key values of a dict."""
-    return dict([(v, k) for k in d.keys() for v in as_iter(d[k])])
 
 
 class ObjectDBHelper(object):
@@ -171,8 +165,3 @@ class ObjectDBHelper(object):
         with open(filename, 'w') as f:
             yaml.dump(_db_to_dict(self.db), f)
         return self
-
-    def swap(self):
-        """Return the DB with swapped key-values."""
-        return {'2D': __swap_dict(self.db['2D']),
-                '3D': __swap_dict(self.db['2D'])}
