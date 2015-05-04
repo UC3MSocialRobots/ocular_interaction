@@ -154,22 +154,6 @@ class Accumulator(object):
         return len(self.l)
 
 
-def accumulator_coroutine(target, max_items):
-    """
-    Accumulate items in a list and sends them to target when len=max_items.
-
-    Params
-        :target: coroutine that receives the accumulated items
-        :max_items: num of items to accumulate before they are sent to target
-    """
-    items = list()
-    while True:
-        items.append((yield))
-        if len(items) == max_items:
-            target.send(items)
-            del items[:]
-
-
 def estimate(predictions_rgb, predictions_pcloud, weights=(0.6, 0.4)):
     """Return ids of object that appears more times in each matcher.
 
@@ -198,8 +182,6 @@ def estimate(predictions_rgb, predictions_pcloud, weights=(0.6, 0.4)):
         (1, 1, 2)
     """
     w_rgb, w_pcloud = weights
-    # freqs_rgb = pd.Series(frequencies(predictions_rgb))
-    # freqs_pcloud = pd.Series(frequencies(predictions_pcloud))
     freqs_rgb = frequencies(predictions_rgb)
     freqs_pcloud = frequencies(predictions_pcloud)
     freqs = pd.Series.add(w_rgb * freqs_rgb,
