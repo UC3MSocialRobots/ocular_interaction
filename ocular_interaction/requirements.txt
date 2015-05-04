@@ -1,6 +1,7 @@
 nltk
 pattern
 enum34
+toolz
 rospkg
 coverage
 flake8
