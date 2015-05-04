@@ -82,11 +82,7 @@ class ObjectNameMatcher(object):
 
     def seek_object_name(self, object_id):
         """Seek object_id in object DB and returns its name."""
-        found_names = [name
-                       for name, ids_rgb, ids_pcloud in self.db.items()
-                       if any([object_id in ids_rgb,
-                               object_id in ids_pcloud])]
-        return found_names[0] if found_names else 'NOT_FOUND'
+        return odbm.get_object_name_from_id(object_id, self.db)
 
     def shutdown(self):
         """Hook to be executed when rospy.shutdown is called."""

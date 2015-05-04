@@ -28,6 +28,8 @@ import yaml
 import rospy
 from collections import defaultdict
 from itertools import chain
+from toolz import memoize
+from rospy_utils import as_iter
 
 
 def _db_to_defaultdict(db):
@@ -40,6 +42,41 @@ def _db_to_dict(db):
     """Convert the database to dict."""
     return {'2D': dict(db['2D']),
             '3D': dict(db['3D'])}
+
+
+def _get_object_name_from_id(object_id, db):
+    """
+    Seek object_id in object db and returns its name.
+
+    Example:
+
+        >>> db = ObjectDBHelper('/tmp/example_db')
+        >>> db.add('A', 1, 1)
+        >>> db.add('B', 2, 2)
+        >>> get_object_name_from_id(1, db)
+        'A'
+        >>> get_object_name_from_id(2, db)
+        'B'
+        >>> get_object_name_from_id(3, db)
+        'NOT_FOUND'
+    """
+    found_names = [name
+                   for name, ids_rgb, ids_pcloud in db.items()
+                   if any([object_id in ids_rgb,
+                           object_id in ids_pcloud])]
+    return found_names[0] if found_names else 'NOT_FOUND'
+
+# Note:
+#   This is the "memoized" [1] version of a private function with the same name
+#   and is the one that should be used.
+
+#   [1] http://toolz.readthedocs.org/en/latest/api.html#toolz.functoolz.memoize
+get_object_name_from_id = memoize(_get_object_name_from_id)
+
+
+def __swap_dict(d):
+    """Swap key values of a dict."""
+    return dict([(v, k) for k in d.keys() for v in as_iter(d[k])])
 
 
 class ObjectDBHelper(object):
@@ -61,7 +98,6 @@ class ObjectDBHelper(object):
         """Add an entry to the database."""
         self.db['2D'][name].append(id2D)
         self.db['3D'][name].append(id3D)
-        return self
 
     def get(self, key, *args, **kwargs):
         """
@@ -135,3 +171,8 @@ class ObjectDBHelper(object):
         with open(filename, 'w') as f:
             yaml.dump(_db_to_dict(self.db), f)
         return self
+
+    def swap(self):
+        """Return the DB with swapped key-values."""
+        return {'2D': __swap_dict(self.db['2D']),
+                '3D': __swap_dict(self.db['2D'])}
