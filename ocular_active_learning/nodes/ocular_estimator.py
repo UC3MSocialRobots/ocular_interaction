@@ -45,7 +45,7 @@ class Estimator(object):
     of the object_id each second from these accumulated predictions.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self):
         """Constructor."""
         rospy.init_node('ocular_object_id_averager', anonymous=True)
         self.node_name = rospy.get_name()

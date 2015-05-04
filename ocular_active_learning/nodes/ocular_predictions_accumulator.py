@@ -42,7 +42,7 @@ class AccumulatorNode(object):
     It accumulates predictions and publishes them every second.
     """
 
-    def __init__(self, **kwargs):
+    def __init__(self):
         """Constructor."""
         rospy.init_node('ocular_predictions_accumulator', anonymous=True)
         self.node_name = rospy.get_name()
