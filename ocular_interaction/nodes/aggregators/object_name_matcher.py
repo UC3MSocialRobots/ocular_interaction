@@ -91,7 +91,7 @@ class ObjectNameMatcher(object):
         rospy.spin()
 
 
-_DEFAULT_NAME = 'object_database_builder'
+_DEFAULT_NAME = 'object_name_matcher'
 
 if __name__ == '__main__':
     db_filename = rospy.myargv(argv=sys.argv)[1]
