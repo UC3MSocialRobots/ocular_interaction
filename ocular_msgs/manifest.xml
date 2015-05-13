@@ -1,0 +1,16 @@
+<package>
+  <description brief="ocular_msgs">
+
+     Common msgs for ocular_project
+
+  </description>
+  <author>Victor Gonzalez-Pacheco</author>
+  <license>LASR-UC3M</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ocular_msgs</url>
+  <depend package="rospy"/>
+  <depend package="std_msgs"/>
+
+</package>
+
+
