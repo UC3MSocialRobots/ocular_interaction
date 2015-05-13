@@ -29,7 +29,7 @@ from rospy import loginfo, logfatal
 from ocular_active_learning import al_utils as alu
 
 from ocular.msg import RecognizedObject
-from ocular_active_learning.msg import AccumulatedPredictions as Predictions
+from ocular_msgs.msg import AccumulatedPredictions as Predictions
 from rospy_utils.param_utils import load_params
 from rospy_utils.func_utils import error_handler as eh
 

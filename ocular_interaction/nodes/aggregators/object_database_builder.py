@@ -35,7 +35,7 @@ import rospy
 from ocular_interaction import utils
 from ocular_interaction import object_database_manager as odbm
 
-from ocular_interaction.msg import ObjectDescriptor
+from ocular_msgs.msg import ObjectDescriptor
 
 
 class ObjectDBNode(object):

@@ -33,7 +33,7 @@ from rospy import loginfo
 from ocular_active_learning import al_utils as alu
 
 from ocular.msg import SystemOutput
-from ocular_active_learning.msg import AccumulatedPredictions as Predictions
+from ocular_msgs.msg import AccumulatedPredictions as Predictions
 
 
 class Estimator(object):

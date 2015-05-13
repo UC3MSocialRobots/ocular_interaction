@@ -31,7 +31,7 @@ import rospy
 
 from std_msgs.msg import String
 from ocular.msg import LearningFinished as LFMsg
-from ocular_interaction.msg import ObjectDescriptor
+from ocular_msgs.msg import ObjectDescriptor
 
 _DEFAULT_NAME = 'object_id_notifier'
 
