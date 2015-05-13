@@ -101,6 +101,13 @@
         respawn="false"
         output="screen"/>
 
+  <node name="predictions_namer"
+        pkg="ocular_interaction"
+        type="predictions_namer.py"
+        args="$(arg object_db)"
+        respawn="false"
+        output="screen"/>
+
   <!-- Interaction Manager -->
   <node name="interaction_manager"
         pkg="dialog_manager"
