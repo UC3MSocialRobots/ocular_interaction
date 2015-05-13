@@ -13,6 +13,7 @@
   <depend package="ocular_interaction"/>
   <depend package="rospy_utils"/>
   <depend package="rospy"/>
+  <depend package="ocular_msgs"/>
   <depend package="dialog_manager_msgs"/>
   <depend package="rosunit"/>
   <depend package="rostest"/>

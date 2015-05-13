@@ -11,6 +11,7 @@
   <url>http://ros.org/wiki/ocular_interaction_rosbuild</url>
   <depend package="rospy"/>
   <depend package="rospy_utils"/>
+  <depend package="ocular_msgs"/>
   <depend package="dialog_manager_msgs"/>
   <depend package="etts_msgs"/>
   <depend package="asr_msgs"/>
