@@ -1,5 +1,6 @@
 nltk
 pattern
+scikit-learn
 enum34
 toolz
 rospkg
