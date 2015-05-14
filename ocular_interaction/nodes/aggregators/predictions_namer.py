@@ -52,10 +52,16 @@ def match_names(db_file, target=None):
         target.send(named_preds)
 
 
-def _start_node(node_name):
+def _init_node(node_name):
     """Common routines for start a node."""
     rospy.init_node(node_name)
     rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
+
+
+def _log_predictions(predictions, logger=rospy.loginfo):
+    """Log predictions msg to logger."""
+    logger("Predictions RGB: {}".format(utils.blue(str(predictions.rgb))))
+    logger("Predictions PCloud: {}".format(utils.blue(str(predictions.pcloud))))
 
 
 _DEFAULT_NAME = 'predictions_namer'
@@ -64,8 +70,9 @@ if __name__ == '__main__':
     db_filename = rospy.myargv(argv=sys.argv)[1]
     rospy.loginfo("Object Database file: {}".format(utils.blue(db_filename)))
     try:
-        _start_node(_DEFAULT_NAME)
+        _init_node(_DEFAULT_NAME)
         pipe = co.pipe([match_names(db_filename),
+                        co.do(_log_predictions),
                         co.publisher('named_predictions', NamedPredictions)])
         co.PipedSubscriber('predictions', Predictions, pipe)
         rospy.spin()
