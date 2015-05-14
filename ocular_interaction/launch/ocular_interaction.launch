@@ -104,7 +104,8 @@
   <node name="predictions_namer"
         pkg="ocular_interaction"
         type="predictions_namer.py"
-        args="$(arg object_db)"
+        args="$(arg object_db)
+              predictions:=/ocular/predictions/accumulated"
         respawn="false"
         output="screen"/>
 
