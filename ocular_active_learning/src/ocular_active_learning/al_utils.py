@@ -24,6 +24,8 @@ Utilities for OCULAR's Active Learning Nodes.
 from itertools import chain, islice
 # from toolz import (compose, frequencies, take)
 # from toolz import (compose, frequencies)
+import numpy as np
+import nltk
 import toolz as tz
 import pandas as pd
 
