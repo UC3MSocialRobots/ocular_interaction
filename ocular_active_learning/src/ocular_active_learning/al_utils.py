@@ -155,7 +155,8 @@ class Accumulator(object):
 
 
 def estimate(predictions_rgb, predictions_pcloud, weights=(0.6, 0.4)):
-    """Return ids of object that appears more times in each matcher.
+    """
+    Return ids of object that appears more times in each matcher.
 
     That is, returns the id of the item with higher frequency in
     the rgb predictions, the point cloud predictions and
@@ -189,3 +190,44 @@ def estimate(predictions_rgb, predictions_pcloud, weights=(0.6, 0.4)):
     return (freqs.nlargest(1).index[0],
             freqs_rgb.nlargest(1).index[0],
             freqs_pcloud.nlargest(1).index[0])
+
+
+def entropy(labels):
+    """
+    Return entropy of a list of categorical variables.
+
+    Example:
+
+        >>> entropy(['red', 'red', 'green', 'red'])
+        0.81127812445913283
+        >>> entropy(['red', 'red', 'red', 'green', 'green', 'blue']) 
+        1.4591479170272448
+    """
+    freqdist = nltk.FreqDist(labels)
+    probs = [freqdist.freq(l) for l in nltk.FreqDist(labels)]
+    probs = np.array(probs)
+    return -sum(probs.T * np.log2(probs))
+
+
+def numerize(array):
+    """
+    Return an int-based id for each categorical variable of the passed list.
+
+    Args:
+    :array (list of str): The list of categorical variables to numerize
+
+    Return:
+    numerized (tuple(int, str)): Returs a lit of tuples where each tuple is
+        the numeric id for each categorical variable and the variable itself.
+
+    Example:
+
+        >>> numerize('red green blue white'.split(' '))
+        [(0, 'blue'), (1, 'green'), (2, 'red'), (3, 'white')]
+
+    Note that repeated variables are numreized only once:
+
+        >>> numerize('red green blue white blue white'.split(' '))
+        [(0, 'blue'), (1, 'green'), (2, 'red'), (3, 'white')]
+    """
+    return list(enumerate(sorted(set(array))))
