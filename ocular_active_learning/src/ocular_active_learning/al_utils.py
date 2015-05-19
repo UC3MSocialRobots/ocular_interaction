@@ -194,6 +194,30 @@ def estimate(predictions_rgb, predictions_pcloud, weights=(0.6, 0.4)):
             freqs_pcloud.nlargest(1).index[0])
 
 
+def margin(items):
+    """
+    Calculate margin between highest two frequencies.
+
+    The margin is the difference between the frequency of appearance between
+    the two most common items in a list.
+
+    Example:
+
+        >>> margin([3, 3, 3, 1, 2, 0])
+        2.0
+        >>> margin([2, 2, 2, 1, 1])
+        1.0
+        >>> margin([3, 3, 5, 5, 6])
+        -0.0
+        >>> margin([3, 3, 3, 3, 3])
+        nan
+        >>> margin([1, 1, 1, 1, 2, 2, 3, 4, 5, 0, 0])
+        2.0
+    """
+    freqs = frequencies(items)
+    return freqs.nlargest(2).diff().values[-1] * (-1)
+
+
 def entropy(labels):
     """
     Return entropy of a list of categorical variables.
