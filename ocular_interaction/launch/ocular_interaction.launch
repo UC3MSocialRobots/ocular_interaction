@@ -105,7 +105,8 @@
         pkg="ocular_interaction"
         type="predictions_namer.py"
         args="$(arg object_db)
-              predictions:=/ocular/predictions/accumulated"
+              predictions:=/ocular/predictions/accumulated_predictions
+              named_predictions:=/ocular/predictions/named_predictions"
         respawn="false"
         output="screen"/>
 
