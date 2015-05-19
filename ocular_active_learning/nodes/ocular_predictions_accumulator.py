@@ -45,9 +45,8 @@ class AccumulatorNode(object):
     def __init__(self):
         """Constructor."""
         rospy.init_node('ocular_predictions_accumulator', anonymous=True)
-        self.node_name = rospy.get_name()
+        loginfo("Initializing " + rospy.get_name() + " node...")
         rospy.on_shutdown(self.shutdown)
-        loginfo("Initializing " + self.node_name + " node...")
 
         with eh(logger=logfatal, log_msg="Couldn't load params", reraise=True):
             self.hz = load_params(['rate']).next()
@@ -63,7 +62,7 @@ class AccumulatorNode(object):
         """Callback that publishes updated predictions when new msg is recv."""
         self.accumulator.append(data.object_id)
         if self.accumulator.isfull():
-            rospy.logdebug("Accumulator full. Printing all predictions")
+            rospy.logdebug("Accumulator full. Printing all predictions:")
             rospy.logdebug("{}".format(self.accumulator))
             predictions_rgb, predictions_pcloud = zip(*self.accumulator)
             msg = Predictions(rgb=predictions_rgb, pcloud=predictions_pcloud)
