@@ -202,7 +202,7 @@ def entropy(labels):
 
         >>> entropy(['red', 'red', 'green', 'red'])
         0.81127812445913283
-        >>> entropy(['red', 'red', 'red', 'green', 'green', 'blue']) 
+        >>> entropy(['red', 'red', 'red', 'green', 'green', 'blue'])
         1.4591479170272448
     """
     freqdist = nltk.FreqDist(labels)
