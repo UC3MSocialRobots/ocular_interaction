@@ -34,7 +34,7 @@ from rospy_utils import coroutines as co
 from ocular_interaction import utils
 from ocular_active_learning import al_utils as alu
 
-from std_msgs.msg import Float32
+# from std_msgs.msg import Float32
 from ocular_msgs.msg import (NamedPredictions, Prediction)
 from ocular_msgs.msg import UncertaintyMetric as Uncertainty
 
