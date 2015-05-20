@@ -34,7 +34,7 @@ from rospy_utils import coroutines as co
 from ocular_interaction import utils
 from ocular_active_learning import al_utils as alu
 
-from std_msgs import Float32
+from std_msgs.msg import Float32
 from ocular_msgs.msg import (NamedPredictions, Prediction)
 from ocular_msgs.msg import UncertaintyMetric as Uncertainty
 
@@ -49,8 +49,8 @@ def _make_entropy_msg(predictions):
 def _make_margin_msg(predictions):
     """Make an Uncertainty msg with margin values of the input predictions."""
     return Uncertainty(name='margin',
-                       rgb=alu.margin(predictions.rgb),
-                       pcloud=alu.margin(predictions.pcloud))
+                       rgb=alu.numerize(alu.margin(predictions.rgb)),
+                       pcloud=alu.numerize(alu.margin(predictions.pcloud)))
 
 
 def _make_prediction_msg(prediction_fields):
@@ -71,24 +71,24 @@ def _log_predictions(predictions, logger=rospy.loginfo):
     logger("Predictions PCloud: {}".format(utils.blue(str(predictions.pcloud))))
 
 entropy_pipe = co.pipe([co.mapper(_make_entropy_msg),
-                        co.publisher('predictions_entropy', Float32)])
+                        co.publisher('predictions_entropy', Uncertainty)])
 
 margin_pipe = co.pipe([co.mapper(_make_margin_msg),
-                       co.publisher('predictions_margin', Float32)])
+                       co.publisher('predictions_margin', Uncertainty)])
 
 estimator_pipe = co.pipe([co.mapper(alu.estimate),
                           co.mapper(_make_prediction_msg),
                           co.publisher('predicted_object', Prediction)])
 
-processor_pipes = co.splitter(entropy_pipe, margin_pipe, estimator_pipe)
+metrics_pipes = co.splitter(entropy_pipe, margin_pipe, estimator_pipe)
 
-_DEFAULT_NAME = 'predictions_namer'
+_DEFAULT_NAME = 'uncertainty_puglisher'
 
 if __name__ == '__main__':
     try:
         _init_node(_DEFAULT_NAME)
-        pipe = co.pipe([co.mapper(alu.numerize), processor_pipes])
-        co.PipedSubscriber('named_predictions', NamedPredictions, pipe)
+        # pipe = co.pipe([co.mapper(alu.numerize), metrics_pipes])
+        co.PipedSubscriber('named_predictions', NamedPredictions, metrics_pipes)
         rospy.spin()
     except rospy.ROSInterruptException:
         pass
