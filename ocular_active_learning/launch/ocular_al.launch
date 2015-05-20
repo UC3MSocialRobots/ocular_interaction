@@ -14,4 +14,10 @@
         <param name="rate" value="30"/>
     </node>
 
+    <group ns="/ocular/predictions/">
+      <node pkg="ocular_active_learning"
+            type="ocular_uncertainty_publisher.py"
+            name="ocular_uncertainty_publisher">
+      </node>
+    </group>
 </launch>
