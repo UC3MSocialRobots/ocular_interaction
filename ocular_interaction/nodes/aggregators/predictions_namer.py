@@ -41,7 +41,7 @@ from ocular_msgs.msg import NamedPredictions
 @rpyu.coroutine
 def match_names(db_file, target=None):
     """Match names in a DB."""
-    db = odbm.ObjectDBHelper(db_filename)
+    db = odbm.ObjectDBHelper(db_file)
     find_in_db = partial(odbm.get_object_name_from_id, db=db)
     if not target:
         target = (yield)
