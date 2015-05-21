@@ -20,10 +20,8 @@ Utilities for OCULAR's Active Learning Nodes.
 
 :author: Victor Gonzalez-Pacheco
 """
-# from functools import partial
-from itertools import chain, islice
-# from toolz import (compose, frequencies, take)
-# from toolz import (compose, frequencies)
+
+# from itertools import chain, islice
 import numpy as np
 import nltk
 import toolz as tz
@@ -31,7 +29,6 @@ import pandas as pd
 
 import roslib
 roslib.load_manifest('ocular_active_learning')
-# import rospy
 
 # Calc frequencies of a list and return them as series
 frequencies = tz.compose(pd.Series, tz.frequencies)
