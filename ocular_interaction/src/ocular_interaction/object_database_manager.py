@@ -130,11 +130,11 @@ class ObjectDBHelper(object):
         Example:
             >>> db = ObjectDBHelper('/tmp/example_db')
             >>> db.add('A', 1, 1)
-            >>> db.add('B', 2, 2)
+            >>> db.add('B', 2, 3)
             >>> db['A']
             ('A', [1], [1])
             >>> db['B']
-            ('B', [2], [2])
+            ('B', [2], [3])
             >>> db['C']
             ('C', [], [])
         """
@@ -144,6 +144,21 @@ class ObjectDBHelper(object):
         """Return all DB elements."""
         keys = set(chain(self.db['2D'].keys(), self.db['3D'].keys()))
         return tuple(self.get(key) for key in keys)
+
+    def keys(self):
+        """
+        Return all keys of the Database.
+
+        Example:
+            >>> db = ObjectDBHelper('/tmp/example_db')
+            >>> db.add('A', 1, 1)
+            >>> db.add('B', 2, 3)
+            >>> db.add('C', 3, 4)
+            >>> db.keys()
+            ('A', 'B', 'C')
+        """
+        return tuple(sorted(set(chain(self.db['2D'].keys(),
+                                      self.db['3D'].keys()))))
 
     def load(self, filename):
         """
