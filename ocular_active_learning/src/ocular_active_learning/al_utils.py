@@ -83,7 +83,7 @@ class Accumulator(object):
         :see: Accumulator.__call__
         """
         if len(self.l) == self.maxlen:
-            self.l = []
+            self.clear()
         self.l.append(item)
         return self
 
@@ -93,15 +93,32 @@ class Accumulator(object):
 
         Note:
             if len(self.l+seq) >= maxlen only keeps the last maxlen items
+
+        >>> acc = Accumulator(3)
+            >>> acc.insert([1, 2])
+            [1, 2]
+            >>> acc.insert([3, 4])
+            [4]
+            >>> acc.insert([5, 6])
+            [4, 5, 6]
+            >>> acc.insert([7, 8, 9])
+            [7, 8, 9]
+            >>> acc.insert([10])
+            [10]
+            >>> acc.insert([11])
+            [10, 11]
+            >>> acc.insert([])
+            [10, 11]
         """
         if not seq:
             return self
-        total_len = len(self.l) + len(seq)
-        start = (total_len // self.maxlen) * self.maxlen
-        self.l = list(islice(chain(self.l, seq), start, total_len))
+
+        for item in seq:
+            self.append(item)
+        # total_len = len(self.l) + len(seq)
+        # start = (total_len // self.maxlen) * self.maxlen
+        # self.l = list(islice(chain(self.l, seq), start, total_len))
         return self
-        # self.l = __combine(self.l, seq)
-        # return self
 
     def get(self):
         """Return the list. Equivalent to acc."""
@@ -118,6 +135,22 @@ class Accumulator(object):
     def haselems(self):
         """Return True if Accumulator has any elem. Otherwise return False."""
         return not self.isempty()
+
+    def clear(self):
+        """Clear accumulator's list.
+
+        Example:
+
+            >>> acc = Accumulator(3)
+            >>> acc(1)
+            [1]
+            >>> acc(2)
+            [1, 2]
+            >>> acc.clear()
+            >>> acc()
+            []
+        """
+        del self.l[:]
 
     def __call__(self, item=None):
         """
@@ -139,7 +172,26 @@ class Accumulator(object):
             return self.get()
 
     def __nonzero__(self):
-        """Return True if list has items, False otherwise."""
+        """Return True if list has items, False otherwise.
+
+        Example:
+
+            >>> acc = Accumulator(3)
+            >>> bool(acc)
+            False
+            >>> acc(1)
+            [1]
+            >>> bool(acc)
+            True
+            >>> acc.insert([2,3])
+            [1, 2, 3]
+            >>> bool(acc)
+            True
+            >>> acc(4)
+            [4]
+            >>> bool(acc)
+            True
+        """
         return bool(self.l)
 
     def __repr__(self):
@@ -152,7 +204,26 @@ class Accumulator(object):
             yield x
 
     def __len__(self):
-        """Return the len of the contained list."""
+        """Return the len of the contained list.
+
+        Example:
+
+            >>> acc = Accumulator(3)
+            >>> len(acc)
+            0
+            >>> acc(1)
+            [1]
+            >>> len(acc)
+            1
+            >>> acc.insert([2,3])
+            [1, 2, 3]
+            >>> len(acc)
+            3
+            >>> acc(4)
+            [4]
+            >>> len(acc)
+            1
+        """
         return len(self.l)
 
 
