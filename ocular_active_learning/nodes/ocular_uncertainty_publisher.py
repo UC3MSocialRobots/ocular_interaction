@@ -16,40 +16,64 @@
 # disponible en <URL a la LASR_UC3Mv1.0>.
 
 """
-Node that performs data processing on NamedPredictions.
-
-It publishes the estimated value of the received predictions,
-and the entropy and margin of these predictions.
+Publishes uncertainty metrics and estimates object from recv. predictions.
 
 :author: Victor Gonzalez Pacheco
 :maintainer: Victor Gonzalez Pacheco
+
+
+Publishes the estimated value of the received predictions,
+and the entropy and margin of these predictions.
+
+
+Attributes:
+    entropy_pipe: Gets NamedPredictions and publishes their entropy.
+    margin_pipe: Gets NamedPredictions and publishes their margin.
+    estimator_pipe: Gets NamedPredictions and publishes the estimated object.
+    pipes: Single entry point to entropy_pipe, margin_pipe, and estimator_pipe.
+    _DEFAULT_NAME: Default name of the node.
 """
 
 import roslib
 roslib.load_manifest('ocular_active_learning')
 
+import toolz as tz
 import rospy
 from rospy_utils import coroutines as co
 
 from ocular_active_learning import al_utils as alu
 
-# from std_msgs.msg import Float32
 from ocular_msgs.msg import (NamedPredictions, Prediction)
 from ocular_msgs.msg import UncertaintyMetric as Uncertainty
 
 
+def calc_uncertainty(metric, predictions_msg, name=None):
+    """
+    Get uncertainty from a predictions_msg.
+
+    Args:
+        metric (callable): The function that calculates the uncertainty
+            of the predictions_msg. Typicaly al_utils.entropy or margin
+        predictions_msg (ocular_msgs.msg.NamedPredictions): the predictions
+            for which the uncertainty is going to be calculated.
+        name (string): Name of the metric to put in the message. Default: None
+            If name is not set, the func gets the name from the metric function.
+
+    """
+    return Uncertainty(name=name or metric.__name__,
+                       rgb=metric(predictions_msg.rgb),
+                       pcloud=metric(predictions_msg.pcloud))
+
+
 def calc_entropy(predictions):
     """Make an Uncertainty msg with entropy values of the input predictions."""
-    return Uncertainty(name='entropy',
-                       rgb=alu.entropy(predictions.rgb),
-                       pcloud=alu.entropy(predictions.pcloud))
+    return calc_uncertainty(alu.entropy, predictions)
 
 
 def calc_margin(predictions):
     """Make an Uncertainty msg with margin values of the input predictions."""
-    return Uncertainty(name='margin',
-                       rgb=alu.margin(alu.numerize(predictions.rgb)),
-                       pcloud=alu.margin(alu.numerize(predictions.pcloud)))
+    margin = tz.compose(alu.margin, alu.numerize)
+    return calc_uncertainty(margin, predictions, name=alu.margin.__name__)
 
 
 def estimate(predictions):
@@ -57,13 +81,14 @@ def estimate(predictions):
     Estimate of the matched object from the last named predictions.
 
     Args:
-      predictions (ocular_msgs/NamedPredictions):
-        The predictions wrapped in a message
+        predictions (ocular_msgs/NamedPredictions):
+            The predictions wrapped in a message
 
     Returns:
         ocular_msgs/Prediction: The predicted object wrapped in a message.
     """
-    combined, rgb, pcloud = alu.estimate(predictions.rgb, predictions.pcloud)
+    combined, rgb, pcloud = alu.estimate(alu.numerize(predictions.rgb),
+                                         alu.numerize(predictions.pcloud))
     rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
     return Prediction(combined=combined, rgb=rgb, pcloud=pcloud)
 
@@ -75,21 +100,16 @@ def _init_node(node_name):
 
 entropy_pipe = co.pipe([co.mapper(calc_entropy),
                         co.publisher('predictions_entropy', Uncertainty)])
-"""Pipe that gets NamedPredictions and publishes their entropy."""
 
 margin_pipe = co.pipe([co.mapper(calc_margin),
                        co.publisher('predictions_margin', Uncertainty)])
-"""Pipe that gets NamedPredictions and publishes their margin."""
 
 estimator_pipe = co.pipe([co.mapper(estimate),
                           co.publisher('predicted_object', Prediction)])
-"""Pipe that gets NamedPredictions and publishes the estimated object."""
 
 pipes = co.splitter(entropy_pipe, margin_pipe, estimator_pipe)
-"""Single entry point to entropy_pipe, margin_pipe, and estimator_pipe."""
 
 _DEFAULT_NAME = 'uncertainty_publisher'
-"""Default name of the node."""
 
 if __name__ == '__main__':
     try:
