@@ -90,7 +90,7 @@ def estimate(predictions):
     combined, rgb, pcloud = alu.estimate(alu.numerize(predictions.rgb),
                                          alu.numerize(predictions.pcloud))
     rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
-    return Prediction(combined=combined, rgb=rgb, pcloud=pcloud)
+    return Prediction(combined=combined[0], rgb=rgb[0], pcloud=pcloud[0])
 
 
 def _init_node(node_name):
