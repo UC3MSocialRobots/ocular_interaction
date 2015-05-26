@@ -35,6 +35,7 @@ import rospy
 from ocular_interaction import utils
 from ocular_interaction import object_database_manager as odbm
 
+from std_msgs.msg import Bool
 from ocular_msgs.msg import ObjectDescriptor
 
 
@@ -45,6 +46,10 @@ class ObjectDBNode(object):
 
     The database can be stored to a given filename or it is automatically
     saved to `db_filename` when the node is shutdown (via rospy.shutdown).
+
+    Subscribes: 'learned_object' (ocular_msgs/ObjectDescriptor)
+    Publishes 'object_database_updated' (std_msgs/Bool)
+
     """
 
     def __init__(self, db_filename):
@@ -54,6 +59,7 @@ class ObjectDBNode(object):
         self.db = odbm.ObjectDBHelper(self.db_filename)
         rospy.on_shutdown(self.shutdown)
         rospy.Subscriber('learned_object', ObjectDescriptor, self.callback)
+        self.pub = rospy.Publisher('object_database_updated', Bool)
 
     def callback(self, msg):
         """
@@ -69,6 +75,7 @@ class ObjectDBNode(object):
         """Save the database to the given filename."""
         rospy.loginfo("Saving Object DB to {}".format(utils.blue(filename)))
         self.db.save(filename)
+        self.pub.publish(True)
         return self
 
     def shutdown(self):
