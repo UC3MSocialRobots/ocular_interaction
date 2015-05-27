@@ -37,11 +37,13 @@ Attributes:
 import roslib
 roslib.load_manifest('ocular_active_learning')
 
+import sys
 import toolz as tz
 import rospy
 from rospy_utils import coroutines as co
 
 from ocular_active_learning import al_utils as alu
+from ocular_interaction import object_database_manager as odbm
 
 from ocular_msgs.msg import (NamedPredictions, Prediction)
 from ocular_msgs.msg import UncertaintyMetric as Uncertainty
@@ -70,26 +72,35 @@ def calc_entropy(predictions):
     return calc_uncertainty(alu.entropy, predictions)
 
 
-def calc_margin(predictions):
-    """Make an Uncertainty msg with margin values of the input predictions."""
-    margin = tz.compose(alu.margin, alu.numerize)
+def calc_margin(predictions, numerizer=alu.numerize):
+    """Make an Uncertainty msg with margin values of the input predictions.
+
+    Args:
+        predictions (ocular_msgs/NamedPredictions):
+            The predictions wrapped in a message
+        numerizer: func with type [a] -> [(int, a)] that numerizes predictions.
+            (default: ocular_active_learning.al_utils.numerize)
+    """
+    margin = tz.compose(alu.margin, numerizer)
     return calc_uncertainty(margin, predictions, name=alu.margin.__name__)
 
 
-def estimate(predictions):
+def estimate(predictions, numerizer=alu.numerize):
     """
     Estimate of the matched object from the last named predictions.
 
     Args:
         predictions (ocular_msgs/NamedPredictions):
             The predictions wrapped in a message
+        numerizer: func with type [a] -> [(int, a)] that numerizes predictions.
+            (default: ocular_active_learning.al_utils.numerize)
 
     Returns:
         ocular_msgs/Prediction: The predicted object wrapped in a message.
     """
-    combined, rgb, pcloud = alu.estimate(alu.numerize(predictions.rgb),
-                                         alu.numerize(predictions.pcloud))
-    rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
+    combined, rgb, pcloud = alu.estimate(numerizer(predictions.rgb),
+                                         numerizer(predictions.pcloud))
+    # rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
     return Prediction(combined=combined[0], rgb=rgb[0], pcloud=pcloud[0])
 
 
@@ -98,23 +109,84 @@ def _init_node(node_name):
     rospy.init_node(node_name)
     rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
 
-entropy_pipe = co.pipe([co.mapper(calc_entropy),
-                        co.publisher('predictions_entropy', Uncertainty)])
+# entropy_pipe = co.pipe([co.mapper(calc_entropy),
+#                         co.publisher('predictions_entropy', Uncertainty)])
+# margin_pipe = co.pipe([co.mapper(calc_margin),
+#                        co.publisher('predictions_margin', Uncertainty)])
+# estimator_pipe = co.pipe([co.mapper(estimate),
+#                           co.publisher('predicted_object', Prediction)])
+# pipes = co.splitter(entropy_pipe, margin_pipe, estimator_pipe)
 
-margin_pipe = co.pipe([co.mapper(calc_margin),
-                       co.publisher('predictions_margin', Uncertainty)])
 
-estimator_pipe = co.pipe([co.mapper(estimate),
-                          co.publisher('predicted_object', Prediction)])
+class UncertaintyPublisher(object):
 
-pipes = co.splitter(entropy_pipe, margin_pipe, estimator_pipe)
+    """Node that matches the predicted object ids to its corresponding names."""
+
+    def __init__(self, db_filename):
+        """
+        Constructor.
+
+        Args:
+            db_filename (str): Filename of the Object DB to load.
+        """
+        super(UncertaintyPublisher, self).__init__()
+        self.db_filename = db_filename
+        self.db = odbm.ObjectDBHelper(self.db_filename)
+        self.numeric_keys = self.numerize_db_keys()
+        rospy.on_shutdown(self.shutdown)
+
+        self.entropy_pipe = \
+            co.pipe([co.mapper(calc_entropy),
+                     co.publisher('predictions_entropy', Uncertainty)])
+        self.margin_pipe = \
+            co.pipe([co.starmapper(calc_margin, None, self.numerize_array),
+                     co.publisher('predictions_margin', Uncertainty)])
+        self.estimator_pipe = \
+            co.pipe([co.starmapper(estimate, None, self.numerize_array),
+                     co.publisher('predicted_object', Prediction)])
+
+        self.pipes = co.splitter(self.entropy_pipe,
+                                 self.margin_pipe,
+                                 self.estimator_pipe)
+
+        co.PipedSubscriber('named_predictions', NamedPredictions, self.pipes)
+
+    def numerize_db_keys(self):
+        """Convert DB keys to numbers.
+
+        Return a dict whose keys are the DB labels and its values the numeric id
+        corresponding to these labels.
+        """
+        self.keys = self.db.keys()
+        return {v: k for k, v in alu.numerize(self.keys)}
+
+    def numerize_array(self, array):
+        """Convert an array of labels to an array of their corresponding ids."""
+        return [self.numeric_keys[elem] for elem in array]
+
+    def callback(self, msg):
+        """Update database."""
+        self.db.load(self.db_filename)
+        self.numeric_keys = self.numerize_db_keys()
+
+    def shutdown(self):
+        """Hook to be executed when rospy.shutdown is called."""
+        pass
+
+    def run(self):
+        """Run the node."""
+        rospy.spin()
+
 
 _DEFAULT_NAME = 'uncertainty_publisher'
 
 if __name__ == '__main__':
+    db_filename = rospy.myargv(argv=sys.argv)[1]
+    rospy.loginfo("Loaded Object Database file from: {}".format(db_filename))
     try:
         _init_node(_DEFAULT_NAME)
-        co.PipedSubscriber('named_predictions', NamedPredictions, pipes)
-        rospy.spin()
+        # co.PipedSubscriber('named_predictions', NamedPredictions, pipes)
+        matcher = UncertaintyPublisher(db_filename)
+        matcher.run()
     except rospy.ROSInterruptException:
         pass
