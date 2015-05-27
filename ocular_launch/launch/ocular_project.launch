@@ -19,7 +19,6 @@
   </include>
 
   <include file="$(find ocular_active_learning)/launch/ocular_al.launch">
-    <arg name="debug"     value="$(arg loglevel)"/>
     <arg name="object_db" value="$(arg db_dir)/$(arg object_db)"/>
   </include>
 
