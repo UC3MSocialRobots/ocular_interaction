@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="US-ASCII"?>
 <launch>
+    <arg name="object_db"/>   <!-- Filename of the object database -->
     <node pkg="ocular_active_learning"
           type="ocular_estimator.py"
           name="ocular_estimator"
@@ -17,7 +19,8 @@
     <group ns="/ocular/predictions/">
       <node pkg="ocular_active_learning"
             type="ocular_uncertainty_publisher.py"
-            name="ocular_uncertainty_publisher">
+            name="ocular_uncertainty_publisher"
+            args="$(arg object_db)">
       </node>
     </group>
 </launch>
