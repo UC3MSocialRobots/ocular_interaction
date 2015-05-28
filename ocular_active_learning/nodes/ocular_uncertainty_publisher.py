@@ -100,7 +100,7 @@ def estimate(predictions, numerizer=alu.numerize):
     """
     combined, rgb, pcloud = alu.estimate(numerizer(predictions.rgb),
                                          numerizer(predictions.pcloud))
-    # rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
+    rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
     return Prediction(combined=combined[0], rgb=rgb[0], pcloud=pcloud[0])
 
 
@@ -158,11 +158,13 @@ class UncertaintyPublisher(object):
         corresponding to these labels.
         """
         self.keys = self.db.keys()
-        return {v: k for k, v in alu.numerize(self.keys)}
+        numeric_keys = {v: k for k, v in alu.numerize(self.keys)}
+        numeric_keys['NOT_FOUND'] = -1
+        return numeric_keys
 
     def numerize_array(self, array):
         """Convert an array of labels to an array of their corresponding ids."""
-        return [self.numeric_keys[elem] for elem in array]
+        return [(self.numeric_keys[elem], elem) for elem in array]
 
     def callback(self, msg):
         """Update database."""
