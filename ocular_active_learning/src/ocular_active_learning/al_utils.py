@@ -308,11 +308,12 @@ def numerize(array):
     Return an int-based id for each categorical variable of the passed list.
 
     Args:
-    :array (list of str): The list of categorical variables to numerize
+    :array ([str]): The list of categorical variables to numerize
 
     Return:
-    numerized (tuple(int, str)): Returs a lit of tuples where each tuple is
-        the numeric id for each categorical variable and the variable itself.
+    numerized ([(int, str)]): Returs a list of tuple(int, str)
+        where each tuple contains the numeric id for each categorical variable
+        and the variable itself.
 
     Example:
 
