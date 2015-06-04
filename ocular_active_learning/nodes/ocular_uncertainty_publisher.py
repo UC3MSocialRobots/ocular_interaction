@@ -109,14 +109,6 @@ def _init_node(node_name):
     rospy.init_node(node_name)
     rospy.loginfo("Initializing {} Node".format(rospy.get_name()))
 
-# entropy_pipe = co.pipe([co.mapper(calc_entropy),
-#                         co.publisher('predictions_entropy', Uncertainty)])
-# margin_pipe = co.pipe([co.mapper(calc_margin),
-#                        co.publisher('predictions_margin', Uncertainty)])
-# estimator_pipe = co.pipe([co.mapper(estimate),
-#                           co.publisher('predicted_object', Prediction)])
-# pipes = co.splitter(entropy_pipe, margin_pipe, estimator_pipe)
-
 
 class UncertaintyPublisher(object):
 
@@ -187,7 +179,6 @@ if __name__ == '__main__':
     rospy.loginfo("Loaded Object Database file from: {}".format(db_filename))
     try:
         _init_node(_DEFAULT_NAME)
-        # co.PipedSubscriber('named_predictions', NamedPredictions, pipes)
         matcher = UncertaintyPublisher(db_filename)
         matcher.run()
     except rospy.ROSInterruptException:
