@@ -164,6 +164,22 @@
     <slot name="consumed"     val="false"         type="string"/>
   </atom>
 
+  <!-- Atom to indicate a new prediction -->
+  <!-- Todo: create a named prediction field or atom with an aggregator -->
+  <atom>
+    <slot name="type"       val="prediction"/>
+    <slot name="subtype"    val="user"/>
+    <slot name="combined"   val="_NO_VALUE_"    type="number"/>
+    <slot name="rgb"        val="_NO_VALUE_"    type="number"/>
+    <slot name="pcloud"     val="_NO_VALUE_"    type="number"/>
+    <slot name="timestamp"  value="_NO_VALUE_"  type="number"/>
+    <slot name="consumed"   val="false"         type="string"/>
+  </atom>
+
+
+
+
+
 
   <!-- ############################################################## -->
   <!-- ####### GLOBALS                                          ##### -->
