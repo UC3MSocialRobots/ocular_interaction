@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 
 """
+This module provides Atom Translators for OCULAR messages.
+
 :author: Victor Gonzalez-Pacheco (VGonPa) vgonzale@ing.uc3m.es
 
-This module provides Atom Translators for OCULAR messages
+Attributes:
+-----------
+varslotters: Dict that maps a generic slot generator function to a ROS msg type.
 """
 
 import roslib
@@ -86,6 +90,35 @@ def slot_from_bool(b, slotname, slottype='string'):
         unique_mask: False
     """
     yield VarSlot(name=slotname, val=str(b).lower(), type=slottype)
+
+
+varslotters = {'bool': slot_from_bool,
+               'string': slot_from_string,
+               'int16': slot_from_num,
+               'int32': slot_from_num,
+               'int64': slot_from_num,
+               'float16': slot_from_num,
+               'float32': slot_from_num,
+               'float64': slot_from_num}
+
+
+def _get_msg_fields(msg):
+    """Return all message field names and types except its header."""
+    try:
+        getattr(msg, 'header')
+    except AttributeError:
+        return zip(msg.__slots__[1:], msg._slot_types[1:])
+    return zip(msg.__slots__, msg._slot_types)
+
+
+def msg_to_slots(msg):
+    """Convert msg fields to VarSlots.
+
+    At this point only bool, string, int*, and float* types are supported.
+    """
+    for sname, stype in _get_msg_fields(msg):
+        yield next(varslotters[stype](slotname=sname,
+                                      num=msg.__getattribute__(sname)))
 
 
 def generate_event_handler_slots(event_msg):
@@ -173,3 +206,4 @@ def object_name_to_atom(object_name):
 def learned_object_to_atom(obj_msg):
     """Generate an OCULAR's learned_object atom."""
     return to_atom_msg(obj_msg, generate_learned_object_slots, 'object_learned')
+
