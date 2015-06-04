@@ -207,3 +207,8 @@ def learned_object_to_atom(obj_msg):
     """Generate an OCULAR's learned_object atom."""
     return to_atom_msg(obj_msg, generate_learned_object_slots, 'object_learned')
 
+
+def prediction_to_atom(prediction_msg):
+    """Generate an OCULAR's prediction atom."""
+    return to_atom_msg(prediction_msg, msg_to_slots,
+                       atom_name='prediction', atom_subtype='user')
