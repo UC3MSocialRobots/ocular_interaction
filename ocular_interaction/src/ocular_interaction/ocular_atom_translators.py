@@ -13,7 +13,6 @@ varslotters: Dict that maps a generic slot generator function to a ROS msg type.
 import roslib
 roslib.load_manifest('ocular_interaction')
 from itertools import chain
-from functools import partial
 
 from dialog_manager_msgs.msg import (VarSlot, AtomMsg)
 
