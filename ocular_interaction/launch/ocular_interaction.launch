@@ -73,6 +73,12 @@
         respawn="false" 
         output="screen"/>
 
+  <node name="uncertainty_metrics_atom_translator" 
+        pkg="ocular_interaction"
+        type="uncertainty_metrics_atom_translator.py" 
+        respawn="false" 
+        output="screen"/>
+
   <!-- Aggregators -->
   <node name="object_name_aggregator" 
         pkg="ocular_interaction"
