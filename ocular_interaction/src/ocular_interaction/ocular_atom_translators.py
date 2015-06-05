@@ -78,6 +78,31 @@ def slot_from_num(num, slotname, slottype='number'):
     yield VarSlot(name=slotname, val=str(num), type=slottype)
 
 
+def slot_from_iter(arr, slotname, slottype='string'):
+    """Produce a Varslot from an iterable.
+
+    Example:
+
+    >>> next(slot_from_iter([1, 2, 3, 4], 'an_array_slot'))
+    name: an_array_slot
+    relation: ''
+    val: 1|2|3|4
+    type: string
+    unique_mask: False
+
+    >>> strings = ['an_str', 'another_str', 'third_str']
+    >>> next(slot_from_iter(strings, slotname='an_array_slot_with_strings'))
+    name: an_array_slot_with_strings
+    relation: ''
+    val: an_str|another_str|third_str
+    type: string
+    unique_mask: False
+
+    """
+    slot_value = '|'.join(str(item) for item in arr)
+    yield VarSlot(name=slotname, val=slot_value, type=slottype)
+
+
 def slot_from_bool(b, slotname, slottype='string'):
     """
     Produce a VarSlot from a boolean.
@@ -108,13 +133,7 @@ def get_slot_parser(slot_type):
     try:
         return basic_type_parsers[slot_type]
     except KeyError:
-        return parse_array
-
-
-def parse_array(arr, slotname, slottype='string'):
-    """parse an array."""
-    slot_value = '|'.join(str(item) for item in arr)
-    yield VarSlot(name=slotname, val=slot_value, type=slottype)
+        return slot_from_iter
 
 
 def _get_msg_fields(msg):
