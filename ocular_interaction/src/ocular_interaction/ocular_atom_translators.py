@@ -13,6 +13,7 @@ varslotters: Dict that maps a generic slot generator function to a ROS msg type.
 import roslib
 roslib.load_manifest('ocular_interaction')
 from itertools import chain
+from functools import partial
 
 from dialog_manager_msgs.msg import (VarSlot, AtomMsg)
 
@@ -92,14 +93,28 @@ def slot_from_bool(b, slotname, slottype='string'):
     yield VarSlot(name=slotname, val=str(b).lower(), type=slottype)
 
 
-varslotters = {'bool': slot_from_bool,
-               'string': slot_from_string,
-               'int16': slot_from_num,
-               'int32': slot_from_num,
-               'int64': slot_from_num,
-               'float16': slot_from_num,
-               'float32': slot_from_num,
-               'float64': slot_from_num}
+basic_type_parsers = {'bool': slot_from_bool,
+                      'string': slot_from_string,
+                      'int16': slot_from_num,
+                      'int32': slot_from_num,
+                      'int64': slot_from_num,
+                      'float16': slot_from_num,
+                      'float32': slot_from_num,
+                      'float64': slot_from_num}
+
+
+def get_slot_parser(slot_type):
+    """Return a slot parser function associated to slot_type."""
+    try:
+        return basic_type_parsers[slot_type]
+    except KeyError:
+        return parse_array
+
+
+def parse_array(arr, slotname, slottype='string'):
+    """parse an array."""
+    slot_value = '|'.join(str(item) for item in arr)
+    yield VarSlot(name=slotname, val=slot_value, type=slottype)
 
 
 def _get_msg_fields(msg):
@@ -107,18 +122,49 @@ def _get_msg_fields(msg):
     try:
         getattr(msg, 'header')
     except AttributeError:
-        return zip(msg.__slots__[1:], msg._slot_types[1:])
-    return zip(msg.__slots__, msg._slot_types)
+        return zip(msg.__slots__, msg._slot_types)
+    return zip(msg.__slots__[1:], msg._slot_types[1:])
 
 
 def msg_to_slots(msg):
     """Convert msg fields to VarSlots.
 
     At this point only bool, string, int*, and float* types are supported.
+
+    Examples:
+    --------
+    >>> from std_msgs.msg import Bool
+    >>> list(msg_to_slots(Bool()))
+    [name: data
+    relation: ''
+    val: false
+    type: string
+    unique_mask: False]
+
+    >>> from std_msgs.msg import ColorRGBA
+    >>> list(msg_to_slots(ColorRGBA()))
+    [name: r
+    relation: ''
+    val: 0.0
+    type: number
+    unique_mask: False, name: g
+    relation: ''
+    val: 0.0
+    type: number
+    unique_mask: False, name: b
+    relation: ''
+    val: 0.0
+    type: number
+    unique_mask: False, name: a
+    relation: ''
+    val: 0.0
+    type: number
+    unique_mask: False]
     """
     for sname, stype in _get_msg_fields(msg):
-        yield next(varslotters[stype](slotname=sname,
-                                      num=msg.__getattribute__(sname)))
+        # parser = varslotters[stype]
+        parser = get_slot_parser(stype)
+        yield next(parser(msg.__getattribute__(sname), slotname=sname))
 
 
 def generate_event_handler_slots(event_msg):
@@ -212,3 +258,4 @@ def prediction_to_atom(prediction_msg):
     """Generate an OCULAR's prediction atom."""
     return to_atom_msg(prediction_msg, msg_to_slots,
                        atom_name='prediction', atom_subtype='user')
+
