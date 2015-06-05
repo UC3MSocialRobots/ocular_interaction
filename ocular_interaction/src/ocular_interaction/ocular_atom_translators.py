@@ -179,9 +179,27 @@ def msg_to_slots(msg):
     val: 0.0
     type: number
     unique_mask: False]
+
+
+    It is also possible to parse messages that contain array fields:
+
+    >>> from sensor_msgs.msg import Joy
+    >>> joy_msg = Joy(axes=[1.0,2.1,3.33,4.0], buttons=[1, 2, 3])
+    >>> axes_varslot, buttons_varslot = list(msg_to_slots(joy_msg))
+    >>> print axes_varslot
+    name: axes
+    relation: ''
+    val: 1.0|2.1|3.33|4.0
+    type: string
+    unique_mask: False
+    >>> print buttons_varslot
+    name: buttons
+    relation: ''
+    val: 1|2|3
+    type: string
+    unique_mask: False
     """
     for sname, stype in _get_msg_fields(msg):
-        # parser = varslotters[stype]
         parser = get_slot_parser(stype)
         yield next(parser(msg.__getattribute__(sname), slotname=sname))
 
