@@ -176,6 +176,21 @@
     <slot name="consumed"   val="false"         type="string"/>
   </atom>
 
+  <!-- Atom that indicates the uncertainty of a prediction -->
+  <!-- Atom slots are:
+        string name     # Name of the metric: entropy|margin
+        num    rgb      # Value of the metric for the rgb matcher
+        num    pcloud   # Value of the metric for the pcloud matcher
+  -->
+  <atom>
+    <slot name="type"       val="uncertainty_metric"/>
+    <slot name="subtype"    val="user"/>
+    <slot name="name"       val="_NO_VALUE_"    type="string"/>
+    <slot name="rgb"        val="_NO_VALUE_"    type="number"/>
+    <slot name="pcloud"     val="_NO_VALUE_"    type="number"/>
+    <slot name="timestamp"  value="_NO_VALUE_"  type="number"/>
+    <slot name="consumed"   val="false"         type="string"/>
+  </atom>
 
 
 
