@@ -69,13 +69,16 @@
 
   <node name="predictions_atom_translator" 
         pkg="ocular_interaction"
-        type="predictions_atom_translator.py" 
+        type="predictions_atom_translator.py"
+        args="predicted_object:=/ocular/predictions/predicted_object"
         respawn="false" 
         output="screen"/>
 
   <node name="uncertainty_metrics_atom_translator" 
         pkg="ocular_interaction"
-        type="uncertainty_metrics_atom_translator.py" 
+        type="uncertainty_metrics_atom_translator.py"
+        args="predictions_entropy:=/ocular/predictions/predictions_entropy
+              predictions_margin:=/ocular/predictions/predictions_margin"
         respawn="false" 
         output="screen"/>
 
