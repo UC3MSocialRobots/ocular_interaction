@@ -259,3 +259,8 @@ def prediction_to_atom(prediction_msg):
     return to_atom_msg(prediction_msg, msg_to_slots,
                        atom_name='prediction', atom_subtype='user')
 
+
+def uncertainty_to_atom(uncertainty_msg):
+    """Generate an OCULAR's prediction atom."""
+    return to_atom_msg(uncertainty_msg, msg_to_slots,
+                       atom_name='uncertainty_metric', atom_subtype='user')
