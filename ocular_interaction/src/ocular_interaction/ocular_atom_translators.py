@@ -258,6 +258,63 @@ def to_atom_msg(msg, generator_func, atom_name,
     return AtomMsg(varslots=list(varslots))
 
 
+def generic_atom_translator(msg, atom_name,
+                            atom_subtype='user', *args, **kwargs):
+    """A generic atom translator that returns an atom from a ros msg instance.
+
+    It supports translation for msgs with simple types such as:
+        -bool, string, int*, and float*
+    and their array versions:
+        -bool[], string[], int*[], and float*[]
+
+    Example:
+
+    >>> from sensor_msgs.msg import Joy
+    >>> joy_msg = Joy(axes=[1.0,2.1,3.33,4.0], buttons=['a', 'b', 'd'])
+    >>> generic_atom_translator(joy_msg, atom_name='joy_atom')
+    varslots: 
+      - 
+        name: type
+        relation: ''
+        val: joy_atom
+        type: ''
+        unique_mask: False
+      - 
+        name: subtype
+        relation: ''
+        val: user
+        type: ''
+        unique_mask: False
+      - 
+        name: timestamp
+        relation: ''
+        val: _NO_VALUE_
+        type: number
+        unique_mask: False
+      - 
+        name: consumed
+        relation: ''
+        val: false
+        type: string
+        unique_mask: False
+      - 
+        name: axes
+        relation: ''
+        val: 1.0|2.1|3.33|4.0
+        type: string
+        unique_mask: False
+      - 
+        name: buttons
+        relation: ''
+        val: a|b|d
+        type: string
+        unique_mask: False
+
+    """
+    return to_atom_msg(msg, msg_to_slots, atom_name=atom_name,
+                       atom_subtype='user', *args, **kwargs)
+
+
 def event_handler_to_atom(event_handler_msg):
     """Generate an OCULAR's event_handler atom."""
     return to_atom_msg(event_handler_msg,
