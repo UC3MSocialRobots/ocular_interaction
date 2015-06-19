@@ -1,4 +1,4 @@
-## Equivalent to AccumulatedPredictions.msg
+## String equivalent to AccumulatedPredictions.msg
 Header header
 
 string[] rgb       # Names of Predictions for the RGB Matcher
