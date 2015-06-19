@@ -22,5 +22,12 @@
             name="ocular_uncertainty_publisher"
             args="$(arg object_db)">
       </node>
+      
+      <node pkg="ocular_active_learning"
+            type="prediction_summarizer.py"
+            name="prediction_summarizer">
+      </node>
     </group>
+
+    
 </launch>
