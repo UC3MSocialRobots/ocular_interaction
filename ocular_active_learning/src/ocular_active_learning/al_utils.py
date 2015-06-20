@@ -290,6 +290,10 @@ def entropy(labels):
     """
     Return entropy of a list of categorical variables.
 
+    Note:
+        I'm using a "log2" to get the entropy.
+        This means that the return units are "bits"
+
     Example:
 
         >>> entropy(['red', 'red', 'green', 'red'])
