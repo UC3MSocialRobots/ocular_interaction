@@ -45,6 +45,7 @@ from rospy_utils import coroutines as co
 from ocular_active_learning import al_utils as alu
 from ocular_interaction import object_database_manager as odbm
 
+from std_msgs.msg import Bool
 from ocular_msgs.msg import (NamedPredictions, Prediction)
 from ocular_msgs.msg import UncertaintyMetric as Uncertainty
 
@@ -100,7 +101,7 @@ def estimate(predictions, numerizer=alu.numerize):
     """
     combined, rgb, pcloud = alu.estimate(numerizer(predictions.rgb),
                                          numerizer(predictions.pcloud))
-    rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
+    # rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
     return Prediction(combined=combined[0], rgb=rgb[0], pcloud=pcloud[0])
 
 
@@ -112,7 +113,15 @@ def _init_node(node_name):
 
 class UncertaintyPublisher(object):
 
-    """Node that matches the predicted object ids to its corresponding names."""
+    """
+    Node that publishes estimation, entropy and margin of this estimation.
+
+    Subscribes: 'object_database_updated' (std_msgs/Bool)
+                'named_predictions' (ocular_msgs/NamedPredictions)
+    Publishes: 'predictions_entropy' (ocular_msgs/Uncertainty)
+               'predictions_margin' (ocular_msgs/Uncertainty)
+               'predicted_object' (ocular_msgs/Prediction)
+    """
 
     def __init__(self, db_filename):
         """
@@ -142,6 +151,7 @@ class UncertaintyPublisher(object):
                                  self.estimator_pipe)
 
         co.PipedSubscriber('named_predictions', NamedPredictions, self.pipes)
+        rospy.Subscriber('object_database_updated', Bool, self.callback)
 
     def numerize_db_keys(self):
         """Convert DB keys to numbers.
@@ -159,7 +169,7 @@ class UncertaintyPublisher(object):
         return [(self.numeric_keys[elem], elem) for elem in array]
 
     def callback(self, msg):
-        """Update database."""
+        """Callback that fetches last changes from the object database."""
         self.db.load(self.db_filename)
         self.numeric_keys = self.numerize_db_keys()
 
