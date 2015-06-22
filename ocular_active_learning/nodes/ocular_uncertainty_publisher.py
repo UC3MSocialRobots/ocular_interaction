@@ -46,7 +46,7 @@ from ocular_active_learning import al_utils as alu
 from ocular_interaction import object_database_manager as odbm
 
 from std_msgs.msg import Bool
-from ocular_msgs.msg import (NamedPredictions, Prediction)
+from ocular_msgs.msg import (NamedPredictions, Prediction, PredictionSummary)
 from ocular_msgs.msg import UncertaintyMetric as Uncertainty
 
 
@@ -121,6 +121,7 @@ class UncertaintyPublisher(object):
     Publishes: 'predictions_entropy' (ocular_msgs/Uncertainty)
                'predictions_margin' (ocular_msgs/Uncertainty)
                'predicted_object' (ocular_msgs/Prediction)
+               'predicted_summary' (ocular_msgs/PredictionSummary)
     """
 
     def __init__(self, db_filename):
@@ -145,13 +146,29 @@ class UncertaintyPublisher(object):
         self.estimator_pipe = \
             co.pipe([co.starmapper(estimate, None, self.numerize_array),
                      co.publisher('predicted_object', Prediction)])
+        self.summary_pipe = \
+            co.pipe([co.mapper(self.summarize_results),
+                     co.publisher('prediction_summary', PredictionSummary)])
 
         self.pipes = co.splitter(self.entropy_pipe,
                                  self.margin_pipe,
-                                 self.estimator_pipe)
+                                 self.estimator_pipe,
+                                 self.summary_pipe)
 
         co.PipedSubscriber('named_predictions', NamedPredictions, self.pipes)
         rospy.Subscriber('object_database_updated', Bool, self.callback)
+
+    def summarize_results(self, predictions):
+        """Return an ocular_msgs/PredictionSummary from received predictions."""
+        summary = PredictionSummary()
+        summary.predicted = estimate(predictions, numerizer=self.numerize_array)
+        summary.entropy = calc_entropy(predictions)
+        summary.margin = calc_margin(predictions, numerizer=self.numerize_array)
+        summary.all_predictions.pcloud = self.numerize_array(predictions.pcloud)
+        summary.all_predictions.rgb = self.numerize_array(predictions.rgb)
+        summary.named_predictions = predictions
+        summary.categories = self.db.keys()
+        return summary
 
     def numerize_db_keys(self):
         """Convert DB keys to numbers.
