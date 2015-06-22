@@ -23,10 +23,10 @@
             args="$(arg object_db)">
       </node>
       
-      <node pkg="ocular_active_learning"
+      <!-- <node pkg="ocular_active_learning"
             type="prediction_summarizer.py"
             name="prediction_summarizer">
-      </node>
+      </node> -->
     </group>
 
     
