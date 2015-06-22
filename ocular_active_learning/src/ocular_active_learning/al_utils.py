@@ -330,3 +330,37 @@ def numerize(array):
         [(0, 'blue'), (1, 'green'), (2, 'red'), (3, 'white')]
     """
     return list(enumerate(sorted(set(array))))
+
+
+def bindiff(a1, a2):
+    """Return the binary difference between 2 arrays.
+
+    The binary difference between arrays is the number of different elements
+    between both arrays.
+
+    Example:
+
+        >>> a1 = [1, 2, 1, 0]
+        >>> a2 = [1, 2, 1, 0]
+        >>> bindiff(a1, a2)
+        0
+        >>> a1 = [1, 2, 1, 0]
+        >>> a2 = [0, 2, 0, 0]
+        >>> bindiff(a1, a2)
+        2
+
+    Note that the difference takes into account the position of each element.
+
+        >>> a1 = [1, 2, 1, 0]
+        >>> a2 = [0, 1, 2, 1]   # Shift one position a1
+        >>> bindiff(a1, a2)
+        4
+
+    As you can see in the previous example, both `a1` and `a2` have the same
+    elements, but they are shifted one position leading to the max difference.
+    """
+    _a1 = np.asarray(a1)
+    _a2 = np.asarray(a2)
+    diff = _a1 - _a2
+    diff[diff != 0] = 1
+    return np.sum(diff)
