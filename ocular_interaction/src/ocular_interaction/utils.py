@@ -125,8 +125,8 @@ def get_pos_tags(string):
     >>> get_pos_tags('hola esto es una frase')  # doctest: +ELLIPSIS
     [[u'hola', u'UH'], [u'esto', u'DT'], [u'es', u'VB'], ..., [u'frase', u'NN']]
     """
-    return map(lambda tokens: tokens[:2], map(lambda s: s.split('/'),
-                                              parse(string).split(' ')))
+    return map(lambda tokens: tokens[:2],
+               map(lambda s: s.split('/'), parse(string).split(' ')))
 
 
 def tokenize(pos_sentence):
