@@ -101,7 +101,7 @@ def estimate(predictions, numerizer=alu.numerize):
     """
     combined, rgb, pcloud = alu.estimate(numerizer(predictions.rgb),
                                          numerizer(predictions.pcloud))
-    # rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
+    rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
     return Prediction(combined=combined[0], rgb=rgb[0], pcloud=pcloud[0])
 
 
@@ -137,37 +137,42 @@ class UncertaintyPublisher(object):
         self.numeric_keys = self.numerize_db_keys()
         rospy.on_shutdown(self.shutdown)
 
-        self.entropy_pipe = \
-            co.pipe([co.mapper(calc_entropy),
-                     co.publisher('predictions_entropy', Uncertainty)])
-        self.margin_pipe = \
-            co.pipe([co.starmapper(calc_margin, None, self.numerize_array),
-                     co.publisher('predictions_margin', Uncertainty)])
-        self.estimator_pipe = \
-            co.pipe([co.starmapper(estimate, None, self.numerize_array),
-                     co.publisher('predicted_object', Prediction)])
         self.summary_pipe = \
             co.pipe([co.mapper(self.summarize_results),
                      co.publisher('prediction_summary', PredictionSummary)])
 
-        self.pipes = co.splitter(self.entropy_pipe,
-                                 self.margin_pipe,
-                                 self.estimator_pipe,
-                                 self.summary_pipe)
+        # self.entropy_pipe = \
+        #     co.pipe([co.mapper(calc_entropy),
+        #              co.publisher('predictions_entropy', Uncertainty)])
+        # self.margin_pipe = \
+        #     co.pipe([co.starmapper(calc_margin, None, self.numerize_array),
+        #              co.publisher('predictions_margin', Uncertainty)])
+        # self.estimator_pipe = \
+        #     co.pipe([co.starmapper(estimate, None, self.numerize_array),
+        #              co.publisher('predicted_object', Prediction)])
 
-        co.PipedSubscriber('named_predictions', NamedPredictions, self.pipes)
+        # self.pipes = co.splitter(self.entropy_pipe,
+        #                          self.margin_pipe,
+        #                          self.estimator_pipe,
+        #                          self.summary_pipe)
+
+        # co.PipedSubscriber('named_predictions', NamedPredictions, self.pipes)
+        co.PipedSubscriber(
+            'named_predictions', NamedPredictions, self.summary_pipe)
         rospy.Subscriber('object_database_updated', Bool, self.callback)
 
     def summarize_results(self, predictions):
         """Return an ocular_msgs/PredictionSummary from received predictions."""
         summary = PredictionSummary()
+        summary.categories = self.db.keys()
         summary.predicted = estimate(predictions, numerizer=self.numerize_array)
         summary.entropy = calc_entropy(predictions)
         summary.margin = calc_margin(predictions, numerizer=self.numerize_array)
-        summary.all_predictions.pcloud = self.numerize_array(predictions.pcloud)
-        summary.all_predictions.rgb = self.numerize_array(predictions.rgb)
         summary.named_predictions = predictions
-        summary.categories = self.db.keys()
+        summary.all_predictions.pcloud = \
+            zip(*self.numerize_array(predictions.pcloud))[0]
+        summary.all_predictions.rgb = \
+            zip(*self.numerize_array(predictions.rgb))[0]
         return summary
 
     def numerize_db_keys(self):
