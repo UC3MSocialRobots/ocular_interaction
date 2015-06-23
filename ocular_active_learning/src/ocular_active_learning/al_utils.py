@@ -26,6 +26,7 @@ import numpy as np
 import nltk
 import toolz as tz
 import pandas as pd
+from scipy import stats as st
 
 import roslib
 roslib.load_manifest('ocular_active_learning')
@@ -364,3 +365,48 @@ def bindiff(a1, a2):
     diff = _a1 - _a2
     diff[diff != 0] = 1
     return np.sum(diff)
+
+
+def pmf(array, categories):
+    """Return the Probability Mass Function (PMF) of an array.
+
+    Args:
+        array (iterable): Array to get its Probability Mass Function
+        categories (iterable): Categories (variables) to base the PMF.
+
+    Return:
+        pandas.Series: A series with the PMF distribution of array
+
+    Examples:
+        >>> categories = ('dog', 'cat', 'lion', 'wolf', 'monkey')
+        >>> array1 = ['cat', 'cat', 'dog', 'dog', 'dog']
+        >>> pmf(array1, categories)
+        dog       0.6
+        cat       0.4
+        lion      0.0
+        wolf      0.0
+        monkey    0.0
+        dtype: float64
+        >>> array2 = ['monkey', 'monkey', 'monkey', 'monkey', 'monkey']
+        >>> pmf(array2, categories)
+        dog       0
+        cat       0
+        lion      0
+        wolf      0
+        monkey    1
+        dtype: float64
+        >>> array3 = ['dragon', 'dragon', 'dragon', 'dragon', 'dragon']
+        >>> pmf(array3, categories)
+        dog       0
+        cat       0
+        lion      0
+        wolf      0
+        monkey    0
+        dtype: float64
+    """
+    freqs = frequencies(array)
+    freqs = freqs.reindex(categories, fill_value=0)
+    freqs /= len(array)
+    return freqs
+
+
