@@ -411,7 +411,7 @@ def pmf(array, categories):
 
 
 def jsd(P, Q):
-    """Calculate the Jensen-Shannon Divergence of two PMFs."""
+    """Calculate the Jensen-Shannon Divergence of two probability vectors."""
     _P = P / np.linalg.norm(P, ord=1)
     _Q = Q / np.linalg.norm(Q, ord=1)
     _M = 0.5 * (_P + _Q)
