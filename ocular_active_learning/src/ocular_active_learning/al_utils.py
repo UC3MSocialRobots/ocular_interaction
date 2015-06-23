@@ -410,3 +410,9 @@ def pmf(array, categories):
     return freqs
 
 
+def jsd(P, Q):
+    """Calculate the Jensen-Shannon Divergence of two PMFs."""
+    _P = P / np.linalg.norm(P, ord=1)
+    _Q = Q / np.linalg.norm(Q, ord=1)
+    _M = 0.5 * (_P + _Q)
+    return 0.5 * (st.entropy(_P, _M, base=2) + st.entropy(_Q, _M, base=2))
