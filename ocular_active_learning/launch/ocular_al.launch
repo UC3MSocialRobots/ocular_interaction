@@ -23,11 +23,15 @@
             args="$(arg object_db)">
       </node>
       
+      <node pkg="ocular_active_learning"
+            type="al_asker_node.py"
+            name="al_asker_node"
+            output="screen">
+      </node>
+
       <!-- <node pkg="ocular_active_learning"
             type="prediction_summarizer.py"
             name="prediction_summarizer">
       </node> -->
     </group>
-
-    
 </launch>
