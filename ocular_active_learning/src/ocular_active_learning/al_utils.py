@@ -313,21 +313,23 @@ def numerize(array):
     Return an int-based id for each categorical variable of the passed list.
 
     Args:
-    :array ([str]): The list of categorical variables to numerize
+        :array ([str]): The list of categorical variables to numerize
 
     Return:
-    numerized ([(int, str)]): Returs a list of tuple(int, str)
-        where each tuple contains the numeric id for each categorical variable
-        and the variable itself.
+        ([(int, str)]): Returs a list of tuple(int, str)
+            where each tuple contains the numeric id for each categorical
+            variable and the variable itself.
 
     Example:
 
-        >>> numerize('red green blue white'.split(' '))
+        >>> colors = ['red', 'green', 'blue', 'white']
+        >>> numerize(colors)
         [(0, 'blue'), (1, 'green'), (2, 'red'), (3, 'white')]
 
     Note that repeated variables are numreized only once:
 
-        >>> numerize('red green blue white blue white'.split(' '))
+        colors = ['red', 'green', 'blue', 'white', 'blue', 'white']
+        >>> numerize(colors)
         [(0, 'blue'), (1, 'green'), (2, 'red'), (3, 'white')]
     """
     return list(enumerate(sorted(set(array))))
