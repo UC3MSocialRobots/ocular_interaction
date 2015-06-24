@@ -116,12 +116,12 @@ class UncertaintyPublisher(object):
     """
     Node that publishes estimation, entropy and margin of this estimation.
 
-    Subscribes: 'object_database_updated' (std_msgs/Bool)
-                'named_predictions' (ocular_msgs/NamedPredictions)
-    Publishes: 'predictions_entropy' (ocular_msgs/Uncertainty)
-               'predictions_margin' (ocular_msgs/Uncertainty)
-               'predicted_object' (ocular_msgs/Prediction)
-               'predicted_summary' (ocular_msgs/PredictionSummary)
+    **Subscribes**: 'object_database_updated' (std_msgs/Bool)
+                    'named_predictions' (ocular_msgs/NamedPredictions)
+    **Publishes**: 'predictions_entropy' (ocular_msgs/Uncertainty)
+                   'predictions_margin' (ocular_msgs/Uncertainty)
+                   'predicted_object' (ocular_msgs/Prediction)
+                   'predicted_summary' (ocular_msgs/PredictionSummary)
     """
 
     def __init__(self, db_filename):
