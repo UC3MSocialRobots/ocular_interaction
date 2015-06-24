@@ -101,7 +101,7 @@ def estimate(predictions, numerizer=alu.numerize):
     """
     combined, rgb, pcloud = alu.estimate(numerizer(predictions.rgb),
                                          numerizer(predictions.pcloud))
-    rospy.logwarn("Fields: {} {} {}".format(combined, rgb, pcloud))
+    rospy.logdebug("Estimation Fields: {} {} {}".format(combined, rgb, pcloud))
     return Prediction(combined=combined[0], rgb=rgb[0], pcloud=pcloud[0])
 
 
