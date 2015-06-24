@@ -20,7 +20,16 @@
 """
 Node that triggers a question to the user if a prediction has high uncertainty.
 
+Attributes
+----------
+pipe : rospy_utils.coroutines.pipe
+    Pipe that gets as input an ocular_msgs/PredictionSummary msg,
+    calculates the Jensen-Shannon Divergence of that prediction and
+    decides whether is worth or not to send an ask a question bool depending on
+    how big is that divergence.
 
+**Subscribes**: 'prediction_summary' (ocular_msgs/PredictionSummary)
+**Publishes**: 'should_ask_question', (std_msgs/Bool)
 
 :author: Victor Gonzalez Pacheco
 :maintainer: Victor Gonzalez Pacheco
@@ -76,7 +85,7 @@ def should_ask_question(jsd_value):
 pipe = co.pipe([co.mapper(jensen_shannon_divergence),
                 co.filterer(should_ask_question),
                 co.do(lambda _: rospy.loginfo("Going to ask")),
-                co.publisher("ask_question", Bool)])
+                co.publisher("should_ask_question", Bool)])
 
 
 _DEFAULT_NAME = 'al_asker_node'
