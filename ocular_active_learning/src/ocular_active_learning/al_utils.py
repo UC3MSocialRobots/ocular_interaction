@@ -47,9 +47,12 @@ class Accumulator(object):
         """
         Constructor.
 
-        Args:
-            :maxlen: Max num of elements of the accumulator.
-            :seq: sequence to initialize the Accumulator. Default=None
+        Parameters
+        ----------
+        maxlen : int
+            Max num of elements of the accumulator.
+        seq : {None, list}
+            sequence to initialize the Accumulator. Default=None
 
         """
         self.maxlen = maxlen
@@ -60,23 +63,23 @@ class Accumulator(object):
         """
         Add a new item to the list.
 
-        If len(list) >= maxlen, it flushes the list and then adds the item
+        If ``len(list) >= maxlen``, it flushes the list and then adds the item
 
-        Example:
-
-            >>> acc = Accumulator(3)
-            >>> acc.append(1)   # Also acc(1)
-            [1]
-            >>> acc.append(2)
-            [1, 2]
-            >>> acc.append(3)
-            [1, 2, 3]
-            >>> acc.get()       # Also acc()
-            [1, 2, 3]
-            >>> acc.append(4)
-            [4]
-            >>> acc.get()
-            [4]
+        Examples
+        --------
+        >>> acc = Accumulator(3)
+        >>> acc.append(1)   # Also acc(1)
+        [1]
+        >>> acc.append(2)
+        [1, 2]
+        >>> acc.append(3)
+        [1, 2, 3]
+        >>> acc.get()       # Also acc()
+        [1, 2, 3]
+        >>> acc.append(4)
+        [4]
+        >>> acc.get()
+        [4]
 
         :see: Accumulator.__call__
         """
@@ -89,24 +92,27 @@ class Accumulator(object):
         """
         Insert a sequence to the list.
 
-        Note:
-            if len(self.l+seq) >= maxlen only keeps the last maxlen items
+        Note
+        ----
+            if ``len(self.l+seq) >= maxlen`` only keeps the last maxlen items
 
+        Examples
+        --------
         >>> acc = Accumulator(3)
-            >>> acc.insert([1, 2])
-            [1, 2]
-            >>> acc.insert([3, 4])
-            [4]
-            >>> acc.insert([5, 6])
-            [4, 5, 6]
-            >>> acc.insert([7, 8, 9])
-            [7, 8, 9]
-            >>> acc.insert([10])
-            [10]
-            >>> acc.insert([11])
-            [10, 11]
-            >>> acc.insert([])
-            [10, 11]
+        >>> acc.insert([1, 2])
+        [1, 2]
+        >>> acc.insert([3, 4])
+        [4]
+        >>> acc.insert([5, 6])
+        [4, 5, 6]
+        >>> acc.insert([7, 8, 9])
+        [7, 8, 9]
+        >>> acc.insert([10])
+        [10]
+        >>> acc.insert([11])
+        [10, 11]
+        >>> acc.insert([])
+        [10, 11]
         """
         if not seq:
             return self
@@ -137,16 +143,16 @@ class Accumulator(object):
     def clear(self):
         """Clear accumulator's list.
 
-        Example:
-
-            >>> acc = Accumulator(3)
-            >>> acc(1)
-            [1]
-            >>> acc(2)
-            [1, 2]
-            >>> acc.clear()
-            >>> acc()
-            []
+        Examples
+        --------
+        >>> acc = Accumulator(3)
+        >>> acc(1)
+        [1]
+        >>> acc(2)
+        [1, 2]
+        >>> acc.clear()
+        >>> acc()
+        []
         """
         del self.l[:]
 
@@ -154,15 +160,15 @@ class Accumulator(object):
         """
         Add an element if item != None else returns the list.
 
-        Example:
-
-            >>> acc = Accumulator(3)
-            >>> acc(1)
-            [1]
-            >>> acc(2)
-            [1, 2]
-            >>> acc()
-            [1, 2]
+        Examples
+        --------
+        >>> acc = Accumulator(3)
+        >>> acc(1)
+        [1]
+        >>> acc(2)
+        [1, 2]
+        >>> acc()
+        [1, 2]
         """
         if item:
             return self.append(item)
@@ -172,23 +178,23 @@ class Accumulator(object):
     def __nonzero__(self):
         """Return True if list has items, False otherwise.
 
-        Example:
-
-            >>> acc = Accumulator(3)
-            >>> bool(acc)
-            False
-            >>> acc(1)
-            [1]
-            >>> bool(acc)
-            True
-            >>> acc.insert([2,3])
-            [1, 2, 3]
-            >>> bool(acc)
-            True
-            >>> acc(4)
-            [4]
-            >>> bool(acc)
-            True
+        Examples
+        --------
+        >>> acc = Accumulator(3)
+        >>> bool(acc)
+        False
+        >>> acc(1)
+        [1]
+        >>> bool(acc)
+        True
+        >>> acc.insert([2,3])
+        [1, 2, 3]
+        >>> bool(acc)
+        True
+        >>> acc(4)
+        [4]
+        >>> bool(acc)
+        True
         """
         return bool(self.l)
 
@@ -204,23 +210,23 @@ class Accumulator(object):
     def __len__(self):
         """Return the len of the contained list.
 
-        Example:
-
-            >>> acc = Accumulator(3)
-            >>> len(acc)
-            0
-            >>> acc(1)
-            [1]
-            >>> len(acc)
-            1
-            >>> acc.insert([2,3])
-            [1, 2, 3]
-            >>> len(acc)
-            3
-            >>> acc(4)
-            [4]
-            >>> len(acc)
-            1
+        Examples
+        --------
+        >>> acc = Accumulator(3)
+        >>> len(acc)
+        0
+        >>> acc(1)
+        [1]
+        >>> len(acc)
+        1
+        >>> acc.insert([2,3])
+        [1, 2, 3]
+        >>> len(acc)
+        3
+        >>> acc(4)
+        [4]
+        >>> len(acc)
+        1
         """
         return len(self.l)
 
@@ -233,25 +239,31 @@ def estimate(predictions_rgb, predictions_pcloud, weights=(0.6, 0.4)):
     the rgb predictions, the point cloud predictions and
     the item with higer frequency in a weighted sum of rgb and pcloud preds.
 
-    Args:
-        predictions_rgb: list of predictions of the RGB matcher
-        predictions_pcloud: list of predictions of the point cloud matcher
-        weights: tuple to indicate relative weights of the matchers.
-            Default=(0.6, 0.4)
+    Parameters
+    ----------
+    predictions_rgb : list
+        list of predictions of the RGB matcher
+    predictions_pcloud : list
+        list of predictions of the point cloud matcher
+    weights: tuple(float, float)
+        tuple to indicate relative weights of the matchers. Default=(0.6, 0.4)
 
-    Return:
-        tuple with (id_of_weighted_sum, id_rgb, id_pcloud)
+    Returns
+    -------
+    tuple (int, int, int):
+        tuple containing the (id_of_weighted_sum, id_rgb, id_pcloud)
 
-    Example:
 
-        >>> estimate([1, 1, 1, 2, 2], [1, 0, 2, 2, 1])
-        (1, 1, 1)
-        >>> estimate([1, 1, 1, 2, 2], [1, 0, 2, 2, 2])
-        (2, 1, 2)
-        >>> estimate([1, 1, 1, 2, 2], [1, 0, 0, 0, 2])
-        (1, 1, 0)
-        >>> estimate([1, 1, 1, 2, 2], [2, 2, 2, 2, 2], weights=(1,0))
-        (1, 1, 2)
+    Exampless
+    --------
+    >>> estimate([1, 1, 1, 2, 2], [1, 0, 2, 2, 1])
+    (1, 1, 1)
+    >>> estimate([1, 1, 1, 2, 2], [1, 0, 2, 2, 2])
+    (2, 1, 2)
+    >>> estimate([1, 1, 1, 2, 2], [1, 0, 0, 0, 2])
+    (1, 1, 0)
+    >>> estimate([1, 1, 1, 2, 2], [2, 2, 2, 2, 2], weights=(1,0))
+    (1, 1, 2)
     """
     w_rgb, w_pcloud = weights
     freqs_rgb = frequencies(predictions_rgb)
@@ -270,18 +282,18 @@ def margin(items):
     The margin is the difference between the frequency of appearance between
     the two most common items in a list.
 
-    Example:
-
-        >>> margin([3, 3, 3, 1, 2, 0])
-        2.0
-        >>> margin([2, 2, 2, 1, 1])
-        1.0
-        >>> margin([3, 3, 5, 5, 6])
-        -0.0
-        >>> margin([3, 3, 3, 3, 3])
-        nan
-        >>> margin([1, 1, 1, 1, 2, 2, 3, 4, 5, 0, 0])
-        2.0
+    Examples
+    --------
+    >>> margin([3, 3, 3, 1, 2, 0])
+    2.0
+    >>> margin([2, 2, 2, 1, 1])
+    1.0
+    >>> margin([3, 3, 5, 5, 6])
+    -0.0
+    >>> margin([3, 3, 3, 3, 3])
+    nan
+    >>> margin([1, 1, 1, 1, 2, 2, 3, 4, 5, 0, 0])
+    2.0
     """
     freqs = frequencies(items)
     return freqs.nlargest(2).diff().values[-1] * (-1)
@@ -291,16 +303,17 @@ def entropy(labels):
     """
     Return entropy of a list of categorical variables.
 
-    Note:
+    Note
+    ----
         I'm using a "log2" to get the entropy.
         This means that the return units are "bits"
 
-    Example:
-
-        >>> entropy(['red', 'red', 'green', 'red'])
-        0.81127812445913283
-        >>> entropy(['red', 'red', 'red', 'green', 'green', 'blue'])
-        1.4591479170272448
+    Examples
+    --------
+    >>> entropy(['red', 'red', 'green', 'red'])
+    0.81127812445913283
+    >>> entropy(['red', 'red', 'red', 'green', 'green', 'blue'])
+    1.4591479170272448
     """
     freqdist = nltk.FreqDist(labels)
     probs = [freqdist.freq(l) for l in nltk.FreqDist(labels)]
@@ -312,25 +325,28 @@ def numerize(array):
     """
     Return an int-based id for each categorical variable of the passed list.
 
-    Args:
-        :array ([str]): The list of categorical variables to numerize
+    Parameters
+    ----------
+    array : [str]
+        The list of categorical variables to numerize
 
-    Return:
-        ([(int, str)]): Returs a list of tuple(int, str)
-            where each tuple contains the numeric id for each categorical
-            variable and the variable itself.
+    Returns
+    -------
+    [(int, str)]
+        Returs a list of tuple(int, str) where each tuple contains
+        the numeric id for each categoricalvariable and the variable itself.
 
-    Example:
-
-        >>> colors = ['red', 'green', 'blue', 'white']
-        >>> numerize(colors)
-        [(0, 'blue'), (1, 'green'), (2, 'red'), (3, 'white')]
+    Examples
+    --------
+    >>> colors = ['red', 'green', 'blue', 'white']
+    >>> numerize(colors)
+    [(0, 'blue'), (1, 'green'), (2, 'red'), (3, 'white')]
 
     Note that repeated variables are numreized only once:
 
-        colors = ['red', 'green', 'blue', 'white', 'blue', 'white']
-        >>> numerize(colors)
-        [(0, 'blue'), (1, 'green'), (2, 'red'), (3, 'white')]
+    >>> colors = ['red', 'green', 'blue', 'white', 'blue', 'white']
+    >>> numerize(colors)
+    [(0, 'blue'), (1, 'green'), (2, 'red'), (3, 'white')]
     """
     return list(enumerate(sorted(set(array))))
 
@@ -341,23 +357,23 @@ def bindiff(a1, a2):
     The binary difference between arrays is the number of different elements
     between both arrays.
 
-    Example:
-
-        >>> a1 = [1, 2, 1, 0]
-        >>> a2 = [1, 2, 1, 0]
-        >>> bindiff(a1, a2)
-        0
-        >>> a1 = [1, 2, 1, 0]
-        >>> a2 = [0, 2, 0, 0]
-        >>> bindiff(a1, a2)
-        2
+    Examples
+    --------
+    >>> a1 = [1, 2, 1, 0]
+    >>> a2 = [1, 2, 1, 0]
+    >>> bindiff(a1, a2)
+    0
+    >>> a1 = [1, 2, 1, 0]
+    >>> a2 = [0, 2, 0, 0]
+    >>> bindiff(a1, a2)
+    2
 
     Note that the difference takes into account the position of each element.
 
-        >>> a1 = [1, 2, 1, 0]
-        >>> a2 = [0, 1, 2, 1]   # Shift one position a1
-        >>> bindiff(a1, a2)
-        4
+    >>> a1 = [1, 2, 1, 0]
+    >>> a2 = [0, 1, 2, 1]   # Shift one position a1
+    >>> bindiff(a1, a2)
+    4
 
     As you can see in the previous example, both `a1` and `a2` have the same
     elements, but they are shifted one position leading to the max difference.
@@ -372,39 +388,45 @@ def bindiff(a1, a2):
 def pmf(array, categories):
     """Return the Probability Mass Function (PMF) of an array.
 
-    Args:
-        array (iterable): Array to get its Probability Mass Function
-        categories (iterable): Categories (variables) to base the PMF.
+    Parameters
+    ----------
+    array : iterable
+        Array to get its Probability Mass Function (PMF)
+    categories : iterable
+        Categories (variables) to base the PMF.
 
-    Return:
-        pandas.Series: A series with the PMF distribution of array
+    Returns
+    -------
+    pandas.Series
+        A series with the PMF distribution of array
 
-    Examples:
-        >>> categories = ('dog', 'cat', 'lion', 'wolf', 'monkey')
-        >>> array1 = ['cat', 'cat', 'dog', 'dog', 'dog']
-        >>> pmf(array1, categories)
-        dog       0.6
-        cat       0.4
-        lion      0.0
-        wolf      0.0
-        monkey    0.0
-        dtype: float64
-        >>> array2 = ['monkey', 'monkey', 'monkey', 'monkey', 'monkey']
-        >>> pmf(array2, categories)
-        dog       0
-        cat       0
-        lion      0
-        wolf      0
-        monkey    1
-        dtype: float64
-        >>> array3 = ['dragon', 'dragon', 'dragon', 'dragon', 'dragon']
-        >>> pmf(array3, categories)
-        dog       0
-        cat       0
-        lion      0
-        wolf      0
-        monkey    0
-        dtype: float64
+    Examples
+    --------
+    >>> categories = ('dog', 'cat', 'lion', 'wolf', 'monkey')
+    >>> array1 = ['cat', 'cat', 'dog', 'dog', 'dog']
+    >>> pmf(array1, categories)
+    dog       0.6
+    cat       0.4
+    lion      0.0
+    wolf      0.0
+    monkey    0.0
+    dtype: float64
+    >>> array2 = ['monkey', 'monkey', 'monkey', 'monkey', 'monkey']
+    >>> pmf(array2, categories)
+    dog       0
+    cat       0
+    lion      0
+    wolf      0
+    monkey    1
+    dtype: float64
+    >>> array3 = ['dragon', 'dragon', 'dragon', 'dragon', 'dragon']
+    >>> pmf(array3, categories)
+    dog       0
+    cat       0
+    lion      0
+    wolf      0
+    monkey    0
+    dtype: float64
     """
     freqs = frequencies(array)
     freqs = freqs.reindex(categories, fill_value=0)
@@ -416,21 +438,22 @@ def jsd(P, Q):
     """Calculate the Jensen-Shannon Divergence of two probability vectors.
 
     See:
+    ----
         https://en.wikipedia.org/wiki/Jensen%E2%80%93Shannon_divergence
 
-    Example:
-
-        >>> arr1 = np.array([0.6, 0.4, 0.0, 0.0, 0.0])
-        >>> arr2 = np.array([0, 0, 0, 0, 1])
-        >>> arr3 = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
-        >>> jsd(arr1, arr2)
-        1.0
-        >>> round(jsd(arr1, arr3), 2)
-        0.4
-        >>> round(jsd(arr2, arr3), 2)
-        0.61
-        >>> jsd(arr1, arr1)
-        0.0
+    Examples
+    --------
+    >>> arr1 = np.array([0.6, 0.4, 0.0, 0.0, 0.0])
+    >>> arr2 = np.array([0, 0, 0, 0, 1])
+    >>> arr3 = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
+    >>> jsd(arr1, arr2)
+    1.0
+    >>> round(jsd(arr1, arr3), 2)
+    0.4
+    >>> round(jsd(arr2, arr3), 2)
+    0.61
+    >>> jsd(arr1, arr1)
+    0.0
     """
     _P = P / np.linalg.norm(P, ord=1)
     _Q = Q / np.linalg.norm(Q, ord=1)
