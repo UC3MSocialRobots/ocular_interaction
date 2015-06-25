@@ -64,14 +64,14 @@ def jensen_shannon_divergence(msg):
 def should_ask_question(jsd_value):
     """Function that decides whether to ask a question or not to the user.
 
-    Parameters:
-    -----------
+    Parameters
+    ----------
     jsd_value : float
         Value indicating the JSD (Jensen-Shannon Divergence) of a prediction.
         This value should be between 0 and 1 (both included).
 
-    Returns:
-    --------
+    Returns
+    -------
     bool
         A bool indicating whether to ask a question or not.
     """
