@@ -17,6 +17,10 @@
   <depend package="dialog_manager_msgs"/>
   <depend package="rosunit"/>
   <depend package="rostest"/>
+  
+  <export>
+    <rosdoc config="rosdoc.yaml"/>    
+  </export>
 
 </package>
 
