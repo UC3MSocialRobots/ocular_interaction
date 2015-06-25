@@ -1,0 +1,21 @@
+actions: []
+authors: "V\xEDctor Gonz\xE1lez"
+brief: ocular_active_learning
+bugtracker: ''
+depends:
+- ocular
+- ocular_msgs
+- dialog_manager_msgs
+- rospy_utils
+- rostest
+- rospy
+- rosunit
+- ocular_interaction
+description: "\n\n     Active Learning tools for OCULAR Project\n\n  "
+license: LASRL-UC3M
+maintainers: ''
+msgs: []
+package_type: package
+repo_url: ''
+srvs: []
+url: http://ros.org/wiki/ocular_active_learning
