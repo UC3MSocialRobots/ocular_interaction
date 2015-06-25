@@ -18,20 +18,11 @@
 """
 Publishes uncertainty metrics and estimates object from recv. predictions.
 
-:author: Victor Gonzalez Pacheco
-:maintainer: Victor Gonzalez Pacheco
-
-
 Publishes the estimated value of the received predictions,
 and the entropy and margin of these predictions.
 
-
-Attributes:
-    entropy_pipe: Gets NamedPredictions and publishes their entropy.
-    margin_pipe: Gets NamedPredictions and publishes their margin.
-    estimator_pipe: Gets NamedPredictions and publishes the estimated object.
-    pipes: Single entry point to entropy_pipe, margin_pipe, and estimator_pipe.
-    _DEFAULT_NAME: Default name of the node.
+:author: Victor Gonzalez Pacheco
+:maintainer: Victor Gonzalez Pacheco
 """
 
 import roslib
@@ -54,13 +45,16 @@ def calc_uncertainty(metric, predictions_msg, name=None):
     """
     Get uncertainty from a predictions_msg.
 
-    Args:
-        metric (callable): The function that calculates the uncertainty
-            of the predictions_msg. Typicaly al_utils.entropy or margin
-        predictions_msg (ocular_msgs.msg.NamedPredictions): the predictions
-            for which the uncertainty is going to be calculated.
-        name (string): Name of the metric to put in the message. Default: None
-            If name is not set, the func gets the name from the metric function.
+    Parameters
+    ----------
+    metric : callable
+        The function that calculates the uncertainty of the predictions_msg.
+        Typicaly al_utils.entropy or margin
+    predictions_msg : ocular_msgs.msg.NamedPredictions
+        The predictions for which the uncertainty is going to be calculated.
+    name : {None, str}
+        Name of the metric to put in the message. Default: None
+        If name is not set, the func gets the name from the metric function.
 
     """
     return Uncertainty(name=name or metric.__name__,
@@ -76,11 +70,13 @@ def calc_entropy(predictions):
 def calc_margin(predictions, numerizer=alu.numerize):
     """Make an Uncertainty msg with margin values of the input predictions.
 
-    Args:
-        predictions (ocular_msgs/NamedPredictions):
-            The predictions wrapped in a message
-        numerizer: func with type [a] -> [(int, a)] that numerizes predictions.
-            (default: ocular_active_learning.al_utils.numerize)
+    Parameters
+    ----------
+    predictions : ocular_msgs/NamedPredictions
+        The predictions wrapped in a message
+    numerizer: callable
+        func with type [a] -> [(int, a)] that numerizes predictions.
+        (default: ocular_active_learning.al_utils.numerize)
     """
     margin = tz.compose(alu.margin, numerizer)
     return calc_uncertainty(margin, predictions, name=alu.margin.__name__)
@@ -90,14 +86,18 @@ def estimate(predictions, numerizer=alu.numerize):
     """
     Estimate of the matched object from the last named predictions.
 
-    Args:
-        predictions (ocular_msgs/NamedPredictions):
-            The predictions wrapped in a message
-        numerizer: func with type [a] -> [(int, a)] that numerizes predictions.
-            (default: ocular_active_learning.al_utils.numerize)
+    Parameters
+    ----------
+    predictions : ocular_msgs/NamedPredictions
+        The predictions wrapped in a message.
+    numerizer: callable
+        func with type [a] -> [(int, a)] that numerizes predictions.
+        (default: ocular_active_learning.al_utils.numerize)
 
-    Returns:
-        ocular_msgs/Prediction: The predicted object wrapped in a message.
+    Returns
+    -------
+        ocular_msgs/Prediction
+            The predicted object wrapped in a message.
     """
     combined, rgb, pcloud = alu.estimate(numerizer(predictions.rgb),
                                          numerizer(predictions.pcloud))
