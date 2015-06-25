@@ -3,7 +3,7 @@ ocular_active_learning Package
 
 :mod:`al_utils` Module
 ----------------------
-.. currentmodule:: al_utils
+.. currentmodule:: ocular_active_learning.al_utils
 
 .. autosummary::
     Accumulator
