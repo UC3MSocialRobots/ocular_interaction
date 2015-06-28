@@ -6,6 +6,14 @@ ocular_active_learning Package
 .. currentmodule:: ocular_active_learning.al_utils
 
 .. autosummary::
+    bindiff
+    entropy
+    estimate
+    jsd
+    margin
+    normalized_margin
+    numerize
+    pmf
     Accumulator
     Accumulator.__init__
     Accumulator.append
@@ -20,14 +28,6 @@ ocular_active_learning Package
     Accumulator.__repr__
     Accumulator.__iter__
     Accumulator.__len__
-    estimate
-    margin
-    normalized_margin
-    entropy
-    numerize
-    bindiff
-    pmf
-    jsd
 
 .. automodule:: ocular_active_learning.al_utils
     :members:
