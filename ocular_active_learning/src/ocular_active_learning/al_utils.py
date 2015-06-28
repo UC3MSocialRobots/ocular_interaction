@@ -281,6 +281,20 @@ def margin(items):
     The margin is the difference between the frequency of appearance between
     the two most common items in a list.
 
+    See Also
+    --------
+    normalized_margin : margin that takes into account the lenght of the array.
+
+    Parameters
+    ----------
+    items : array
+        Array of items from which the normalized margin will be calculated
+
+    Returns
+    -------
+    float
+        The normalized margin of the array
+
     Examples
     --------
     >>> margin([3, 3, 3, 1, 2, 0])
