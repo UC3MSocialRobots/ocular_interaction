@@ -22,6 +22,7 @@ ocular_active_learning Package
     Accumulator.__len__
     estimate
     margin
+    normalized_margin
     entropy
     numerize
     bindiff
