@@ -20,7 +20,7 @@ Utilities for OCULAR's Active Learning Nodes.
 
 :author: Victor Gonzalez-Pacheco
 """
-
+from __future__ import division
 # from itertools import chain, islice
 import numpy as np
 import nltk
@@ -253,7 +253,6 @@ def estimate(predictions_rgb, predictions_pcloud, weights=(0.6, 0.4)):
     tuple (int, int, int):
         tuple containing the (id_of_weighted_sum, id_rgb, id_pcloud)
 
-
     Exampless
     --------
     >>> estimate([1, 1, 1, 2, 2], [1, 0, 2, 2, 1])
@@ -289,14 +288,52 @@ def margin(items):
     >>> margin([2, 2, 2, 1, 1])
     1.0
     >>> margin([3, 3, 5, 5, 6])
-    -0.0
+    0.0
     >>> margin([3, 3, 3, 3, 3])
     nan
     >>> margin([1, 1, 1, 1, 2, 2, 3, 4, 5, 0, 0])
     2.0
     """
     freqs = frequencies(items)
-    return freqs.nlargest(2).diff().values[-1] * (-1)
+    return abs(freqs.nlargest(2).diff().values[-1])
+
+
+def normalized_margin(items):
+    """
+    Calculate normalized margin between highest two frequencies of an array.
+
+    The normalized margin is the margin dived by the lenght of the array.
+
+    See Also
+    --------
+    margin : Unnormalized margin
+
+    Parameters
+    ----------
+    items : array
+        Array of items from which the normalized margin will be calculated
+
+    Returns
+    -------
+    float
+        The normalized margin of the array
+
+    Examples
+    --------
+    >>> from __future__ import division
+    >>> margin([3, 3, 3, 1, 2, 0])
+    0.3333333333333333
+    >>> margin([2, 2, 2, 1, 1])
+    0.2
+    >>> margin([3, 3, 5, 5, 6])
+    0.0
+    >>> margin([3, 3, 3, 3, 3])
+    nan
+    >>> margin([1, 1, 1, 1, 2, 2, 3, 4, 5, 0, 0])
+    0.18181818181818182
+    """
+    # return margin(items) / len(items)
+    return np.true_divide(margin(items), len(items))
 
 
 def entropy(labels):
