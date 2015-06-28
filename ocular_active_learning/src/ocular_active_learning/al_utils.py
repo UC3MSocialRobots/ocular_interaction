@@ -253,7 +253,7 @@ def estimate(predictions_rgb, predictions_pcloud, weights=(0.6, 0.4)):
     tuple (int, int, int):
         tuple containing the (id_of_weighted_sum, id_rgb, id_pcloud)
 
-    Exampless
+    Examples
     --------
     >>> estimate([1, 1, 1, 2, 2], [1, 0, 2, 2, 1])
     (1, 1, 1)
@@ -346,7 +346,6 @@ def normalized_margin(items):
     >>> margin([1, 1, 1, 1, 2, 2, 3, 4, 5, 0, 0])
     0.18181818181818182
     """
-    # return margin(items) / len(items)
     return np.true_divide(margin(items), len(items))
 
 
@@ -354,8 +353,8 @@ def entropy(labels):
     """
     Return entropy of a list of categorical variables.
 
-    Note
-    ----
+    Notes
+    -----
         I'm using a "log2" to get the entropy.
         This means that the return units are "bits"
 
