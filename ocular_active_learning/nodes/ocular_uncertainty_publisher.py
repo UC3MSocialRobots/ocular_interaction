@@ -82,9 +82,8 @@ def calc_margin(predictions, numerizer=alu.numerize):
     return calc_uncertainty(margin, predictions, name=alu.margin.__name__)
 
 
-def estimate(predictions, numerizer=alu.numerize):
-    """
-    Estimate of the matched object from the last named predictions.
+def _get_weights(predictions, numerizer=alu.numerize):
+    """Calculate the prediction weights according to their normalized margin.
 
     Parameters
     ----------
@@ -96,12 +95,42 @@ def estimate(predictions, numerizer=alu.numerize):
 
     Returns
     -------
-        ocular_msgs/Prediction
-            The predicted object wrapped in a message.
+    (float, float)
+        Returns the normalized margin of predictions
     """
+    n_margin = tz.compose(alu.nmargin, numerizer)  # Normalized margin
+    rgb_nmargin = n_margin(predictions.rgb)
+    pcloud_nmargin = n_margin(predictions.pcloud)
+    return (rgb_nmargin, pcloud_nmargin)
+
+
+def estimate(predictions, numerizer=alu.numerize):
+    """
+    Estimate of the matched object from the last named predictions.
+
+    The estimation consits in using ``estimate`` function from al_utils module
+    with the normalized_margin weights for each prediction matcher.
+    That is, the rgb matcher is weighted with the ``normalized_margin`` of its
+    predictions and the same occurs for the pcloud matcher
+
+    Parameters
+    ----------
+    predictions : ocular_msgs/NamedPredictions
+        The predictions wrapped in a message.
+    numerizer: callable
+        func with type [a] -> [(int, a)] that numerizes predictions.
+        (default: ocular_active_learning.al_utils.numerize)
+
+    Returns
+    -------
+    ocular_msgs/Prediction
+        The predicted object wrapped in a message.
+    """
+    # rospy.logwarn("Predictions are: {}".format(predictions))
     combined, rgb, pcloud = alu.estimate(numerizer(predictions.rgb),
                                          numerizer(predictions.pcloud))
-    rospy.logdebug("Estimation Fields: {} {} {}".format(combined, rgb, pcloud))
+#                                        weights=(rgb_nmargin, pcloud_nmargin))
+    rospy.logwarn("Estimation Fields: {} {} {}".format(combined, rgb, pcloud))
     return Prediction(combined=combined[0], rgb=rgb[0], pcloud=pcloud[0])
 
 
