@@ -22,6 +22,7 @@ Utilities for OCULAR's Active Learning Nodes.
 """
 from __future__ import division
 # from itertools import chain, islice
+import math
 import numpy as np
 import nltk
 import toolz as tz
@@ -283,7 +284,7 @@ def margin(items):
 
     See Also
     --------
-    normalized_margin : margin that takes into account the lenght of the array.
+    nmargin : Normalized margin. Takes into account the lenght of the array.
 
     Parameters
     ----------
@@ -312,7 +313,7 @@ def margin(items):
     return abs(freqs.nlargest(2).diff().values[-1])
 
 
-def normalized_margin(items):
+def nmargin(items):
     """
     Calculate normalized margin between highest two frequencies of an array.
 
@@ -335,18 +336,24 @@ def normalized_margin(items):
     Examples
     --------
     >>> from __future__ import division
-    >>> margin([3, 3, 3, 1, 2, 0])
-    0.3333333333333333
-    >>> margin([2, 2, 2, 1, 1])
+    >>> nmar = nmargin([3, 3, 3, 1, 2, 0])
+    >>> round(nmar, 3)
+    0.333
+    >>> nmar = nmargin([2, 2, 2, 1, 1])
+    >>> round(nmar, 3)
     0.2
-    >>> margin([3, 3, 5, 5, 6])
+    >>> nmargin([3, 3, 5, 5, 6])
     0.0
-    >>> margin([3, 3, 3, 3, 3])
-    nan
-    >>> margin([1, 1, 1, 1, 2, 2, 3, 4, 5, 0, 0])
-    0.18181818181818182
+    >>> nmargin([3, 3, 3, 3, 3])
+    1.0
+    >>> nmar = nmargin([1, 1, 1, 1, 2, 2, 3, 4, 5, 0, 0])
+    >>> round(nmar, 3)
+    0.182
     """
-    return np.true_divide(margin(items), len(items))
+    margin_ = np.true_divide(margin(items), len(items))
+    if math.isnan(margin_):
+        margin_ = 1.0
+    return margin_
 
 
 def entropy(labels):
