@@ -1,0 +1,19 @@
+<package>
+  <description brief="ocular_data">
+
+     Package with the OCULAR data and scripts to analyze these data
+
+  </description>
+  <author>Victor Gonzalez-Pacheco</author>
+  <license>LASR-UC3M</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/ocular_data</url>
+  <depend package="rospy"/>
+  <depend package="rosunit"/>
+  <depend package="rospy_utils"/>
+  <depend package="ocular"/>
+  <depend package="std_msgs"/>
+  <depend package="ocular_msgs"/>
+</package>
+
+
