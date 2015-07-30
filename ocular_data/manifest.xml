@@ -11,9 +11,11 @@
   <depend package="rospy"/>
   <depend package="rosunit"/>
   <depend package="rospy_utils"/>
-  <depend package="ocular"/>
   <depend package="std_msgs"/>
   <depend package="ocular_msgs"/>
+  <depend package="ocular_active_learning"/>
+  <depend package="ocular_interaction"/>
+  <depend package="ocular"/>
 </package>
 
 
