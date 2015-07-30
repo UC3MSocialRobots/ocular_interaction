@@ -6,7 +6,7 @@ roslib.load_manifest('ocular_data')
 
 import pandas as pd
 from ocular_active_learning import al_utils as alu
-from std_msgs.msg import (Bool, String)
+from std_msgs.msg import String
 from ocular_msgs.msg import PredictionSummary as SummaryMsg
 
 
