@@ -22,7 +22,8 @@
   <node name="event_handler_translator_rate_limiter"
         type="throttle"
         pkg="topic_tools"
-        args="messages event 0.5 /event_low_rate"/>
+        args="messages event 1 /event_low_rate"/>
+        <!-- args="messages event 0.5 /event_low_rate"/> -->
 
   <!-- <node name="asr_atom_translator" 
       pkg="ocular_interaction"
@@ -74,13 +75,13 @@
         respawn="false" 
         output="screen"/>
 
-  <node name="uncertainty_metrics_atom_translator" 
+  <!-- <node name="uncertainty_metrics_atom_translator" 
         pkg="ocular_interaction"
         type="uncertainty_metrics_atom_translator.py"
         args="predictions_entropy:=/ocular/predictions/predictions_entropy
               predictions_margin:=/ocular/predictions/predictions_margin"
         respawn="false" 
-        output="screen"/>
+        output="screen"/> -->
 
   <!-- Aggregators -->
   <node name="object_name_aggregator" 
