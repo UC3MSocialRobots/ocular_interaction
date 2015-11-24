@@ -29,13 +29,18 @@
         <arg name="last_event"  value="recognize"  type="string"/>
       </roboml:args>
     </action> -->
-
+<!-- 
     <action name="say_text" actor="etts">
       <roboml:args>
-        <arg name="sentence" value="¿Cómo se llama el objeto que me vas a ensenyar?" type="string"/>
+        <arg name="sentence" value="¿Cómo se llama ese objeto?" type="string"/>
+        <arg name="engine"   value="microsoft" type="string"/>
+        <arg name="emotion"  value="happy" type="string"/>
+        <arg name="language" value="es" type="string"/>
+        <arg name="priority" value="QUEUE_SENTENCE" type="string"/>
+        <arg name="volume"   value="0" type="number"/>
       </roboml:args>
     </action>
-
+ -->
     <action name="log" actor="ros_logger">
       <roboml:args>
         <arg name="logger"  value="loginfo" type="string"/>
@@ -161,6 +166,12 @@
     <action name="say_text" actor="etts">
       <roboml:args>
         <arg name="sentence" value="Lo siento, no he entendido lo que has dicho. ¿Lo puedes repetir?" type="string"/>
+        <!-- <arg name="engine"   value="google" type="string"/> -->
+        <arg name="engine"   value="microsoft" type="string"/>
+        <arg name="emotion"  value="happy" type="string"/>
+        <arg name="language" value="es" type="string"/>
+        <arg name="priority" value="QUEUE_SENTENCE" type="string"/>
+        <arg name="volume"   value="0" type="number"/>
       </roboml:args>
     </action>
 
@@ -221,7 +232,13 @@
 
     <action name="say_text" actor="etts">
       <roboml:args>
-        <arg name="sentence" value="Vale, $object_name_var. ¡Espero poder acordarme! GeGe" type="string"/>
+        <arg name="sentence" value="Vale, $object_name_var, ¡Espero poder acordarme! GeGe" type="string"/>
+        <!-- <arg name="engine"   value="google" type="string"/> -->
+        <arg name="engine"   value="microsoft" type="string"/>
+        <arg name="emotion"  value="happy" type="string"/>
+        <arg name="language" value="es" type="string"/>
+        <arg name="priority" value="QUEUE_SENTENCE" type="string"/>
+        <arg name="volume"   value="0" type="number"/>
       </roboml:args>
     </action>
 
