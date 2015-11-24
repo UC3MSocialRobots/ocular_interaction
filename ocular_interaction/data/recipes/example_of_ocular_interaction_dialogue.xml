@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+
+<!-- ####################################################################### -->
+<!-- OCULAR INTERACTION                                                      -->
+<!-- ####################################################################### -->
+<recipe name="start_learning">
+  <precondition>
+    <atom>
+
+      <slot name="type"     val="user_command"/>
+      <slot name="subtype"  val="user"/>
+      <slot name="command"  rel="equal" val="learn"/>
+      <slot name="consumed" rel="equal" val="false"/>
+      <slot name="this"     rel="bind" var="user_command_atom"/>
+    </atom> 
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body  order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="Recipe Triggered: start_learning" type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Go to specific recipes ············································ -->
+    <goal recipe_name="get_object_name" initiator="any"/>
+    <!-- ··································································  -->
+
+    <action name="say_text" actor="etts">
+      <roboml:args>
+        <arg name="sentence" value="Ahora alarga el brazo para que lo pueda ver bien" type="string"/>
+        <!-- <arg name="engine"   value="google" type="string"/> -->
+        <arg name="engine"   value="microsoft" type="string"/>      
+        <arg name="emotion"  value="happy" type="string"/>
+        <arg name="language" value="es" type="string"/>
+        <arg name="priority" value="QUEUE_SENTENCE" type="string"/>
+        <arg name="volume"   value="0" type="number"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="Waiting user to show object..." type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Go to specific recipes ············································ --> 
+    <goal recipe_name="user_shows_object" initiator="any"/>
+    <!-- ··································································  -->
+    <!-- <action name="say_text" actor="etts">
+      <roboml:args>
+        <arg name="sentence" value="Ya lo veo. Sigue ensenyandome hasta que yo te diga." type="string"/>
+      </roboml:args>
+    </action> -->
+<!-- 
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Waiting for learning ends..." type="string"/>
+      </roboml:args>
+    </action>
+ -->
+    <!-- Go to specific recipes ············································ --> 
+    <!-- <goal recipe_name="wait_until_learning_ends" initiator="any"/> -->
+    <!-- ··································································  -->
+
+<!-- 
+    <action name="say_text" actor="etts">
+      <roboml:args>
+        <arg name="sentence" value="Bien ya has acabado de ensenyarme el objeto. Gracias!" type="string"/>
+      </roboml:args>
+    </action>
+ -->
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="Finishing recipe: ocular_interaction" type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END END " type="string"/>
+      </roboml:args>
+    </action>
+
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+
+  <assignpost>
+    <atom>
+        <slot name="this" var="user_command_atom"/>
+        <slot name="consumed" val="true"/>
+    </atom> 
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->
+
+
+<!-- ####################################################################### 
+      Wait for user start
+<!-- ####################################################################### -->
+<recipe name="user_shows_object">
+  <precondition>
+    <atom>
+      <slot name="type"        val="event_handler"/>
+      <slot name="subtype"     val="user"/>
+      <slot name="event"       rel="equal" val="learn"/>
+      <!-- <slot name="last_event"  rel="equal" val="recognize"/> -->
+      <slot name="consumed"    rel="equal" val="false"/>
+      <slot name="hand"        rel= "bind" var="hand_var"/>
+      <slot name="event"       rel= "bind" var="event_var"/>
+      <slot name="last_event"  rel= "bind" var="last_event_var"/>
+      <slot name="this" rel="bind" var="event_handler_atom"/>
+    </atom> 
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body  order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Recipe Triggered: user_shows_object" type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Send event to OCULAR -->
+    <action name="send_event" actor="event_handler">
+      <roboml:args>
+        <arg name="hand"        value="$hand_var"  type="string"/>
+        <arg name="event"       value="learn"      type="string"/>
+        <arg name="last_event"  value="recognize"  type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="say_text" actor="etts">
+      <roboml:args>
+        <arg name="sentence" value="Vale ya lo veo." type="string"/>
+        <!-- <arg name="engine"   value="google" type="string"/> -->
+        <arg name="engine"   value="microsoft" type="string"/>
+        <arg name="emotion"  value="happy" type="string"/>
+        <arg name="language" value="es" type="string"/>
+        <arg name="priority" value="QUEUE_SENTENCE" type="string"/>
+        <arg name="volume"   value="0" type="number"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT OBJECT " type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger"  value="loginfo" type="string"/>
+        <arg name="message" value="Finishing recipe: user_shows_object" type="string"/>
+      </roboml:args>
+    </action>
+
+    <!-- Send event to OCULAR -->
+    <!-- <action name="send_event" actor="event_handler">
+      <roboml:args>
+        <arg name="hand"        value="$hand_var"  type="string"/>
+        <arg name="event"       value="recognize"  type="string"/>
+        <arg name="last_event"  value="recognize"  type="string"/>
+      </roboml:args>
+    </action> -->
+
+    <assignment>
+    </assignment>
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+
+  <assignpost>
+    <atom>
+        <slot name="this" var="event_handler_atom"/>
+        <slot name="consumed" val="true"/>
+    </atom> 
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->
+
+<!-- ####################################################################### -->
+<!-- Wait for End of learning                                                -->
+<!-- ####################################################################### -->
+<recipe name="wait_until_learning_ends">
+  <precondition>
+    <!-- Atom to indicate that an object has been learned -->
+    <atom>
+      <slot name="type"     val="object_learned"/>
+      <slot name="subtype"  val="user"/>
+      <slot name="consumed" rel="equal" val="false"/>
+      <slot name="object"   rel="bind"  var="object_var"/>
+      <slot name="this" rel="bind" var="object_learned_atom"/>
+    </atom> 
+  </precondition>
+
+  <!-- --------------------------------------------------------------------- -->
+  <body  order="sequence">
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Recipe Triggered: wait_until_learning_ends" type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Learning ended. Object Learned is: $object_var" type="string"/>
+      </roboml:args>
+    </action>
+
+    <action name="log" actor="ros_logger">
+      <roboml:args>
+        <arg name="logger" value="loginfo" type="string"/>
+        <arg name="message" value="Finishing recipe: wait_until_learning_ends" type="string"/>
+      </roboml:args>
+    </action>
+
+    <assignment>
+    </assignment>
+  </body>
+  <!-- --------------------------------------------------------------------- -->
+  
+  <assignpost>
+    <atom>
+        <slot name="this" var="object_learned_atom"/>
+        <slot name="consumed" val="true"/>
+    </atom> 
+  </assignpost>
+</recipe>
+<!-- ####################################################################### -->
