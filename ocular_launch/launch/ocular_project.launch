@@ -13,7 +13,8 @@
   <arg name="db_dir" default="$(env PWD)"/>
   <arg name="object_db"/>   <!-- Filename of the object database -->
 
-  <include file="$(find ocular)/launch/ocular.launch">
+  <!-- <include file="$(find ocular)/launch/ocular_example.launch"> -->
+  <include file="$(find ocular)/launch/ocular_example.launch">
     <arg name="event_topic" default="event"/>
     <arg name="interactive_event_topic" default="interactive_event"/>
   </include>
